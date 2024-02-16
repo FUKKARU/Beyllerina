@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98396b16256741e488d8840bf7654c9f, type: 3}
+  m_Name: BallerinaStatusSO
+  m_EditorClassIdentifier: 
+  Status:
+    DebugIsJumpDisable: 0
+    DebugIsGuardDisable: 0
+    Name: "\u30D0\u30EC\u30EA\u30FC\u30CA"
+    SkillName: "\u30AF\u30A4\u30C3\u30AF\u30BF\u30FC\u30F3"
+    SpecialName: "\u30EF\u30EB\u30C4"
+    Hp: 100
+    Weight: 1
+    RotationSpeed: 1800
+    PushPower: 10
+    JumpPower: 10
+    CriticalPushPower: 20
+    GuardDurability: 0
+    KnockbackResistance: 0.01
+    GaugeAmountUntilSpecial: 0
+    PushCoolTime: 3
+    JumpCooltime: 0
+    SkillCooltime: 0
+    SpecialCooltime: 0
+    ForwardKey: 119
+    LeftKey: 97
+    BackKey: 115
+    RightKey: 100
+    PushKey: 49
+    JumpKey: 50
+    GuardKey: 51
