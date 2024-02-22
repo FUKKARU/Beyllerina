@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BallerinaStatusSO
   m_EditorClassIdentifier: 
   Status:
-    DebugIsJumpDisable: 0
-    DebugIsGuardDisable: 0
+    DebugIsJumpDisable: 1
+    DebugIsGuardDisable: 1
     Name: "\u30D0\u30EC\u30EA\u30FC\u30CA"
     SkillName: "\u30AF\u30A4\u30C3\u30AF\u30BF\u30FC\u30F3"
     SpecialName: "\u30EF\u30EB\u30C4"

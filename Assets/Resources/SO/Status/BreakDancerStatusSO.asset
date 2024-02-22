@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BreakDancerStatusSO
   m_EditorClassIdentifier: 
   Status:
-    DebugIsJumpDisable: 0
-    DebugIsGuardDisable: 0
+    DebugIsJumpDisable: 1
+    DebugIsGuardDisable: 1
     Name: "\u30D6\u30EC\u30A4\u30AF\u30C0\u30F3\u30B5\u30FC"
     SkillName: "\u30A2\u30AF\u30ED\u30D0\u30C3\u30C8"
     SpecialName: "\u30AA\u30FC\u30D0\u30FC\u30D8\u30C3\u30C9\u30B9\u30D4\u30F3"
