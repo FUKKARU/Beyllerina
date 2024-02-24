@@ -4,25 +4,19 @@ using UnityEngine;
 
 public class MouseTranking : MonoBehaviour
 {
-    
+
     /// マウスポインターを投影するCanvasコンポーネントの参照
-    [SerializeField] 
-    private Canvas canvas;
-    /// マウスポインターを投影するCanvasのRectTransformコンポーネントの参照
-    [SerializeField] 
-    private RectTransform canvasTransform;
-    /// マウスポインターのRectTransformコンポーネントの参照
-    [SerializeField] 
-    private RectTransform cursorTransform;
-    [SerializeField]
-    private 
+    private Vector3 mouseVector;
+
+    private Vector3 targetObj;
 
     void Update()
     {
-        // CanvasのRectTransform内にあるマウスの座標をローカル座標に変換する
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasTransform,Input.mousePosition,canvas.worldCamera,out var mousePosition);
-
-        // ポインターをマウスの座標に移動させる
-        cursorTransform.anchoredPosition = new Vector2(mousePosition.x, mousePosition.y);
+        //マウスのポジション
+        mouseVector = Input.mousePosition;
+        //マウスに追従するオブジェクトのポジション
+        targetObj = Camera.main.ScreenToWorldPoint(new Vector3(mouseVector.x, mouseVector.y, 10));
+        this.transform.position = targetObj;
+        
     }
 }

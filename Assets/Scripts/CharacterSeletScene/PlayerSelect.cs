@@ -9,30 +9,30 @@ public class PlayerSelect : MonoBehaviour
     [SerializeField]
     private Transform Camera; //カメラの位置情報を取得
     [SerializeField]
-    private string sceneName;
-    [SerializeField]
     private GameObject ObjForScale, CharacterMenu;
-  //  [SerializeField]
-   // private float angle = 1.0f;
+    [SerializeField]
+    private Vector3 Rotate = new Vector3(0, 50f, 0); //新しいベクトル３を定義
     
 
-    Dictionary<string, int> DecidedCharacter = new Dictionary<string, int>();
 
 
-    float StartNumber;
+    private CharacterDate characterDate;
+    
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
+        characterDate = FindObjectOfType<CharaGameManager>().GetCharacterDate();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+    //    if (Input.GetButton("Cancel001"))
+    //    {
+    //        GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
+    //       childUI.SetActive(false);
+    //    }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         
@@ -43,10 +43,7 @@ public class PlayerSelect : MonoBehaviour
             ObjForScale.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
             Debug.Log("選んでくれてありがとう！");
 
-            
-            
-            
-            
+                
         }
 
 
@@ -55,47 +52,59 @@ public class PlayerSelect : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        
 
         //衝突しない場合元に戻る
         ObjForScale.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         Debug.Log("えっ...選んでくれないの");
-       
-        //CharacterMenu.SetActive(false);
 
-        //Destroy(this.gameObject);
-        
+    
+
+
+
     }
 
     private void OnCollisionStay(Collision collision)
     {
+        GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
+        
         if (Input.GetButton("Decide"))
         {
             
             Debug.Log("左クリック推したよ");
 
-            //Instantiate<GameObject>(this.gameObject, this.gameObject.transform.position, Quaternion.identity);
-
-            this.transform.transform.position = Camera.transform.position + new Vector3(1f, -1.35f, 2.58f);
-            this.transform.Rotate(new Vector3(31f, 0, 0));
             
-            
-            Debug.Log("近づけてきた！");
+   　　//  this.transform.transform.position = Camera.transform.position + new Vector3(1f, -1.35f, 2.58f);
 
-            CharacterMenu.SetActive(true);
+           
+            Debug.Log("近づいてきた");
+
+
+            childUI.SetActive(true);
+
+            
 
 
         }
 
-        while (CharacterMenu.activeSelf)
-        {
+        this.gameObject.transform.Rotate(Rotate * Time.deltaTime);
 
-            
 
-        }
     }
-    //次のシーンへ
-    public void changeScene()
+
+    //オブジェクトをcharacterに代入して、SetPlayerで設定したcharacter（CharacterDataScript)にcharacter（ここの変数）を代入した
+    public void OnSlectCharacter1P(GameObject character01)
     {
-        SceneManager.LoadScene(sceneName);
+        characterDate.SetPlayer01(character01);
+  
+        Debug.Log("これはおした");
     }
+    
+    public void OnSlectCharacter2P(GameObject character02)
+    {
+        characterDate.SetPlayer02(character02);
+
+        Debug.Log("これはおしたの２P");
+    }
+    
 }
