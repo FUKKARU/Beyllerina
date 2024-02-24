@@ -51,7 +51,7 @@ public class CharacterDate : ScriptableObject
 
     public GameObject GetPlayer02()
     {
-        return Player01;
+        return Player02;
     }
 
 

@@ -27,11 +27,11 @@ public class PlayerSelect : MonoBehaviour
 
     private void Update()
     {
-    //    if (Input.GetButton("Cancel001"))
-    //    {
-    //        GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
-    //       childUI.SetActive(false);
-    //    }
+        if (Input.GetButton("Cancel001"))
+        {
+            GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
+           childUI.SetActive(false);
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
