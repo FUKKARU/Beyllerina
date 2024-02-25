@@ -9,9 +9,9 @@ public class PlayerMove : MonoBehaviour
     enum TYPE { NULL, Ballerina, BreakDancer }
     [SerializeField] TYPE type = TYPE.NULL;
 
-    // プレイヤーの状態
-    enum PlayerState { IDLE, PUSH, GUARD }
-    PlayerState state;
+    // プレイヤーの状態(public)
+    public enum PlayerState { IDLE, PUSH, COUNTER, COUNTERED };
+    public PlayerState State { get; set; }
 
     // 物理演算用
     Rigidbody rb;
@@ -25,6 +25,11 @@ public class PlayerMove : MonoBehaviour
     float weight;
     float knockbackResistance; // 内部的にRigidbody.drag（＝抵抗）を操作している
 
+    // 敵への参照を取得する用
+    GameObject opponent; // ゲームオブジェクト
+    PlayerMove opponentPlayerMove; // PlayerMoveクラス
+    Rigidbody opponentRb; // Rigidbody
+
     // ベイの行動処理用
     float pushTimer;
     Vector3 axis; // 回転軸
@@ -35,8 +40,8 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        // プレイヤーの初期状態を設定
-        state = PlayerState.IDLE;
+        // プレイヤーの初期状態を設定・敵オブジェクトとそのPlayerMoveクラスを取得して保持しておく
+        State = PlayerState.IDLE;
 
         // 物理演算の準備（Unity側の重力をオフにし、人力で計算する重力の中心を取得）
         rb = GetComponent<Rigidbody>();
@@ -47,12 +52,29 @@ public class PlayerMove : MonoBehaviour
         pSO = PlayerSO.Entity;
 
         // 対応するStatusSOを取得し、変動する数値を改めて、このクラス内の変数に格納
-        if (type == TYPE.Ballerina) status = BallerinaStatusSO.Entity.Status;
-        else if (type == TYPE.BreakDancer) status = BreakDancerStatusSO.Entity.Status;
-        else Debug.LogError("<color=red>typeが設定されていません</color>");
+        switch (type)
+        {
+            case TYPE.Ballerina:
+                status = BallerinaStatusSO.Entity.Status;
+                break;
+            case TYPE.BreakDancer:
+                status = BreakDancerStatusSO.Entity.Status;
+                break;
+            case TYPE.NULL:
+                Debug.LogError("<color=red>typeが設定されていません</color>");
+                break;
+        }
         hp = status.Hp;
         weight = status.Weight;
         knockbackResistance = status.KnockbackResistance;
+
+        // 敵への参照を取得
+        int idx = Array.IndexOf(GameManager.Instance.Beys, gameObject);
+        if (idx == 0) opponent = GameManager.Instance.Beys[1];
+        else if (idx == 1) opponent = GameManager.Instance.Beys[0];
+        else Debug.LogError("<color=red>敵オブジェクトの取得に失敗しました</color>");
+        opponentPlayerMove = opponent.GetComponent<PlayerMove>();
+        opponentRb = opponent.GetComponent<Rigidbody>();
 
         // このベイに対応するテキストを取得して、HP表示
         text = GameManager.Instance.Texts[Array.IndexOf(GameManager.Instance.Beys, gameObject)];
@@ -66,7 +88,7 @@ public class PlayerMove : MonoBehaviour
         rb.drag = pSO.DragCoef * knockbackResistance; // drag：抵抗
         grounded = Physics.Raycast(transform.position, -transform.up, pSO.PlayerHeight * 0.5f + 0.2f, pSO.WhatIsGround);
 
-        // PlayerStateに基づいて、ベイの挙動及び行動を処理する。PlayerStateについて、GUARD=>PUSHを除く、全ての遷移を行う。
+        // PlayerStateに基づいて、ベイの挙動及び行動を処理する。PlayerStateについて、（COUNTER=>PUSHを除く、（？））全ての遷移を行う。
         PlayerAct();
 
         // HP表示。もしもHPが0を切っていたら、このオブジェクトを非アクティブにする。
@@ -96,18 +118,24 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // プッシュ中は受けるダメージが減る
-            if (state == PlayerState.PUSH)
+            if (State == PlayerState.IDLE)
             {
-                hp -= collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
+                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef;
             }
-            else if (state == PlayerState.IDLE)
+            else if (State == PlayerState.PUSH)　// プッシュ中は受けるダメージが減る
             {
-                hp -= collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude * pSO.DamageCoef;
+                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
+                Debug.Log($"<color=#64ff64>{gameObject.name}がプッシュ：ダメージが減る</color>");
             }
-            else
+            else if (State == PlayerState.COUNTER)　// カウンター中はダメージを食らわない
             {
+                Debug.Log($"<color=#64ff64>{gameObject.name}がカウンター：ダメージを食らわない</color>");
                 return;
+            }
+            else　// 被カウンター時はダメージが増える
+            {
+                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnCountered;
+                Debug.Log($"<color=#64ff64>{gameObject.name}が被カウンター：ダメージが増える</color>");
             }
         }
     }
@@ -124,58 +152,43 @@ public class PlayerMove : MonoBehaviour
         // IDLE状態の時のみ、プッシュ入力を検知。クールタイムカウントも行い、IDLE<=>PUSHの遷移を行う。
         PushBehaviour();
 
-        // 地面に接触している時のみ入力を検知して、ワールド鉛直上方向にジャンプする。
-        if (!status.DebugIsJumpDisable)
+        // 地面へ接触している時、かつ敵のstateがPUSHの時のみ、入力を検知する。
+        // カウンターをし、IDLE,PUSH=>COUNTERの遷移を行う。カウンターを解除したら、COUNTER=>IDLEの遷移を行う。
+        // カウンター時にベイのノックバック耐性を大きく乗算し、カウンターが終わったらそれを打ち消す除算を行う。
+        #region
+        if (State == PlayerState.IDLE || State == PlayerState.PUSH)
         {
-            if (grounded && Input.GetKeyDown(status.JumpKey))
-                Jump();
+            if (grounded && opponentPlayerMove.State == PlayerState.PUSH && Input.GetKeyDown(status.CounterKey))
+            {
+                knockbackResistance *= pSO.SelfKnockbackResistanceCoefOnCounter;
+                State = PlayerState.COUNTER;
+            }
         }
 
-        // 地面に接触している時のみ入力を検知して、ガードをし、IDLE,PUSH=>GUARDの遷移を行う。ガードを解除したら、GUARD=>IDLEの遷移を行う。
-        // ガード時にベイのノックバック耐性を大きく乗算し、ガードが終わったらそれを打ち消す除算を行う。
-        if (!status.DebugIsGuardDisable)
+        if (State == PlayerState.COUNTER)
         {
-            #region
-            if (state == PlayerState.IDLE || state == PlayerState.PUSH)
+            if (Input.GetKeyUp(status.CounterKey))
             {
-                if (grounded && Input.GetKeyDown(status.GuardKey))
-                {
-                    knockbackResistance *= pSO.KnockbackResistanceCoefOnGuard;
-                    state = PlayerState.GUARD;
-                }
-
+                knockbackResistance /= pSO.SelfKnockbackResistanceCoefOnCounter;
+                State = PlayerState.IDLE;
             }
-
-            if (state == PlayerState.GUARD)
-            {
-                if (Input.GetKeyUp(status.GuardKey))
-                {
-                    knockbackResistance /= pSO.KnockbackResistanceCoefOnGuard;
-                    state = PlayerState.IDLE;
-                }
-            }
-            #endregion
         }
-    }
-    
-    void Jump()
-    {
-        rb.AddForce(transform.up * status.JumpPower, ForceMode.Impulse);
+        #endregion
     }
 
     void PushBehaviour()
     {
-        if (Input.GetKeyDown(status.PushKey) && state == PlayerState.IDLE)
-            Push(); // プッシュのターゲットを認識する（要改善）。ターゲットが倒されていないならば、プッシュを行い、ログを出し、IDLE=>PUSHの遷移を行う。
+        if (Input.GetKeyDown(status.PushKey) && State == PlayerState.IDLE)
+            Push(); // プッシュのターゲットを認識する。ターゲットが倒されていないならば、プッシュを行い、ログを出し、IDLE=>PUSHの遷移を行う。
 
-        if (state == PlayerState.PUSH)
+        if (State == PlayerState.PUSH)
         {
             pushTimer += Time.deltaTime;
 
             if (pushTimer >= status.PushCoolTime)
             {
                 pushTimer = 0;
-                state = PlayerState.IDLE; // クールタイムが切れたら、PUSH=>IDLEの遷移を行う。
+                State = PlayerState.IDLE; // クールタイムが切れたら、PUSH=>IDLEの遷移を行う。
             }
         }
     }
@@ -215,10 +228,9 @@ public class PlayerMove : MonoBehaviour
 
         if (target.activeSelf)
         {
-            state = PlayerState.PUSH;
+            State = PlayerState.PUSH;
             pushTimer = 0;
             rb.AddForce((target.transform.position - transform.position).normalized * status.PushPower, ForceMode.Impulse);
-            Debug.Log($"<color=#64ff64>{gameObject.name}がプッシュ</color>");
         }
     }
 

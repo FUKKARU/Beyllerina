@@ -45,5 +45,7 @@ public class PlayerSO : ScriptableObject
     [Header("Rigidbody.drag（＝抵抗）を\nノックバック耐性の何倍にするか")] public float DragCoef;
     [Header("ぶつかった時、相手の速度の何倍のダメージを食らうか")] public float DamageCoef;
     [Header("プッシュ中、受けるダメージを何倍にするか")] public float DamageCoefOnPush;
-    [Header("ガード時に、ベイのノックバック耐性を何倍にするか")] public float KnockbackResistanceCoefOnGuard;
+    [Header("被カウンター時、受けるダメージを何倍にするか")] public float DamageCoefOnCountered;
+    [Header("カウンター時に、自分のベイのノックバック耐性を何倍にするか")] public float SelfKnockbackResistanceCoefOnCounter;
+    [Header("カウンター時に、相手のベイのノックバック耐性を何倍にするか")] public float OpponentKnockbackResistanceCoefOnCounter;
 }

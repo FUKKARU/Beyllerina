@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: BallerinaStatusSO
   m_EditorClassIdentifier: 
   Status:
-    DebugIsJumpDisable: 1
-    DebugIsGuardDisable: 1
     Name: "\u30D0\u30EC\u30EA\u30FC\u30CA"
     SkillName: "\u30AF\u30A4\u30C3\u30AF\u30BF\u30FC\u30F3"
     SpecialName: "\u30EF\u30EB\u30C4"
@@ -22,19 +20,10 @@ MonoBehaviour:
     Weight: 1
     RotationSpeed: 1800
     PushPower: 10
-    JumpPower: 10
-    CriticalPushPower: 20
-    GuardDurability: 0
     KnockbackResistance: 0.01
-    GaugeAmountUntilSpecial: 0
+    GaugeAmountUntilSpecial: 100
     PushCoolTime: 3
-    JumpCooltime: 0
     SkillCooltime: 0
     SpecialCooltime: 0
-    ForwardKey: 119
-    LeftKey: 97
-    BackKey: 115
-    RightKey: 100
     PushKey: 49
-    JumpKey: 50
-    GuardKey: 51
+    CounterKey: 50
