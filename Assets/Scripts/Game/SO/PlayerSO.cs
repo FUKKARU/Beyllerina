@@ -48,4 +48,7 @@ public class PlayerSO : ScriptableObject
     [Header("被カウンター時、受けるダメージを何倍にするか")] public float DamageCoefOnCountered;
     [Header("カウンター時に、自分のベイのノックバック耐性を何倍にするか")] public float SelfKnockbackResistanceCoefOnCounter;
     [Header("カウンター時に、相手のベイのノックバック耐性を何倍にするか")] public float OpponentKnockbackResistanceCoefOnCounter;
+    [Header("プッシュ失敗後、何秒でIdle状態に戻すか")] public float Duration2IdleOnPushFailed;
+    [Header("カウンター失敗後、何秒でIdle状態に戻すか")] public float Duration2IdleOnCounterFailed;
+    [Header("Knockbacked状態から、何秒でIdle状態に戻すか")] public float Duration2IdleWhenKnockbacked;
 }

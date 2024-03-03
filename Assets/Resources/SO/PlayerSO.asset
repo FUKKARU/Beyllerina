@@ -30,3 +30,6 @@ MonoBehaviour:
   DamageCoefOnCountered: 2
   SelfKnockbackResistanceCoefOnCounter: 100
   OpponentKnockbackResistanceCoefOnCounter: 0.01
+  Duration2IdleOnPushFailed: 0.1
+  Duration2IdleOnCounterFailed: 0.1
+  Duration2IdleWhenKnockbacked: 1

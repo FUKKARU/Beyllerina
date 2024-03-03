@@ -6,17 +6,18 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    #region 変数宣言
+    // ベイの種類を識別する。インスペクタ上で設定しておくこと！
     enum TYPE { NULL, Ballerina, BreakDancer }
     [SerializeField] TYPE type = TYPE.NULL;
 
     // プレイヤーの状態(public)
-    public enum PlayerState { IDLE, PUSH, COUNTER, COUNTERED };
+    public enum PlayerState { IDLE, PUSH, COUNTER, KNOCKBACKED };
     public PlayerState State { get; set; }
 
     // 物理演算用
     Rigidbody rb;
-    GameObject center;
-    bool grounded;
+    GameObject stageCenter;
 
     // SOからデータを取得する用
     PlayerSO pSO;
@@ -31,12 +32,16 @@ public class PlayerMove : MonoBehaviour
     Rigidbody opponentRb; // Rigidbody
 
     // ベイの行動処理用
-    float pushTimer;
-    Vector3 axis; // 回転軸
-    float axisTimer = 0; // 回転軸を傾ける時間
+    bool isHitOpponent = false; // 敵にぶつかっているか
+    bool isDamaged = false; // 敵との接触時において、既にダメージを食らっているか
+    bool isKnockbackResistanceMultipliedOnCounter = false; // カウンター時のノックバック耐性の乗算処理を、完了しているか
+    bool isVelocityInvertedOnKnockbacked = false; // ノックバックされたときの速度の反転処理を、完了しているか
+    Vector3 axis; // ベイの回転軸
+    float axisTimer = 0; // ベイの回転軸を傾ける時間
 
     // このベイに対応するテキストを取得する用
     TextMeshProUGUI text;
+    #endregion
 
     void Start()
     {
@@ -46,7 +51,7 @@ public class PlayerMove : MonoBehaviour
         // 物理演算の準備（Unity側の重力をオフにし、人力で計算する重力の中心を取得）
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-        center = GameObject.FindGameObjectWithTag("Center");
+        stageCenter = GameObject.FindGameObjectWithTag("Center");
 
         // PlayerSOを取得
         pSO = PlayerSO.Entity;
@@ -83,118 +88,218 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        // Rigidbodyの物理量（massとdrag）の更新、及び地面との接触判定
-        rb.mass = weight; // mass：重量
-        rb.drag = pSO.DragCoef * knockbackResistance; // drag：抵抗
-        grounded = Physics.Raycast(transform.position, -transform.up, pSO.PlayerHeight * 0.5f + 0.2f, pSO.WhatIsGround);
+        #region PlayerStateの遷移（遷移するだけ）
+        Idle2Push();
+        Idle2Counter();
+        Idle2Knockbacked();
+        Push2Idle();
+        Push2Counter();
+        Push2Knockbacked();
+        Counter2Idle();
+        Counter2Push();
+        Knockbacked2Idle();
+        #endregion
 
-        // PlayerStateに基づいて、ベイの挙動及び行動を処理する。PlayerStateについて、（COUNTER=>PUSHを除く、（？））全ての遷移を行う。
-        PlayerAct();
+        #region PlayerStateに基づくベイの行動処理
+        Rotate(); // 最初に回転処理を行う。
+        Idle();
+        Push();
+        Counter();
+        Knockbacked();
+        ChangeRigidbodyParameters(); // ベイの物理状態の更新
+        #endregion
 
-        // HP表示。もしもHPが0を切っていたら、このオブジェクトを非アクティブにする。
-        if (hp < 0)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            text.text = hp.ToString();
-        }
+        #region ダメージ処理
+        DamageManagement();
+        ShowHP(); // デス判定も行う。
+        #endregion
     }
 
-    // すり鉢状のフィールドにおける、重力を再現する。
+    #region 【物理演算】すり鉢状のフィールドにおける、重力を再現する。
     void FixedUpdate()
     {
         // 重力
         rb.AddForce(Vector3.down * 9.81f * pSO.GravityScale, ForceMode.Force);
 
         //常に中心へ移動
-        rb.AddForce((center.transform.position - transform.position).normalized * pSO.SpeedTowardCenter, ForceMode.Force);
+        rb.AddForce((stageCenter.transform.position - transform.position).normalized * pSO.SpeedTowardCenter, ForceMode.Force);
 
     }
+    #endregion
 
-    // プレイヤーとの接触を検知し、相手の速度に基づいてダメージ処理を行う。
+    #region 【コリジョン判定】敵との接触状態の変化を検知し、ダメージ処理時に使うフラグを変化させる。
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (State == PlayerState.IDLE)
+            isHitOpponent = true; // isHitOpponentの切り替え
+            isDamaged = false; // isDamagedのリセット
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            isHitOpponent = false; // isHitOpponentの切り替え
+            isDamaged = false; // isDamagedのリセット
+        }
+    }
+    #endregion
+
+
+
+    #region　PlayerStateの遷移の詳細
+    void Idle2Push()
+    {
+        if (State == PlayerState.IDLE)
+        {
+            if (Input.GetKeyDown(status.PushKey))
             {
-                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef;
-            }
-            else if (State == PlayerState.PUSH)　// プッシュ中は受けるダメージが減る
-            {
-                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
-                Debug.Log($"<color=#64ff64>{gameObject.name}がプッシュ：ダメージが減る</color>");
-            }
-            else if (State == PlayerState.COUNTER)　// カウンター中はダメージを食らわない
-            {
-                Debug.Log($"<color=#64ff64>{gameObject.name}がカウンター：ダメージを食らわない</color>");
-                return;
-            }
-            else　// 被カウンター時はダメージが増える
-            {
-                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnCountered;
-                Debug.Log($"<color=#64ff64>{gameObject.name}が被カウンター：ダメージが増える</color>");
+                State = PlayerState.PUSH;
             }
         }
     }
 
-    void PlayerAct()
+    void Idle2Counter()
     {
-        // 回転処理を行う前に、ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
-        VerticalToGround();
-
-        // ベイを回転させ、その回転速度を一定範囲内に収める。
-        // HPが一定以下になったら、指定秒数ごとに回転軸の傾きを変化させて歳差運動をさせる。
-        Rotate();
-        
-        // IDLE状態の時のみ、プッシュ入力を検知。クールタイムカウントも行い、IDLE<=>PUSHの遷移を行う。
-        PushBehaviour();
-
-        // 地面へ接触している時、かつ敵のstateがPUSHの時のみ、入力を検知する。
-        // カウンターをし、IDLE,PUSH=>COUNTERの遷移を行う。カウンターを解除したら、COUNTER=>IDLEの遷移を行う。
-        // カウンター時にベイのノックバック耐性を大きく乗算し、カウンターが終わったらそれを打ち消す除算を行う。
-        #region
-        if (State == PlayerState.IDLE || State == PlayerState.PUSH)
+        if (State == PlayerState.IDLE)
         {
-            if (grounded && opponentPlayerMove.State == PlayerState.PUSH && Input.GetKeyDown(status.CounterKey))
+            if (Input.GetKeyDown(status.CounterKey))
             {
-                knockbackResistance *= pSO.SelfKnockbackResistanceCoefOnCounter;
                 State = PlayerState.COUNTER;
             }
         }
-
-        if (State == PlayerState.COUNTER)
-        {
-            if (Input.GetKeyUp(status.CounterKey))
-            {
-                knockbackResistance /= pSO.SelfKnockbackResistanceCoefOnCounter;
-                State = PlayerState.IDLE;
-            }
-        }
-        #endregion
     }
 
-    void PushBehaviour()
+    void Idle2Knockbacked()
     {
-        if (Input.GetKeyDown(status.PushKey) && State == PlayerState.IDLE)
-            Push(); // プッシュのターゲットを認識する。ターゲットが倒されていないならば、プッシュを行い、ログを出し、IDLE=>PUSHの遷移を行う。
+        if (State == PlayerState.IDLE)
+        {
+            if (isHitOpponent && opponentPlayerMove.State == PlayerState.PUSH)
+            {
+                State = PlayerState.KNOCKBACKED;
+            }
+        }
+    }
 
+    void Push2Idle()
+    {
         if (State == PlayerState.PUSH)
         {
-            pushTimer += Time.deltaTime;
-
-            if (pushTimer >= status.PushCoolTime)
+            if (opponentPlayerMove.State == PlayerState.KNOCKBACKED)
             {
-                pushTimer = 0;
-                State = PlayerState.IDLE; // クールタイムが切れたら、PUSH=>IDLEの遷移を行う。
+                State = PlayerState.IDLE;
+            }
+            else
+            {
+                StartCoroutine(Push2IdleWithCount());
             }
         }
     }
-    
+    IEnumerator Push2IdleWithCount()
+    {
+        yield return new WaitForSeconds(pSO.Duration2IdleOnPushFailed);
+        State = PlayerState.IDLE;
+    }
+
+    void Push2Counter()
+    {
+        if (State == PlayerState.PUSH)
+        {
+            if (Input.GetKeyDown(status.CounterKey))
+            {
+                State = PlayerState.COUNTER;
+            }
+        }
+    }
+
+    void Push2Knockbacked()
+    {
+        if (State == PlayerState.PUSH)
+        {
+            if (isHitOpponent && opponentPlayerMove.State == PlayerState.PUSH)
+            {
+                State = PlayerState.KNOCKBACKED;
+            }
+        }
+    }
+
+    void Counter2Idle()
+    {
+        if (State == PlayerState.COUNTER)
+        {
+            if (opponentPlayerMove.State == PlayerState.KNOCKBACKED)
+            {
+                State = PlayerState.IDLE;
+                knockbackResistance /= pSO.SelfKnockbackResistanceCoefOnCounter;
+                isKnockbackResistanceMultipliedOnCounter = false;
+            }
+            else
+            {
+                StartCoroutine(Counter2IdleWithCount());
+            }
+        }
+    }
+    IEnumerator Counter2IdleWithCount()
+    {
+        yield return new WaitForSeconds(pSO.Duration2IdleOnCounterFailed);
+        State = PlayerState.IDLE;
+        knockbackResistance /= pSO.SelfKnockbackResistanceCoefOnCounter;
+        isKnockbackResistanceMultipliedOnCounter = false;
+    }
+
+    void Counter2Push()
+    {
+        if (State == PlayerState.COUNTER)
+        {
+            if (Input.GetKeyDown(status.PushKey))
+            {
+                State = PlayerState.PUSH;
+                knockbackResistance /= pSO.SelfKnockbackResistanceCoefOnCounter;
+                isKnockbackResistanceMultipliedOnCounter = false;
+            }
+        }
+    }
+
+    void Knockbacked2Idle()
+    {
+        if (State == PlayerState.KNOCKBACKED)
+        {
+            StartCoroutine(Knockbacked2IdleWithCount());
+        }
+    }
+    IEnumerator Knockbacked2IdleWithCount()
+    {
+        yield return new WaitForSeconds(pSO.Duration2IdleWhenKnockbacked);
+        State = PlayerState.IDLE;
+        isVelocityInvertedOnKnockbacked = false;
+    }
+    #endregion
+
+    #region PlayerStateに基づくベイの行動処理の詳細
+
+    void ChangeRigidbodyParameters()
+    {
+        // Rigidbodyの物理量の更新
+        rb.mass = weight; // mass：重量
+        rb.drag = pSO.DragCoef * knockbackResistance; // drag：抵抗
+    }
+
+    // 回転処理を行う前に、ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
+    // ベイを回転させ、その回転速度を一定範囲内に収める。
+    // HPが一定以下になったら、指定秒数ごとに回転軸の傾きを変化させて歳差運動をさせる。
     void Rotate()
     {
+        //地面の法線を調べるレイ
+        Ray shotRay = new Ray(transform.position, -transform.up);
+        if (Physics.Raycast(shotRay, out RaycastHit ground))
+        {
+            //ベイのローカルy軸（緑）の方向　から　地面の法線ベクトルへ
+            Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, pSO.PlayerMainAxisChangeSpeed * Time.deltaTime);
+        }
+
         if (hp < status.Hp * pSO.AxisSlopeStartHpCoef)
         {
             axisTimer += Time.deltaTime;
@@ -219,30 +324,75 @@ public class PlayerMove : MonoBehaviour
 
     }
 
+    void Idle()
+    {
+        return;
+    }
+
+    // プッシュを行う。
     void Push()
     {
-        GameObject target;
-        int idx = Array.IndexOf(GameManager.Instance.Beys, gameObject);
-        if (idx == 0) target = GameManager.Instance.Beys[1];
-        else target = GameManager.Instance.Beys[0];
-
-        if (target.activeSelf)
-        {
-            State = PlayerState.PUSH;
-            pushTimer = 0;
-            rb.AddForce((target.transform.position - transform.position).normalized * status.PushPower, ForceMode.Impulse);
-        }
+        rb.AddForce((opponent.transform.position - transform.position).normalized * status.PushPower, ForceMode.Impulse);
     }
 
-    void VerticalToGround()
+    // カウンター時にベイのノックバック耐性を大きく乗算し、カウンターが終わったらそれを打ち消す除算を行う。
+    void Counter()
     {
-        //地面の法線を調べるレイ
-        Ray shotRay = new Ray(transform.position, -transform.up);
-        if (Physics.Raycast(shotRay, out RaycastHit ground))
+        if (!isKnockbackResistanceMultipliedOnCounter)
         {
-            //ベイのローカルy軸（緑）の方向　から　地面の法線ベクトルへ
-            Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
-            transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, pSO.PlayerMainAxisChangeSpeed * Time.deltaTime);
+            isKnockbackResistanceMultipliedOnCounter = true;
+            knockbackResistance *= pSO.SelfKnockbackResistanceCoefOnCounter;
         }
     }
+
+    void Knockbacked()
+    {
+        if (!isVelocityInvertedOnKnockbacked)
+        {
+            isVelocityInvertedOnKnockbacked = true;
+            rb.velocity *= -1;
+        }
+    }
+    #endregion
+
+    #region ダメージ処理の詳細
+    void DamageManagement()
+    {
+        if (isHitOpponent && !isDamaged)
+        {
+            isDamaged = true;
+
+            if (State == PlayerState.PUSH) // プッシュ中は受けるダメージが減る
+            {
+                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
+                Debug.Log($"<color=#64ff64>{gameObject.name}がプッシュ中：ダメージが減る</color>");
+                return;
+            }
+            else if (State == PlayerState.COUNTER) // カウンター中はダメージを食らわない
+            {
+                Debug.Log($"<color=#64ff64>{gameObject.name}がカウンター中：ダメージを食らわない</color>");
+                return;
+            }
+            else // ノックバックされた（Idle状態で敵に接触した場合も、この処理を行う）：通常ダメージ処理
+            {
+                hp -= opponentRb.velocity.magnitude * pSO.DamageCoef;
+                Debug.Log($"<color=#64ff64>{gameObject.name}がノックバックされた：通常ダメージ</color>");
+                return;
+            }
+        }
+    }
+
+    // HP表示。もしもHPが0を切っていたら、このオブジェクトを非アクティブにする。
+    void ShowHP()
+    {
+        if (hp < 0)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            text.text = hp.ToString();
+        }
+    }
+    #endregion
 }
