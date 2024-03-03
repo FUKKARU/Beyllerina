@@ -973,6 +973,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BreakDancer
       objectReference: {fileID: 0}
+    - target: {fileID: 5166151706588887907, guid: d186e11ad9ae9554f98051685950888b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5650680529059630524, guid: d186e11ad9ae9554f98051685950888b,
         type: 3}
       propertyPath: m_LocalPosition.x

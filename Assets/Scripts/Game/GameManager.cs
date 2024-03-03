@@ -27,7 +27,13 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // 確認ログを表示
+        // 確認ログの表示
+        ShowConfirmationLog();
+    }
+
+    // 確認ログの表示の詳細
+    void ShowConfirmationLog()
+    {
         Debug.Log("<color=cyan>確認して下さい：各プレイヤーのPlayerMove.cs内の、typeが正しいかどうか</color>");
         Debug.Log("<color=cyan>確認して下さい：GameManager.cs内の、BeysとTextsの要素の順番が一致しているかどうか</color>");
     }

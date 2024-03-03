@@ -25,11 +25,11 @@ MonoBehaviour:
   AxisSlopeStartHpCoef: 0.3
   AxisSlopRange: {x: -5, y: 5}
   DragCoef: 10
+  DamagableInterval: 0.3
   DamageCoef: 0.25
   DamageCoefOnPush: 0.5
-  DamageCoefOnCountered: 2
-  SelfKnockbackResistanceCoefOnCounter: 100
-  OpponentKnockbackResistanceCoefOnCounter: 0.01
-  Duration2IdleOnPushFailed: 0.1
-  Duration2IdleOnCounterFailed: 0.1
+  DamageCoefOnKnockbacked: 2
+  KnockbackResistanceCoefOnCounter: 100
+  Duration2IdleOnPushFailed: 0.3
+  Duration2IdleOnCounterFailed: 0.3
   Duration2IdleWhenKnockbacked: 1

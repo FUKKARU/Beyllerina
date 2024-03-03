@@ -43,12 +43,12 @@ public class PlayerSO : ScriptableObject
     [Header("歳差運動を始める境界のHPを、最大HPの何倍にするか")] public float AxisSlopeStartHpCoef;
     [Header("歳差運動において、中心軸から何度傾けるか（min,max）")] public Vector2 AxisSlopRange;
     [Header("Rigidbody.drag（＝抵抗）を\nノックバック耐性の何倍にするか")] public float DragCoef;
+    [Header("無敵時間（＝最低で何秒おきに、ダメージを食らえるか）")] public float DamagableInterval;
     [Header("ぶつかった時、相手の速度の何倍のダメージを食らうか")] public float DamageCoef;
-    [Header("プッシュ中、受けるダメージを何倍にするか")] public float DamageCoefOnPush;
-    [Header("被カウンター時、受けるダメージを何倍にするか")] public float DamageCoefOnCountered;
-    [Header("カウンター時に、自分のベイのノックバック耐性を何倍にするか")] public float SelfKnockbackResistanceCoefOnCounter;
-    [Header("カウンター時に、相手のベイのノックバック耐性を何倍にするか")] public float OpponentKnockbackResistanceCoefOnCounter;
-    [Header("プッシュ失敗後、何秒でIdle状態に戻すか")] public float Duration2IdleOnPushFailed;
-    [Header("カウンター失敗後、何秒でIdle状態に戻すか")] public float Duration2IdleOnCounterFailed;
-    [Header("Knockbacked状態から、何秒でIdle状態に戻すか")] public float Duration2IdleWhenKnockbacked;
+    [Header("プッシュ時、受けるダメージを何倍にするか")] public float DamageCoefOnPush;
+    [Header("ノックバックされた時、受けるダメージを何倍にするか")] public float DamageCoefOnKnockbacked;
+    [Header("カウンター時に、自分のベイのノックバック耐性を何倍にするか")] public float KnockbackResistanceCoefOnCounter;
+    [Header("プッシュ失敗後、何秒でIDLE状態に戻すか")] public float Duration2IdleOnPushFailed;
+    [Header("カウンター失敗後、何秒でIDLE状態に戻すか")] public float Duration2IdleOnCounterFailed;
+    [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
 }
