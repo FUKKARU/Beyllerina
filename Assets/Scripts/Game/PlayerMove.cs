@@ -158,7 +158,7 @@ public class PlayerMove : MonoBehaviour
 
 
 
-    #region　PlayerStateの遷移の詳細（対応する状態の時、【条件】を満たしたら即座に遷移する。【その他】の処理も追加で行う。）
+    #region　PlayerStateの遷移の詳細（対応する状態の時、【条件】を満たしたら即座に遷移する。【その他】の処理も追加で行う（主に、ベイの行動処理に関わるフラグのリセット）。）
     // IDLE => PUSH
     // 【条件】プッシュキーが押された。
     void Idle2Push()
@@ -407,13 +407,20 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    // KNOCKBACKED状態では、1回だけRigidbodyの速度ベクトルを反転する。
+    // KNOCKBACKED状態では、1回だけ以下の処理を行う。
+    // ・Rigidbodyの速度ベクトルが敵方向の時だけ（＝自分から敵に向かうベクトルと、速度ベクトルの、内積が正の時だけ）、それを反転する。
     void Knockbacked()
     {
         if (!isVelocityInvertedOnKnockbacked)
         {
             isVelocityInvertedOnKnockbacked = true;
-            rb.velocity *= -1;
+
+            Vector3 self2Opponent = opponent.transform.position - transform.position;
+            Vector3 v = rb.velocity;
+            if (Vector3.Dot(self2Opponent, v) > 0)
+            {
+                rb.velocity *= -1;
+            }
         }
     }
     #endregion
