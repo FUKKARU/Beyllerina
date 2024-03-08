@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d80aa9969654c646977f50061cd5c9d, type: 3}
   m_Name: PlayerSO
   m_EditorClassIdentifier: 
+  IsShowNormalLog: 1
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -25,7 +26,9 @@ MonoBehaviour:
   AxisSlopeStartHpCoef: 0.3
   AxisSlopRange: {x: -5, y: 5}
   DragCoef: 10
-  DamagableInterval: 0.3
+  PowerCoefOnKnockbacked: 1
+  MinPowerOnKnockbacked: 10
+  DamagableDuration: 0.5
   DamageCoef: 0.25
   DamageCoefOnPush: 0.5
   DamageCoefOnKnockbacked: 2

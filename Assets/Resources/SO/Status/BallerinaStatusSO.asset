@@ -20,7 +20,7 @@ MonoBehaviour:
     Weight: 1
     RotationSpeed: 1800
     PushPower: 10
-    KnockbackResistance: 0.01
+    KnockbackResistance: 0.1
     GaugeAmountUntilSpecial: 100
     PushCoolTime: 3
     SkillCooltime: 0

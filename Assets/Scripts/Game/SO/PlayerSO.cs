@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "SO/Player", fileName = "PlayerSO")]
@@ -32,6 +30,7 @@ public class PlayerSO : ScriptableObject
     }
     #endregion
 
+    [Header("ログを出すかどうか（WarningとErrorは除く）")] public bool IsShowNormalLog;
     [Header("地面として使うオブジェクトのレイヤー")] public LayerMask WhatIsGround;
     [Header("重力を何倍にするか")] public float GravityScale;
     [Header("プレイヤーの高さ")] public float PlayerHeight;
@@ -43,7 +42,9 @@ public class PlayerSO : ScriptableObject
     [Header("歳差運動を始める境界のHPを、最大HPの何倍にするか")] public float AxisSlopeStartHpCoef;
     [Header("歳差運動において、中心軸から何度傾けるか（min,max）")] public Vector2 AxisSlopRange;
     [Header("Rigidbody.drag（＝抵抗）を\nノックバック耐性の何倍にするか")] public float DragCoef;
-    [Header("無敵時間（＝最低で何秒おきに、ダメージを食らえるか）")] public float DamagableInterval;
+    [Header("KNOCKBACKEDの処理において、\n自分と敵の速度ベクトルの大きさの和の、\n何倍の力を瞬間的に受けるか")] public float PowerCoefOnKnockbacked;
+    [Header("KNOCKBACEDの処理において、瞬間的に受ける力の最小値（＝最低保証）")] public float MinPowerOnKnockbacked;
+    [Header("ダメージを食らえる間隔（＝無敵時間）")] public float DamagableDuration;
     [Header("ぶつかった時、相手の速度の何倍のダメージを食らうか")] public float DamageCoef;
     [Header("プッシュ時、受けるダメージを何倍にするか")] public float DamageCoefOnPush;
     [Header("ノックバックされた時、受けるダメージを何倍にするか")] public float DamageCoefOnKnockbacked;

@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     [Header("BeysとTextsの要素の順番を一致させること！")]
-    public GameObject[] Beys;
-    public TextMeshProUGUI[] Texts;
+    [Header("アタッチする")] public GameObject[] Beys;
+    [Header("アタッチする")] public TextMeshProUGUI[] Texts;
 
     void Start()
     {
@@ -34,7 +34,10 @@ public class GameManager : MonoBehaviour
     // 確認ログの表示の詳細
     void ShowConfirmationLog()
     {
-        Debug.Log("<color=cyan>確認して下さい：各プレイヤーのPlayerMove.cs内の、typeが正しいかどうか</color>");
-        Debug.Log("<color=cyan>確認して下さい：GameManager.cs内の、BeysとTextsの要素の順番が一致しているかどうか</color>");
+        if (PlayerSO.Entity.IsShowNormalLog)
+        {
+            Debug.Log("<color=cyan>確認して下さい：各プレイヤーのPlayerMove.cs内の、typeが正しいかどうか</color>");
+            Debug.Log("<color=cyan>確認して下さい：GameManager.cs内の、BeysとTextsの要素の順番が一致しているかどうか</color>");
+        }
     }
 }

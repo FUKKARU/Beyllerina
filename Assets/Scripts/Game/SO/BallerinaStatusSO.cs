@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "SO/Status/Ballerina", fileName = "BallerinaStatusSO")]
@@ -32,5 +30,5 @@ public class BallerinaStatusSO : ScriptableObject
     }
     #endregion
 
-    public StatusSO Status;
+    public StatusTable Status;
 }
