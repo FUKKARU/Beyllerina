@@ -126,10 +126,10 @@ public class PlayerMove : MonoBehaviour
     }
     #endregion
 
-    #region 【OnCollision】敵との接触を検知し、無敵時間でないならば、ダメージ処理を行いかつ条件によって自分または敵をKNOCKBACKED状態にする。
+    #region 【OnCollision】【一人しか行わない】敵との接触を検知し、無敵時間でないならば、ダメージ処理を行いかつ条件によって自分または敵をKNOCKBACKED状態にする。
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && isDamageManager)
+        if (collision.gameObject.CompareTag(pSO.BeyTagName) && isDamageManager)
         {
             if (isDamagable)
             {
@@ -139,7 +139,6 @@ public class PlayerMove : MonoBehaviour
             }
         }
     }
-
     IEnumerator CountDamagableDuration()
     {
         yield return new WaitForSeconds(pSO.DamagableDuration);
@@ -185,7 +184,7 @@ public class PlayerMove : MonoBehaviour
     // ・【自分】COUNTER => IDLE       【敵】PUSH    => KNOCKBACKED
     // ・【自分】IDLE    => KNOCKBACKED【敵】PUSH    => IDLE
     // ・【自分】PUSH    => KNOCKBACKED【敵】COUNTER => IDLE
-    // 【条件】（敵と接触した際に呼ばれる。）自分がPUSHで敵がIDLE、または、自分がCOUNTERで敵がPUSH
+    // 【条件】（敵と接触した際に呼ばれる。）
     // 【その他】ダメージ処理も行う。
     void HitBehaviour()
     {
@@ -285,49 +284,45 @@ public class PlayerMove : MonoBehaviour
                 break;
         }
     }
-
     // 与えられたPlayerMoveクラスのインスタンスに、自身の速さを元にして、そのインスタンスが与えられた状態である場合の、ダメージを与える。
     void Damage(PlayerMove playerMoveInstance, PlayerState State)
     {
-        if (isDamageManager)
+        switch (State)
         {
-            switch (State)
-            {
-                // IDLE状態なら、通常のダメージを食らう。
-                case PlayerState.IDLE:
-                    playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef;
-                    if (pSO.IsShowNormalLog)
-                    {
-                        Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に通常のダメージを与える</color>");
-                    }
-                    break;
+            // IDLE状態なら、通常のダメージを食らう。
+            case PlayerState.IDLE:
+                playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef;
+                if (pSO.IsShowNormalLog)
+                {
+                    Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に通常のダメージを与える</color>");
+                }
+                break;
 
-                // PUSH状態なら、ダメージが減る。
-                case PlayerState.PUSH:
-                    playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
-                    if (pSO.IsShowNormalLog)
-                    {
-                        Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に与えるダメージを減らす</color>");
-                    }
-                    break;
+            // PUSH状態なら、ダメージが減る。
+            case PlayerState.PUSH:
+                playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnPush;
+                if (pSO.IsShowNormalLog)
+                {
+                    Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に与えるダメージを減らす</color>");
+                }
+                break;
 
-                // COUNTER状態なら、ダメージを食らわない。
-                case PlayerState.COUNTER:
-                    if (pSO.IsShowNormalLog)
-                    {
-                        Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} にダメージを与えない</color>");
-                    }
-                    break;
+            // COUNTER状態なら、ダメージを食らわない。
+            case PlayerState.COUNTER:
+                if (pSO.IsShowNormalLog)
+                {
+                    Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} にダメージを与えない</color>");
+                }
+                break;
 
-                // KNOCKBACKED状態なら、ダメージが増える。
-                case PlayerState.KNOCKBACKED:
-                    playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnKnockbacked;
-                    if (pSO.IsShowNormalLog)
-                    {
-                        Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に与えるダメージを増やす</color>");
-                    }
-                    break;
-            }
+            // KNOCKBACKED状態なら、ダメージが増える。
+            case PlayerState.KNOCKBACKED:
+                playerMoveInstance.Hp -= rb.velocity.magnitude * pSO.DamageCoef * pSO.DamageCoefOnKnockbacked;
+                if (pSO.IsShowNormalLog)
+                {
+                    Debug.Log($"<color=#64ff64>{playerMoveInstance.gameObject.name} に与えるダメージを増やす</color>");
+                }
+                break;
         }
     }
 
@@ -530,7 +525,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     // KNOCKBACKED状態では、1回だけ以下の処理を行う。
-    // ・自分と敵の速度ベクトルの大きさを合計し、その定数倍の瞬間的な力（最低保証あり）を、敵と反対方向に加える。
+    // ・自分と敵の運動量の大きさを合計し、その定数倍の瞬間的な力（最低保証あり）を、敵と反対方向に加える。
     void Knockbacked()
     {
         if (State == PlayerState.KNOCKBACKED)
@@ -539,7 +534,9 @@ public class PlayerMove : MonoBehaviour
             {
                 isKnockbackedBehaviourDone = true;
 
-                float power = (rb.velocity.magnitude + opponentRb.velocity.magnitude) * pSO.PowerCoefOnKnockbacked;
+                float self = (weight * rb.velocity).magnitude;
+                float oppo = (opponentPlayerMove.weight * opponentRb.velocity).magnitude;
+                float power = (self + oppo) * pSO.PowerCoefOnKnockbacked;
                 if (power < pSO.MinPowerOnKnockbacked)
                 {
                     power = pSO.MinPowerOnKnockbacked;

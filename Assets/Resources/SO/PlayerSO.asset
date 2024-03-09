@@ -16,6 +16,7 @@ MonoBehaviour:
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  BeyTagName: Player
   GravityScale: 2
   PlayerHeight: 2
   SpeedTowardCenter: 5
@@ -24,11 +25,11 @@ MonoBehaviour:
   AxisSlopeChangeInterval: 0.5
   RotationSpeedCoefRange: {x: 0.1, y: 1}
   AxisSlopeStartHpCoef: 0.3
-  AxisSlopRange: {x: -5, y: 5}
+  AxisSlopRange: {x: -10, y: 10}
   DragCoef: 10
   PowerCoefOnKnockbacked: 1
-  MinPowerOnKnockbacked: 10
-  DamagableDuration: 0.5
+  MinPowerOnKnockbacked: 15
+  DamagableDuration: 0.1
   DamageCoef: 0.25
   DamageCoefOnPush: 0.5
   DamageCoefOnKnockbacked: 2

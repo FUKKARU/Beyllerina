@@ -6,7 +6,11 @@ public class GameStateSetter : MonoBehaviour
 {
     void Awake()
     {
-        QualitySettings.vSyncCount = 0; // VSyncをOFFにする
+        if (!GameStateSO.Entity.IsVsyncOn)
+        {
+            QualitySettings.vSyncCount = 0; // VSyncをOFFにする
+        }
+        
         Application.targetFrameRate = GameStateSO.Entity.TargetFrameRate; // ターゲットフレームレートを設定
     }
 }

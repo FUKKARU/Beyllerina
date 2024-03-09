@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("<color=cyan>確認して下さい：各プレイヤーのPlayerMove.cs内の、typeが正しいかどうか</color>");
             Debug.Log("<color=cyan>確認して下さい：GameManager.cs内の、BeysとTextsの要素の順番が一致しているかどうか</color>");
+            Debug.Log("<color=cyan>確認して下さい：GameStateSetterオブジェクトが、ゲーム開始時のシーン内にあるかどうか</color>");
         }
     }
 }

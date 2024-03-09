@@ -1,10 +1,10 @@
+using System;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class StatusTable
 {
     [Header("ステータスの初期値設定")]
-    [Space(25)]
     [Header("名前")] public string Name;
     [Header("スキルの名前")] public string SkillName;
     [Header("必殺技の名前")] public string SpecialName;

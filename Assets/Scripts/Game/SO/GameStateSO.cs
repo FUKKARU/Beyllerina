@@ -30,5 +30,6 @@ public class GameStateSO : ScriptableObject
     }
     #endregion
 
+    [Header("Vsync‚ðƒIƒ“‚É‚·‚é‚©")] public bool IsVsyncOn;
     [Header("Unity‚ª–Ú•W‚Æ‚·‚éFPS")] public int TargetFrameRate;
 }
