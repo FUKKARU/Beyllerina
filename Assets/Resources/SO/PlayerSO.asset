@@ -25,7 +25,7 @@ MonoBehaviour:
   AxisSlopeChangeInterval: 0.5
   RotationSpeedCoefRange: {x: 0.1, y: 1}
   AxisSlopeStartHpCoef: 0.3
-  AxisSlopRange: {x: -10, y: 10}
+  AxisSlopRange: {x: -30, y: 30}
   DragCoef: 10
   PowerCoefOnKnockbacked: 1
   MinPowerOnKnockbacked: 15
