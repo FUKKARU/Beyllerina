@@ -7,7 +7,7 @@ namespace BaseSystem
     {
         #region QOLŒüãˆ—
         // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-        public const string PATH = "SO/Status/BallerinaStatusSO";
+        public const string PATH = "BaseSystem/SO/Status/BallerinaStatusSO";
 
         // À‘Ì
         private static BallerinaStatusSO _entity;

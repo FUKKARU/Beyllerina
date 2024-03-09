@@ -7,7 +7,7 @@ namespace BaseSystem
     {
         #region QOLŒüãˆ—
         // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-        public const string PATH = "SO/GameStateSO";
+        public const string PATH = "BaseSystem/SO/GameStateSO";
 
         // À‘Ì
         private static GameStateSO _entity;
