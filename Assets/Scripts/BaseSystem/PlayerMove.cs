@@ -27,7 +27,7 @@ namespace BaseSystem
         float Hp { get; set; }
         float weight;
         float knockbackResistance; // 内部的にRigidbody.drag（＝抵抗）を操作している
-        float speed;
+        float rotationSpeed;
 
         // 敵への参照を取得する用
         GameObject opponent; // ゲームオブジェクト
@@ -80,8 +80,7 @@ namespace BaseSystem
             Hp = status.Hp;
             weight = status.Weight;
             knockbackResistance = status.KnockbackResistance;
-            speed = status.RotationSpeed * SelectTeam.SceneChange.rotatenumber;
-            Debug.Log(SelectTeam.SceneChange.rotatenumber);
+            rotationSpeed = status.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
 
             // 敵への参照を取得
             int idx = Array.IndexOf(GameManager.Instance.Beys, gameObject);
@@ -487,9 +486,9 @@ namespace BaseSystem
             }
 
             // ベイを回転軸周りに回転させる。
-            float rotSpeed = speed / status.Hp * Hp;
-            float minRotSpeed = pSO.RotationSpeedCoefRange.x * speed;
-            float maxRotSpeed = pSO.RotationSpeedCoefRange.y * speed;
+            float rotSpeed = rotationSpeed / status.Hp * Hp;
+            float minRotSpeed = pSO.RotationSpeedCoefRange.x * rotationSpeed;
+            float maxRotSpeed = pSO.RotationSpeedCoefRange.y * rotationSpeed;
             rotSpeed = Mathf.Clamp(rotSpeed, minRotSpeed, maxRotSpeed); // 角速度を制限する。
             transform.localRotation = Quaternion.AngleAxis(rotSpeed * Time.deltaTime, axis) * transform.localRotation;
         }

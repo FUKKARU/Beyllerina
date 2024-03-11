@@ -2,7 +2,6 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SelectTeam
 {
@@ -12,17 +11,16 @@ namespace SelectTeam
 
         Vector2 mPos;
         Vector3 screenSizeHalf;
-        float rad;
         float previousRad;
-        float tan = 0f;
+        [SerializeField] float tan = 0f;
 
-        // Start is called before the first frame update
         void Start()
         {
-            if (!GameManager.Instance.isUsingMouse)
+            if (!GameManager.Instance.IsUsingMouse)
             {
-                this.enabled = false;
+                enabled = false;
             }
+
             // 画面の縦横の半分 
             screenSizeHalf.x = Screen.width / 2f;
             screenSizeHalf.y = Screen.height / 2f;
@@ -33,7 +31,6 @@ namespace SelectTeam
             previousRad = Mathf.Atan2(mPos.x, mPos.y);
         }
 
-        // Update is called once per frame
         void Update()
         {
             // 真ん中が(0,0,0)になるようにマウスの位置を取得
@@ -44,10 +41,13 @@ namespace SelectTeam
 
             tan += Mathf.Tan(dRad); //タンジェント // * mPos.magnitude;
             text.text = tan + "";
-            SceneChange.rotatenumber = tan ;
 
             previousRad = rad; // 今のフレームの角度を保存
         }
-    }
 
+        private void OnDisable()
+        {
+            SceneChange.RotateNumber = tan * 2;
+        }
+    }
 }

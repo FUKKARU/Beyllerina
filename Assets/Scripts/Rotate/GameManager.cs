@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,14 +22,15 @@ namespace SelectTeam
             }
         }
         #endregion
-        public bool isUsingMouse = true;
-        // Start is called before the first frame update
+
+        public bool IsUsingMouse = true;
+        [NonSerialized] public float time = 10f;
+
         void Start()
         {
 
         }
 
-        // Update is called once per frame
         void Update()
         {
 

@@ -8,17 +8,16 @@ namespace SelectTeam
     public class ControllerRotate : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI text;
-        // Start is called before the first frame update
-        public float degree02 = 0;
+        [SerializeField] float degree02 = 0;
+
         void Start()
         {
-            if (GameManager.Instance.isUsingMouse)
+            if (GameManager.Instance.IsUsingMouse)
             {
-                this.enabled = false;
+                enabled = false;
             }
         }
 
-        // Update is called once per frame
         void Update()
         {
             var h = Input.GetAxis("Horizontal");
@@ -33,8 +32,11 @@ namespace SelectTeam
             }
 
             text.text = degree02.ToString();
-            SceneChange.rotatenumber = degree02;
-    
+        }
+
+        private void OnDisable()
+        {
+            SceneChange.RotateNumber = degree02 * 2;
         }
     }
 }
