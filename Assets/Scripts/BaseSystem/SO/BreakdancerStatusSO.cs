@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BaseSystem
 {
-    [CreateAssetMenu(menuName = "SO/Status/BreakDancer", fileName = "BreakDancerStatusSO")]
+    [CreateAssetMenu(menuName = "SO/BaseSystem/Status/BreakDancer", fileName = "BreakDancerStatusSO")]
     public class BreakDancerStatusSO : ScriptableObject
     {
         #region QOLŒüãˆ—
@@ -32,6 +32,6 @@ namespace BaseSystem
         }
         #endregion
 
-        public StatusTable Status;
+        public StatusTable StatusTable;
     }
 }

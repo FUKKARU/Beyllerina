@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d254192a23e3a4194a77db608c3082, type: 3}
   m_Name: GameStateSO
   m_EditorClassIdentifier: 
+  IsVsyncOn: 0
   TargetFrameRate: 120

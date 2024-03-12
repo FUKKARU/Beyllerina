@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03916c165559a844ba3470886898c3f9, type: 3}
   m_Name: BreakDancerStatusSO
   m_EditorClassIdentifier: 
-  Status:
-    Name: "\u30D6\u30EC\u30A4\u30AF\u30C0\u30F3\u30B5\u30FC"
-    SkillName: "\u30A2\u30AF\u30ED\u30D0\u30C3\u30C8"
-    SpecialName: "\u30AA\u30FC\u30D0\u30FC\u30D8\u30C3\u30C9\u30B9\u30D4\u30F3"
+  StatusTable:
+    Name: 
+    SkillName: 
+    SpecialName: 
     Hp: 100
     Weight: 1
     RotationSpeed: 1800
     PushPower: 10
     KnockbackResistance: 0.1
-    GaugeAmountUntilSpecial: 100
-    PushCoolTime: 3
+    GaugeAmountUntilSpecial: 0
+    PushCoolTime: 0
+    CounterCoolTime: 0
     SkillCooltime: 0
     SpecialCooltime: 0
     PushKey: 57

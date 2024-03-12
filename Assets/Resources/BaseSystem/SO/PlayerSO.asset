@@ -20,20 +20,32 @@ MonoBehaviour:
   GravityScale: 2
   PlayerHeight: 2
   SpeedTowardCenter: 5
-  PlayerMainAxisChangeSpeed: 10
-  AxisRotateSpeed: 360
-  AxisSlopeChangeInterval: 0.5
-  RotationSpeedCoefRange: {x: 0.1, y: 1}
-  AxisSlopeStartHpCoef: 0.3
-  AxisSlopRange: {x: -30, y: 30}
-  DragCoef: 10
-  PowerCoefOnKnockbacked: 1
-  MinPowerOnKnockbacked: 15
-  DamagableDuration: 0.1
-  DamageCoef: 0.25
-  DamageCoefOnPush: 0.5
-  DamageCoefOnKnockbacked: 2
-  KnockbackResistanceCoefOnCounter: 100
-  Duration2IdleOnPushFailed: 0.3
-  Duration2IdleOnCounterFailed: 0.3
-  Duration2IdleWhenKnockbacked: 1
+  BehaviourTable:
+    PlayerMainAxisChangeSpeed: 10
+    AxisRotateSpeed: 360
+    AxisSlopeChangeInterval: 5
+    RotationSpeedCoefRange: {x: -10, y: 10}
+    AxisSlopeStartHpCoef: 0.3
+    AxisSlopRange: {x: -30, y: 30}
+    DragCoef: 10
+    PowerCoefOnKnockbacked: 1.5
+    MinPowerOnKnockbacked: 15
+    KnockbackResistanceCoefOnCounter: 100
+    Duration2IdleOnPushFailed: 0.3
+    Duration2IdleOnCounterFailed: 0.3
+    Duration2IdleWhenKnockbacked: 1
+  DamageTable:
+    DamagableDuration: 0.1
+    StateAdjustValue:
+    - 1
+    - 0.5
+    - 0
+    - 2
+    DamageCoef: 0.25
+    MrkAdjustValueY: 1.5
+    MrkAdjustValueX: 0.5
+    HpAdjustValue:
+    - 0.9
+    - 1
+    DamageDescriptionTable:
+      Tmp: 0

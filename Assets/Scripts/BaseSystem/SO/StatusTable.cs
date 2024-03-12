@@ -17,6 +17,7 @@ namespace BaseSystem
         [Header("ノックバック耐性"), Range(0, 1)] public float KnockbackResistance;
         [Header("必殺技の発動に必要なゲージ量")] public float GaugeAmountUntilSpecial;
         [Header("プッシュのクールタイム")] public float PushCoolTime;
+        [Header("カウンターのクールタイム")] public float CounterCoolTime;
         [Header("スキルのクールタイム")] public float SkillCooltime;
         [Header("必殺技のクールタイム")] public float SpecialCooltime;
         [Header("プッシュキー")] public KeyCode PushKey;

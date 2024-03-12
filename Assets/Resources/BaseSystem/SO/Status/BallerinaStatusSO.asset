@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98396b16256741e488d8840bf7654c9f, type: 3}
   m_Name: BallerinaStatusSO
   m_EditorClassIdentifier: 
-  Status:
-    Name: "\u30D0\u30EC\u30EA\u30FC\u30CA"
-    SkillName: "\u30AF\u30A4\u30C3\u30AF\u30BF\u30FC\u30F3"
-    SpecialName: "\u30EF\u30EB\u30C4"
+  StatusTable:
+    Name: 
+    SkillName: 
+    SpecialName: 
     Hp: 100
     Weight: 1
     RotationSpeed: 1800
     PushPower: 10
     KnockbackResistance: 0.1
-    GaugeAmountUntilSpecial: 100
-    PushCoolTime: 3
+    GaugeAmountUntilSpecial: 0
+    PushCoolTime: 0
+    CounterCoolTime: 0
     SkillCooltime: 0
     SpecialCooltime: 0
     PushKey: 49
