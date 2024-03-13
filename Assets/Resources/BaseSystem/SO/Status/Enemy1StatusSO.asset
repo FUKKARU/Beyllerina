@@ -9,23 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98396b16256741e488d8840bf7654c9f, type: 3}
-  m_Name: BallerinaStatusSO
+  m_Script: {fileID: 11500000, guid: 0f1bfdc4738308446b82c53601cc405b, type: 3}
+  m_Name: Enemy1StatusSO
   m_EditorClassIdentifier: 
   StatusTable:
-    IsPlayable: 1
+    IsPlayable: 0
     StatusTableName:
       Name: 
       SkillName: 
       SpecialName: 
     StatusTablePlayable:
-      PushKey: 49
-      CounterKey: 50
+      PushKey: 0
+      CounterKey: 0
     StatusTableUnPlayable:
-      Push2SkillInterval: 0
-      Push2SkillIntervalOffset: 0
-      Skill2PushInterval: 0
-      Skill2PushIntervalOffset: 0
+      Push2SkillInterval: 10
+      Push2SkillIntervalOffset: 5
+      Skill2PushInterval: 10
+      Skill2PushIntervalOffset: 5
     StatusTableInitStatus:
       Hp: 100
       Weight: 1

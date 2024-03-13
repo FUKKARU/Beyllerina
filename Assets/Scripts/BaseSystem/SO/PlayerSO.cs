@@ -39,11 +39,12 @@ namespace BaseSystem
         [Header("重力を何倍にするか")] public float GravityScale;
         [Header("プレイヤーの高さ")] public float PlayerHeight;
         [Header("中心への移動速度")] public float SpeedTowardCenter;
-        
+        [Space(25)]
         [Header("【挙動関係】")] public BehaviourTable BehaviourTable;
         [Header("【ダメージ処理関係】")] public DamageTable DamageTable;
     }
 
+    #region Table
     [Serializable]
     public class BehaviourTable
     {
@@ -66,6 +67,8 @@ namespace BaseSystem
     public class DamageTable
     {
         [Header("ダメージを食らえる間隔（＝無敵時間）")] public float DamagableDuration;
+        [Header("食らえるダメージの最小値")] public float MinDamage;
+        [Header("食らえるダメージの最大値")] public float MaxDamage;
         
         [Header("状態補正値\r\n（IDLE/PUSH/COUNTER/KNOCKBACKED）")] public float[] StateAdjustValue;
         [Header("ダメージ係数")] public float DamageCoef;
@@ -73,11 +76,11 @@ namespace BaseSystem
         [Header("重量/回転速度/ノックバック耐性補正値で、\r\nx >= d の時と傾きが等しくなる x( < d) が、\r\n d の何倍かどうか")] public float MrkAdjustValueX;
         [Header("体力補正値（歳差運動をしている/していない）")] public float[] HpAdjustValue;
 
-        [Header("ダメージ計算の詳細")] public DamageDescriptionTable DamageDescriptionTable;
+        [Header("ダメージ計算の詳細")] public DamageTableDescription DamageDescriptionTable;
     }
 
     [Serializable]
-    public class DamageDescriptionTable
+    public class DamageTableDescription
     {
         [Header("ダメージ＝\r\n（基礎ダメージ）＊\r\n（ステータス補正値）＊\r\n（状態補正値）＊\r\n（ダメージ係数）")]
         [Space(50)]
@@ -92,4 +95,5 @@ namespace BaseSystem
 
         [Header("何もしない定数")] public int Tmp;
     }
+    #endregion
 }

@@ -30,6 +30,9 @@ public class GameStateSO : ScriptableObject
     }
     #endregion
 
+    [Header("解像度（横幅）")] public int ResolutionH;
+    [Header("解像度（縦幅）")] public int ResolutionV;
+    [Header("フルスクリーンにするか")] public bool IsFullScreen;
     [Header("Vsyncをオンにするか")] public bool IsVsyncOn;
-    [Header("Unityが目標とするFPS")] public int TargetFrameRate;
+    [Header("（Vsyncがオフの場合に）Unityが目標とするFPS")] public int TargetFrameRate;
 }

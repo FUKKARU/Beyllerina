@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace BaseSystem
 {
@@ -10,7 +11,7 @@ namespace BaseSystem
     {
         #region 変数宣言
         // ベイの種類を識別する。インスペクタ上で設定しておくこと！
-        enum TYPE { NULL, Ballerina, BreakDancer }
+        enum TYPE { NULL, Ballerina, BreakDancer, Enemy1 }
         [SerializeField] TYPE type = TYPE.NULL;
 
         // プレイヤーの状態(public)
@@ -25,7 +26,11 @@ namespace BaseSystem
         PlayerSO pSO;
         BehaviourTable pSOB;
         DamageTable pSOD;
-        StatusTable initStatus;
+        StatusTable sSO;
+        StatusTableName sSON;
+        StatusTablePlayable sSOP;
+        StatusTableUnPlayable sSOU;
+        StatusTableInitStatus sSOI;
         float Hp { get; set; }
         float weight;
         float knoRes; // 内部的にRigidbody.drag（＝抵抗）を操作している
@@ -39,6 +44,10 @@ namespace BaseSystem
         // ベイの行動処理用
         bool isDamageManager = false; // ダメージ処理を行うインスタンスであるかどうか
         bool isDamagable = false; // 【一人しか行わない】ダメージを食らえるか（＝無敵時間でないか）
+        bool isPushIfUnplayable = false; // アンプレイアブルである時、プッシュを使うフラグ
+        bool isCounterIfUnplayable = false; // アンプレイアブルである時、カウンターを使うフラグ
+        bool isSkillIfUnplayable = false; // アンプレイアブルである時、スキルを使うフラグ
+        bool isSpecialIfUnplayable = false; // アンプレイアブルである時、必殺技を使うフラグ
         bool IsPushBehaviourDone { get; set; } = false; // プッシュの処理を、完了しているか
         bool IsCounterBehaviourDone { get; set; } = false; // カウンターの処理を、完了しているか
         bool isKnockbackedBehaviourDone = false; // ノックバックされた時の処理を、完了しているか
@@ -73,19 +82,29 @@ namespace BaseSystem
             switch (type)
             {
                 case TYPE.Ballerina:
-                    initStatus = BallerinaStatusSO.Entity.StatusTable;
+                    sSO = BallerinaStatusSO.Entity.StatusTable;
                     break;
+
                 case TYPE.BreakDancer:
-                    initStatus = BreakDancerStatusSO.Entity.StatusTable;
+                    sSO = BreakDancerStatusSO.Entity.StatusTable;
                     break;
+
+                case TYPE.Enemy1:
+                    sSO = Enemy1StatusSO.Entity.StatusTable;
+                    break;
+
                 case TYPE.NULL:
                     Debug.LogError("<color=red>typeが設定されていません</color>");
                     break;
             }
-            Hp = initStatus.Hp;
-            weight = initStatus.Weight;
-            knoRes = initStatus.KnockbackResistance;
-            rotSpe = initStatus.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
+            sSON = sSO.StatusTableName;
+            sSOP = sSO.StatusTablePlayable;
+            sSOU = sSO.StatusTableUnPlayable;
+            sSOI = sSO.StatusTableInitStatus;
+            Hp = sSOI.Hp;
+            weight = sSOI.Weight;
+            knoRes = sSOI.KnockbackResistance;
+            rotSpe = sSOI.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
 
             // 敵への参照を取得
             int idx = Array.IndexOf(GameManager.Instance.Beys, gameObject);
@@ -110,6 +129,41 @@ namespace BaseSystem
 
             // ゲーム開始から少しの間は、無敵時間になっている。
             StartCoroutine(CountDamagableDuration());
+
+            // アンプレイアブルなら、プッシュとスキルを使うフラグを、周期的かつ交互にUpdateメソッドに送る
+            if (!sSO.IsPlayable)
+            {
+                StartCoroutine(InputPushAndSkillPeriodically());
+            }
+        }
+
+        IEnumerator InputPushAndSkillPeriodically()
+        {
+            bool isSkill2Push = true; // スキル → プッシュの遷移を行う番であるかどうか
+
+            while (true)
+            {
+                if (isSkill2Push)
+                {
+                    isSkill2Push = false;
+
+                    float dTime = sSOU.Skill2PushInterval;
+                    float ofst = sSOU.Skill2PushIntervalOffset;
+                    float time = Random.Range(dTime - ofst, dTime + ofst);
+                    yield return new WaitForSeconds(time);
+                    isPushIfUnplayable = true;
+                }
+                else
+                {
+                    isSkill2Push = true;
+
+                    float dTime = sSOU.Push2SkillInterval;
+                    float ofst = sSOU.Push2SkillIntervalOffset;
+                    float time = Random.Range(dTime - ofst, dTime + ofst);
+                    yield return new WaitForSeconds(time);
+                    isSkillIfUnplayable = true;
+                }
+            }
         }
         #endregion
 
@@ -158,7 +212,7 @@ namespace BaseSystem
         #region 【Update】
         void Update()
         {
-            #region PlayerStateの遷移：遷移クールタイム中でないなら、プレイヤーの入力を取得して、PUSH状態またはCOUNTER状態になる。
+            #region PlayerStateの遷移：遷移クールタイム中でないなら、プレイヤーからの入力またはコルーチンからのフラグを取得して、PUSH状態またはCOUNTER状態になる。
             Idle2Push();
             Counter2Push();
             Idle2Counter();
@@ -302,9 +356,9 @@ namespace BaseSystem
             float baseDamage = momentumNorm + opponentMomentumNorm;
 
             // ステータス補正値
-            float weightAdjustValue = CalcMrkDamage(weight, initStatus.Weight); // 重量補正値
-            float rotSpeAdjustValue = CalcMrkDamage(rotSpe, initStatus.RotationSpeed); // 回転速度補正値
-            float knoResAdjustValue = CalcMrkDamage(knoRes, initStatus.KnockbackResistance); // ノックバック耐性補正値
+            float weightAdjustValue = CalcMrkDamage(weight, sSOI.Weight); // 重量補正値
+            float rotSpeAdjustValue = CalcMrkDamage(rotSpe, sSOI.RotationSpeed); // 回転速度補正値
+            float knoResAdjustValue = CalcMrkDamage(knoRes, sSOI.KnockbackResistance); // ノックバック耐性補正値
             float hpAdjustValue = pm.isHpLow ? pSOD.HpAdjustValue[0] : pSOD.HpAdjustValue[1]; // 体力補正値
             float statusAdjustValue = weightAdjustValue * rotSpeAdjustValue * knoResAdjustValue * hpAdjustValue;
 
@@ -333,7 +387,12 @@ namespace BaseSystem
             float damageCoef = pSOD.DamageCoef;
 
             float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef; // ダメージ計算
-            pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
+
+            if (pSOD.MinDamage <= damage && damage <= pSOD.MaxDamage)
+            {
+                pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
+            }
+            
             if (pSO.IsShowNormalLog) // ログを表示
             {
                 Debug.Log($"<color=#64ff64>{pm.gameObject.name} に {damage} ダメージ！</color>");
@@ -355,56 +414,107 @@ namespace BaseSystem
         }
 
         // IDLE => PUSH
-        // 【条件】プッシュキーが押された。
+        // 【条件】プレイアブルかつプッシュキーが押された、またはアンプレイアブルかつプッシュのフラグを受け取った。
         void Idle2Push()
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
-                if (Input.GetKeyDown(initStatus.PushKey))
+                if (sSO.IsPlayable)
                 {
-                    State = PlayerState.PUSH;
+                    if (Input.GetKeyDown(sSOP.PushKey))
+                    {
+                        State = PlayerState.PUSH;
+                    }
+                }
+                else
+                {
+                    if (isPushIfUnplayable)
+                    {
+                        isPushIfUnplayable = false;
+
+                        State = PlayerState.PUSH;
+                    }
                 }
             }
         }
 
         // COUNTER => PUSH
-        // 【条件】プッシュキーが押された。
+        // 【条件】プレイアブルかつプッシュキーが押された、またはアンプレイアブルかつプッシュのフラグを受け取った。
         void Counter2Push()
         {
             if (State == PlayerState.COUNTER && !isOnStateChangeCooltime)
             {
-                if (Input.GetKeyDown(initStatus.PushKey))
+                if (sSO.IsPlayable)
                 {
-                    State = PlayerState.PUSH;
-                    knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
-                    IsCounterBehaviourDone = false;
+                    if (Input.GetKeyDown(sSOP.PushKey))
+                    {
+                        State = PlayerState.PUSH;
+                        knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        IsCounterBehaviourDone = false;
+                    }
+                }
+                else
+                {
+                    if (isPushIfUnplayable)
+                    {
+                        isPushIfUnplayable = false;
+
+                        State = PlayerState.PUSH;
+                        knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        IsCounterBehaviourDone = false;
+                    }
                 }
             }
         }
 
         // IDLE => COUNTER
-        // 【条件】カウンターキーが押された。
+        // 【条件】プレイアブルかつカウンターキーが押された、またはアンプレイアブルかつカウンターのフラグを受け取った。
         void Idle2Counter()
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
-                if (Input.GetKeyDown(initStatus.CounterKey))
+                if (sSO.IsPlayable)
                 {
-                    State = PlayerState.COUNTER;
+                    if (Input.GetKeyDown(sSOP.CounterKey))
+                    {
+                        State = PlayerState.COUNTER;
+                    }
+                }
+                else
+                {
+                    if (isCounterIfUnplayable)
+                    {
+                        isCounterIfUnplayable = false;
+
+                        State = PlayerState.COUNTER;
+                    }
                 }
             }
         }
 
         // PUSH => COUNTER
-        // カウンターキーが押された。
+        // 【条件】プレイアブルかつカウンターキーが押された、またはアンプレイアブルかつカウンターのフラグを受け取った。
         void Push2Counter()
         {
             if (State == PlayerState.PUSH && !isOnStateChangeCooltime)
             {
-                if (Input.GetKeyDown(initStatus.CounterKey))
+                if (sSO.IsPlayable)
                 {
-                    State = PlayerState.COUNTER;
-                    IsPushBehaviourDone = false;
+                    if (Input.GetKeyDown(sSOP.CounterKey))
+                    {
+                        State = PlayerState.COUNTER;
+                        IsPushBehaviourDone = false;
+                    }
+                }
+                else
+                {
+                    if (isCounterIfUnplayable)
+                    {
+                        isCounterIfUnplayable = false;
+
+                        State = PlayerState.COUNTER;
+                        IsPushBehaviourDone = false;
+                    }
                 }
             }
         }
@@ -480,7 +590,7 @@ namespace BaseSystem
         void Rotate()
         {
             // HPが一定以下かどうかチェックし、フラグを切り替える。
-            isHpLow = Hp < initStatus.Hp * pSOB.AxisSlopeStartHpCoef ? true : false;
+            isHpLow = Hp < sSOI.Hp * pSOB.AxisSlopeStartHpCoef ? true : false;
 
             // 回転処理を行う前に、ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
             Ray shotRay = new Ray(transform.position, -transform.up);
@@ -503,7 +613,7 @@ namespace BaseSystem
                 }
 
                 // 回転軸を中心軸（transform.up）周りに回転させる。
-                float axisSpeed = pSOB.AxisRotateSpeed / initStatus.Hp * Hp;
+                float axisSpeed = pSOB.AxisRotateSpeed / sSOI.Hp * Hp;
                 axis = Quaternion.AngleAxis(axisSpeed * Time.deltaTime, transform.up) * axis;
             }
             // そうでないなら、自転する。
@@ -513,7 +623,7 @@ namespace BaseSystem
             }
 
             // ベイを回転軸周りに回転させる。
-            float rotSpeed = rotSpe / initStatus.Hp * Hp;
+            float rotSpeed = rotSpe / sSOI.Hp * Hp;
             float minRotSpeed = pSOB.RotationSpeedCoefRange.x * rotSpe;
             float maxRotSpeed = pSOB.RotationSpeedCoefRange.y * rotSpe;
             rotSpeed = Mathf.Clamp(rotSpeed, minRotSpeed, maxRotSpeed); // 角速度を制限する。
@@ -537,7 +647,7 @@ namespace BaseSystem
                 if (!IsPushBehaviourDone)
                 {
                     IsPushBehaviourDone = true;
-                    rb.AddForce((opponent.transform.position - transform.position).normalized * initStatus.PushPower, ForceMode.Impulse);
+                    rb.AddForce((opponent.transform.position - transform.position).normalized * sSOI.PushPower, ForceMode.Impulse);
                 }
             }
         }
@@ -588,12 +698,13 @@ namespace BaseSystem
         #region ベイのスクリプトの、各種変数の表示の詳細
         void ShowHP()
         {
-            if (Hp < 0) // HPが0を切ったら、このゲームオブジェクトを非アクティブにする。
+            if (Hp < 0) // デス判定
             {
-                StopAllCoroutines();
-                text.text = "0";
+                GameManager.Instance.IsGameEnded = true; // ゲーム終了の合図を送る
+                StopAllCoroutines(); // コルーチンをすべて停止
+                text.text = "0"; // HP表示を0にする
 
-                gameObject.SetActive(false);
+                gameObject.SetActive(false); // 非アクティブにする
             }
             else
             {

@@ -9,14 +9,12 @@ public class GameStateSetter
     static void RuntimeInitializeOnLoadMethods()
     {
         #region【設定】
-        SetVsync(); // Vsyncの設定
-        SetTargetFrameRate(); // ターゲットフレームレートの設定
+        SetResolutionAndFullScreenMode(); // 解像度とフルスクリーンにするかどうかを設定
+        SetVsyncAndTargetFrameRate(); // Vsync（とターゲットフレームレート）の設定
         #endregion
 
 #if UNITY_EDITOR
         #region【LogError】
-        CheckVsync(); // Vsyncの設定が成功したどうかを確認
-        CheckTargetFrameRate(); // ターゲットフレームレートの設定が成功したかどうかを確認
         #endregion
 
         #region【LogWarning】
@@ -29,36 +27,21 @@ public class GameStateSetter
     }
 
     #region メソッド達の詳細
-    static void SetVsync()
+    static void SetResolutionAndFullScreenMode()
     {
-        if (!GameStateSO.Entity.IsVsyncOn)
+        Screen.SetResolution(GameStateSO.Entity.ResolutionH, GameStateSO.Entity.ResolutionV, GameStateSO.Entity.IsFullScreen);
+    }
+
+    static void SetVsyncAndTargetFrameRate()
+    {
+        if (GameStateSO.Entity.IsVsyncOn)
+        {
+            QualitySettings.vSyncCount = 1; // VSyncをONにする
+        }
+        else
         {
             QualitySettings.vSyncCount = 0; // VSyncをOFFにする
-        }
-    }
-
-    static void SetTargetFrameRate()
-    {
-        Application.targetFrameRate = GameStateSO.Entity.TargetFrameRate;
-    }
-
-    static void CheckVsync()
-    {
-        if (!GameStateSO.Entity.IsVsyncOn && QualitySettings.vSyncCount != 0)
-        {
-            Debug.LogError("<color=red>Vsyncがオフになっていません</color>");
-        }
-        else if (GameStateSO.Entity.IsVsyncOn && QualitySettings.vSyncCount == 0)
-        {
-            Debug.LogError("<color=red>Vsyncがオンになっていません</color>");
-        }
-    }
-
-    static void CheckTargetFrameRate()
-    {
-        if (Application.targetFrameRate != GameStateSO.Entity.TargetFrameRate)
-        {
-            Debug.LogError("<color=red>ターゲットフレームレートが設定できていません</color>");
+            Application.targetFrameRate = GameStateSO.Entity.TargetFrameRate; // ターゲットフレームレートの設定
         }
     }
 

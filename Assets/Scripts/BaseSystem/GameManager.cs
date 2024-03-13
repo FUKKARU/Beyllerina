@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -26,5 +27,7 @@ namespace BaseSystem
         [Header("BeysとTextsの要素の順番を一致させること！")]
         [Header("アタッチする")] public GameObject[] Beys;
         [Header("アタッチする")] public TextMeshProUGUI[] Texts;
+
+        [NonSerialized] public bool IsGameEnded = false; // ゲームが終了しているかどうか
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d80aa9969654c646977f50061cd5c9d, type: 3}
   m_Name: PlayerSO
   m_EditorClassIdentifier: 
-  IsShowNormalLog: 1
+  IsShowNormalLog: 0
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -36,6 +36,8 @@ MonoBehaviour:
     Duration2IdleWhenKnockbacked: 1
   DamageTable:
     DamagableDuration: 0.1
+    MinDamage: 0
+    MaxDamage: 100
     StateAdjustValue:
     - 1
     - 0.5
