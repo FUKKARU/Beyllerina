@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BaseSystem
 {
@@ -24,10 +24,62 @@ namespace BaseSystem
         }
         #endregion
 
-        [Header("BeysとTextsの要素の順番を一致させること！")]
-        [Header("アタッチする")] public GameObject[] Beys;
-        [Header("アタッチする")] public TextMeshProUGUI[] Texts;
+        [Header("ベイ（プレイアブル/アンプレイアブル）")] public GameObject[] Beys;
+        [Header("プレイアブルのBar")] public Image P_Bar;
+        [Header("プレイアブルのDamagedBar")] public Image P_DBar;
+        [Header("アンプレイアブルのBar")] public Image U_Bar;
+        [Header("アンプレイアブルのDamagedBar")] public Image U_DBar;
 
-        [NonSerialized] public bool IsGameEnded = false; // ゲームが終了しているかどうか
+        [NonSerialized] public bool IsChangePlayableBar = false; // プレイアブルのバーを変化させるかどうか
+        [NonSerialized] public bool IsChangeUnPlayableBar = false; // アンプレイアブルのバーを変化させるかどうか
+
+        // PlayerMoveクラスのインスタンス
+        PlayerMove pPm;
+        PlayerMove uPm;
+
+        void Start()
+        {
+            pPm = Beys[0].GetComponent<PlayerMove>();
+            uPm = Beys[1].GetComponent<PlayerMove>();
+        }
+
+        void Update()
+        {
+            // バーを減少させる。
+            ChangeBarsFillAmount();
+        }
+
+        void ChangeBarsFillAmount()
+        {
+            if (IsChangePlayableBar)
+            {
+                float targetValue = P_Bar.fillAmount; // ここまでバーを減らす
+                float nowValue = P_DBar.fillAmount; // 現在のバーの進捗
+
+                if (nowValue > targetValue) // 目標値を越えていないとき
+                {
+                    P_DBar.fillAmount -= pPm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
+                }
+                else
+                {
+                    IsChangePlayableBar = false;
+                }
+            }
+
+            if (IsChangeUnPlayableBar)
+            {
+                float targetValue = U_Bar.fillAmount; // ここまでバーを減らす
+                float nowValue = U_DBar.fillAmount; // 現在のバーの進捗
+
+                if (nowValue > targetValue) // 目標値を越えていないとき
+                {
+                    U_DBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
+                }
+                else
+                {
+                    IsChangeUnPlayableBar = false;
+                }
+            }
+        }
     }
 }

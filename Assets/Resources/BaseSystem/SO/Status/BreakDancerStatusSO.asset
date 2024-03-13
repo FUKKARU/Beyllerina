@@ -21,11 +21,13 @@ MonoBehaviour:
     StatusTablePlayable:
       PushKey: 57
       CounterKey: 48
+      HpBarChangeSpeed: 0.1
     StatusTableUnPlayable:
       Push2SkillInterval: 0
       Push2SkillIntervalOffset: 0
       Skill2PushInterval: 0
       Skill2PushIntervalOffset: 0
+      HpBarChangeSpeed: 0
     StatusTableInitStatus:
       Hp: 100
       Weight: 1

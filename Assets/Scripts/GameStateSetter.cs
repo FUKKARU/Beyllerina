@@ -8,25 +8,11 @@ public class GameStateSetter
     [RuntimeInitializeOnLoadMethod]
     static void RuntimeInitializeOnLoadMethods()
     {
-        #region【設定】
         SetResolutionAndFullScreenMode(); // 解像度とフルスクリーンにするかどうかを設定
         SetVsyncAndTargetFrameRate(); // Vsync（とターゲットフレームレート）の設定
-        #endregion
-
-#if UNITY_EDITOR
-        #region【LogError】
-        #endregion
-
-        #region【LogWarning】
-        #endregion
-
-        #region【Log】
-        ShowConfirmation(); // 確認メッセージを表示
-        #endregion
-#endif
     }
 
-    #region メソッド達の詳細
+    #region 詳細
     static void SetResolutionAndFullScreenMode()
     {
         Screen.SetResolution(GameStateSO.Entity.ResolutionH, GameStateSO.Entity.ResolutionV, GameStateSO.Entity.IsFullScreen);
@@ -43,12 +29,6 @@ public class GameStateSetter
             QualitySettings.vSyncCount = 0; // VSyncをOFFにする
             Application.targetFrameRate = GameStateSO.Entity.TargetFrameRate; // ターゲットフレームレートの設定
         }
-    }
-
-    static void ShowConfirmation()
-    {
-        Debug.Log("<color=cyan>確認してください：BaseSystem：各プレイヤーのPlayerMove.cs内の、typeが正しいかどうか</color>");
-        Debug.Log("<color=cyan>確認してください：BaseSystem：GameManager.cs内の、BeysとTextsの要素の順番が一致しているかどうか</color>");
     }
     #endregion
 }

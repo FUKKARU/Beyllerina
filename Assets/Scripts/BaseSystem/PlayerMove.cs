@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -22,16 +21,19 @@ namespace BaseSystem
         Rigidbody rb;
         GameObject stageCenter;
 
+        // GMからデータを取得するよう
+        GameManager gm;
+
         // SOからデータを取得する用
-        PlayerSO pSO;
-        BehaviourTable pSOB;
-        DamageTable pSOD;
-        StatusTable sSO;
-        StatusTableName sSON;
-        StatusTablePlayable sSOP;
-        StatusTableUnPlayable sSOU;
-        StatusTableInitStatus sSOI;
-        float Hp { get; set; }
+        public PlayerSO P_SO { get; set; }
+        public BehaviourTable P_SOB { get; set; }
+        public DamageTable P_SOD { get; set; }
+        public StatusTable S_SO { get; set; }
+        public StatusTableName S_SON { get; set; }
+        public StatusTablePlayable S_SOP { get; set; }
+        public StatusTableUnPlayable S_SOU { get; set; }
+        public StatusTableInitStatus S_SOI { get; set; }
+        public float Hp { get; set; }
         float weight;
         float knoRes; // 内部的にRigidbody.drag（＝抵抗）を操作している
         float rotSpe;
@@ -55,9 +57,6 @@ namespace BaseSystem
         Vector3 axis; // ベイの回転軸
         float axisTimer = 0; // ベイの回転軸を傾ける時間
         bool isHpLow = false; // HPが一定以下になって、歳差運動をしているかどうか
-
-        // このベイに対応するテキストを取得する用
-        TextMeshProUGUI text;
         #endregion
 
 
@@ -73,49 +72,52 @@ namespace BaseSystem
             rb.useGravity = false;
             stageCenter = GameObject.FindGameObjectWithTag("Center");
 
+            // GameManagerを取得
+            gm = GameManager.Instance;
+
             // PlayerSOを取得
-            pSO = PlayerSO.Entity;
-            pSOB = pSO.BehaviourTable;
-            pSOD = pSO.DamageTable;
+            P_SO = PlayerSO.Entity;
+            P_SOB = P_SO.BehaviourTable;
+            P_SOD = P_SO.DamageTable;
 
             // 対応するStatusTableを取得し、変動する数値を改めて、このクラス内の変数に格納
             switch (type)
             {
                 case TYPE.Ballerina:
-                    sSO = BallerinaStatusSO.Entity.StatusTable;
+                    S_SO = BallerinaStatusSO.Entity.StatusTable;
                     break;
 
                 case TYPE.BreakDancer:
-                    sSO = BreakDancerStatusSO.Entity.StatusTable;
+                    S_SO = BreakDancerStatusSO.Entity.StatusTable;
                     break;
 
                 case TYPE.Enemy1:
-                    sSO = Enemy1StatusSO.Entity.StatusTable;
+                    S_SO = Enemy1StatusSO.Entity.StatusTable;
                     break;
 
                 case TYPE.NULL:
                     Debug.LogError("<color=red>typeが設定されていません</color>");
                     break;
             }
-            sSON = sSO.StatusTableName;
-            sSOP = sSO.StatusTablePlayable;
-            sSOU = sSO.StatusTableUnPlayable;
-            sSOI = sSO.StatusTableInitStatus;
-            Hp = sSOI.Hp;
-            weight = sSOI.Weight;
-            knoRes = sSOI.KnockbackResistance;
-            rotSpe = sSOI.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
+            S_SON = S_SO.StatusTableName;
+            S_SOP = S_SO.StatusTablePlayable;
+            S_SOU = S_SO.StatusTableUnPlayable;
+            S_SOI = S_SO.StatusTableInitStatus;
+            Hp = S_SOI.Hp;
+            weight = S_SOI.Weight;
+            knoRes = S_SOI.KnockbackResistance;
+            rotSpe = S_SOI.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
 
             // 敵への参照を取得
-            int idx = Array.IndexOf(GameManager.Instance.Beys, gameObject);
+            int idx = Array.IndexOf(gm.Beys, gameObject);
             if (idx == 0)
             {
-                opponent = GameManager.Instance.Beys[1];
+                opponent = gm.Beys[1];
                 isDamageManager = true; // 0番目のインスタンスで、ダメージ処理を行う。
             }
             else if (idx == 1)
             {
-                opponent = GameManager.Instance.Beys[0];
+                opponent = gm.Beys[0];
             }
             else
             {
@@ -124,14 +126,11 @@ namespace BaseSystem
             opponentPm = opponent.GetComponent<PlayerMove>();
             opponentRb = opponent.GetComponent<Rigidbody>();
 
-            // このベイに対応するテキストを取得して、HP表示
-            text = GameManager.Instance.Texts[Array.IndexOf(GameManager.Instance.Beys, gameObject)];
-
             // ゲーム開始から少しの間は、無敵時間になっている。
             StartCoroutine(CountDamagableDuration());
 
             // アンプレイアブルなら、プッシュとスキルを使うフラグを、周期的かつ交互にUpdateメソッドに送る
-            if (!sSO.IsPlayable)
+            if (!S_SO.IsPlayable)
             {
                 StartCoroutine(InputPushAndSkillPeriodically());
             }
@@ -147,8 +146,8 @@ namespace BaseSystem
                 {
                     isSkill2Push = false;
 
-                    float dTime = sSOU.Skill2PushInterval;
-                    float ofst = sSOU.Skill2PushIntervalOffset;
+                    float dTime = S_SOU.Skill2PushInterval;
+                    float ofst = S_SOU.Skill2PushIntervalOffset;
                     float time = Random.Range(dTime - ofst, dTime + ofst);
                     yield return new WaitForSeconds(time);
                     isPushIfUnplayable = true;
@@ -157,8 +156,8 @@ namespace BaseSystem
                 {
                     isSkill2Push = true;
 
-                    float dTime = sSOU.Push2SkillInterval;
-                    float ofst = sSOU.Push2SkillIntervalOffset;
+                    float dTime = S_SOU.Push2SkillInterval;
+                    float ofst = S_SOU.Push2SkillIntervalOffset;
                     float time = Random.Range(dTime - ofst, dTime + ofst);
                     yield return new WaitForSeconds(time);
                     isSkillIfUnplayable = true;
@@ -174,10 +173,10 @@ namespace BaseSystem
             ChangeRigidbodyParameters();
 
             // 重力
-            rb.AddForce(Vector3.down * 9.81f * pSO.GravityScale, ForceMode.Force);
+            rb.AddForce(Vector3.down * 9.81f * P_SO.GravityScale, ForceMode.Force);
 
             // 常に中心へ移動
-            rb.AddForce((stageCenter.transform.position - transform.position).normalized * pSO.SpeedTowardCenter, ForceMode.Force);
+            rb.AddForce((stageCenter.transform.position - transform.position).normalized * P_SO.SpeedTowardCenter, ForceMode.Force);
 
         }
 
@@ -185,14 +184,14 @@ namespace BaseSystem
         void ChangeRigidbodyParameters()
         {
             rb.mass = weight; // mass：重量
-            rb.drag = pSOB.DragCoef * knoRes; // drag：抵抗
+            rb.drag = P_SOB.DragCoef * knoRes; // drag：抵抗
         }
         #endregion
 
         #region 【OnCollision】【一人しか行わない】敵との接触を検知し、無敵時間でないならば、ダメージ処理を行いかつ条件によって自分または敵をKNOCKBACKED状態にする。
         void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.CompareTag(pSO.BeyTagName) && isDamageManager)
+            if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 if (isDamagable)
                 {
@@ -204,7 +203,7 @@ namespace BaseSystem
         }
         IEnumerator CountDamagableDuration()
         {
-            yield return new WaitForSeconds(pSOD.DamagableDuration);
+            yield return new WaitForSeconds(P_SOD.DamagableDuration);
             isDamagable = true;
         }
         #endregion
@@ -227,8 +226,8 @@ namespace BaseSystem
             Knockbacked();
             #endregion
 
-            #region ベイのスクリプトの、各種変数の表示
-            ShowHP(); // デス判定も行う。
+            #region デス判定
+            JudgeDeath();
             #endregion
 
             #region PlayerStateの遷移：遷移クールタイム中でないなら、遷移クールタイムを開始し、時間経過でIDLE状態になる。
@@ -264,7 +263,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.PUSH);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
 
-                        if (pSO.IsShowNormalLog)
+                        if (P_SO.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{name} が {opponent.name} にプッシュした！</color>");
                         }
@@ -287,7 +286,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.KNOCKBACKED);
                         Damage(opponentPm, PlayerState.PUSH);
 
-                        if (pSO.IsShowNormalLog)
+                        if (P_SO.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{opponent.name} が {name} にプッシュした！</color>");
                         }
@@ -295,7 +294,7 @@ namespace BaseSystem
                     else if (State == PlayerState.COUNTER)
                     {
                         State = PlayerState.IDLE;
-                        knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
 
                         opponentPm.State = PlayerState.KNOCKBACKED;
@@ -304,7 +303,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.COUNTER);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
 
-                        if (pSO.IsShowNormalLog)
+                        if (P_SO.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{name} が {opponent.name} にカウンターした！</color>");
                         }
@@ -323,13 +322,13 @@ namespace BaseSystem
                         IsPushBehaviourDone = false;
 
                         opponentPm.State = PlayerState.IDLE;
-                        opponentPm.knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        opponentPm.knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         opponentPm.IsCounterBehaviourDone = false;
 
                         Damage(this, PlayerState.KNOCKBACKED);
                         Damage(opponentPm, PlayerState.COUNTER);
 
-                        if (pSO.IsShowNormalLog)
+                        if (P_SO.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{opponent.name} が {name} にカウンターした！</color>");
                         }
@@ -356,10 +355,10 @@ namespace BaseSystem
             float baseDamage = momentumNorm + opponentMomentumNorm;
 
             // ステータス補正値
-            float weightAdjustValue = CalcMrkDamage(weight, sSOI.Weight); // 重量補正値
-            float rotSpeAdjustValue = CalcMrkDamage(rotSpe, sSOI.RotationSpeed); // 回転速度補正値
-            float knoResAdjustValue = CalcMrkDamage(knoRes, sSOI.KnockbackResistance); // ノックバック耐性補正値
-            float hpAdjustValue = pm.isHpLow ? pSOD.HpAdjustValue[0] : pSOD.HpAdjustValue[1]; // 体力補正値
+            float weightAdjustValue = CalcMrkDamage(weight, S_SOI.Weight); // 重量補正値
+            float rotSpeAdjustValue = CalcMrkDamage(rotSpe, S_SOI.RotationSpeed); // 回転速度補正値
+            float knoResAdjustValue = CalcMrkDamage(knoRes, S_SOI.KnockbackResistance); // ノックバック耐性補正値
+            float hpAdjustValue = pm.isHpLow ? P_SOD.HpAdjustValue[0] : P_SOD.HpAdjustValue[1]; // 体力補正値
             float statusAdjustValue = weightAdjustValue * rotSpeAdjustValue * knoResAdjustValue * hpAdjustValue;
 
             // 状態補正値
@@ -367,33 +366,45 @@ namespace BaseSystem
             switch (state)
             {
                 case PlayerState.IDLE:
-                    stateAdjustValue = pSOD.StateAdjustValue[0];
+                    stateAdjustValue = P_SOD.StateAdjustValue[0];
                     break;
 
                 case PlayerState.PUSH:
-                    stateAdjustValue = pSOD.StateAdjustValue[1];
+                    stateAdjustValue = P_SOD.StateAdjustValue[1];
                     break;
 
                 case PlayerState.COUNTER:
-                    stateAdjustValue = pSOD.StateAdjustValue[2];
+                    stateAdjustValue = P_SOD.StateAdjustValue[2];
                     break;
 
                 case PlayerState.KNOCKBACKED:
-                    stateAdjustValue = pSOD.StateAdjustValue[3];
+                    stateAdjustValue = P_SOD.StateAdjustValue[3];
                     break;
             }
 
             // ダメージ係数
-            float damageCoef = pSOD.DamageCoef;
+            float damageCoef = P_SOD.DamageCoef;
 
             float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef; // ダメージ計算
 
-            if (pSOD.MinDamage <= damage && damage <= pSOD.MaxDamage)
+            if (P_SOD.MinDamage <= damage && damage <= P_SOD.MaxDamage)
             {
                 pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
+
+                // Barを変化させる
+                if (pm.S_SO.IsPlayable)
+                {
+                    pm.gm.P_Bar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                    pm.gm.IsChangePlayableBar = true;
+                }
+                else
+                {
+                    pm.gm.U_Bar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                    pm.gm.IsChangeUnPlayableBar = true;
+                }
             }
             
-            if (pSO.IsShowNormalLog) // ログを表示
+            if (P_SO.IsShowNormalLog) // ログを表示
             {
                 Debug.Log($"<color=#64ff64>{pm.gameObject.name} に {damage} ダメージ！</color>");
             }
@@ -401,14 +412,14 @@ namespace BaseSystem
         // 重量補正値/回転速度補正値/ノックバック耐性補正値 の計算
         float CalcMrkDamage(float x, float d)
         {
-            float k = -2 / d * Mathf.Log(2 - pSOD.MrkAdjustValueY);
+            float k = -2 / d * Mathf.Log(2 - P_SOD.MrkAdjustValueY);
             if (x < d)
             {
                 return -Mathf.Exp(k * (x - d)) + 2;
             }
             else
             {
-                float m = -k * Mathf.Exp(k * (pSOD.MrkAdjustValueX - d));
+                float m = -k * Mathf.Exp(k * (P_SOD.MrkAdjustValueX - d));
                 return m * (x - d) + 1;
             }
         }
@@ -419,9 +430,9 @@ namespace BaseSystem
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
-                if (sSO.IsPlayable)
+                if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(sSOP.PushKey))
+                    if (Input.GetKeyDown(S_SOP.PushKey))
                     {
                         State = PlayerState.PUSH;
                     }
@@ -444,12 +455,12 @@ namespace BaseSystem
         {
             if (State == PlayerState.COUNTER && !isOnStateChangeCooltime)
             {
-                if (sSO.IsPlayable)
+                if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(sSOP.PushKey))
+                    if (Input.GetKeyDown(S_SOP.PushKey))
                     {
                         State = PlayerState.PUSH;
-                        knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
                     }
                 }
@@ -460,7 +471,7 @@ namespace BaseSystem
                         isPushIfUnplayable = false;
 
                         State = PlayerState.PUSH;
-                        knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                        knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
                     }
                 }
@@ -473,9 +484,9 @@ namespace BaseSystem
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
-                if (sSO.IsPlayable)
+                if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(sSOP.CounterKey))
+                    if (Input.GetKeyDown(S_SOP.CounterKey))
                     {
                         State = PlayerState.COUNTER;
                     }
@@ -498,9 +509,9 @@ namespace BaseSystem
         {
             if (State == PlayerState.PUSH && !isOnStateChangeCooltime)
             {
-                if (sSO.IsPlayable)
+                if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(sSOP.CounterKey))
+                    if (Input.GetKeyDown(S_SOP.CounterKey))
                     {
                         State = PlayerState.COUNTER;
                         IsPushBehaviourDone = false;
@@ -531,7 +542,7 @@ namespace BaseSystem
         IEnumerator Push2IdleWithCount()
         {
             isOnStateChangeCooltime = true;
-            yield return new WaitForSeconds(pSOB.Duration2IdleOnPushFailed);
+            yield return new WaitForSeconds(P_SOB.Duration2IdleOnPushFailed);
             if (State == PlayerState.PUSH)
             {
                 State = PlayerState.IDLE;
@@ -552,11 +563,11 @@ namespace BaseSystem
         IEnumerator Counter2IdleWithCount()
         {
             isOnStateChangeCooltime = true;
-            yield return new WaitForSeconds(pSOB.Duration2IdleOnCounterFailed);
+            yield return new WaitForSeconds(P_SOB.Duration2IdleOnCounterFailed);
             if (State == PlayerState.COUNTER)
             {
                 State = PlayerState.IDLE;
-                knoRes /= pSOB.KnockbackResistanceCoefOnCounter;
+                knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                 IsCounterBehaviourDone = false;
             }
             isOnStateChangeCooltime = false;
@@ -574,7 +585,7 @@ namespace BaseSystem
         IEnumerator Knockbacked2IdleWithCount()
         {
             isOnStateChangeCooltime = true;
-            yield return new WaitForSeconds(pSOB.Duration2IdleWhenKnockbacked);
+            yield return new WaitForSeconds(P_SOB.Duration2IdleWhenKnockbacked);
             if (State == PlayerState.KNOCKBACKED)
             {
                 State = PlayerState.IDLE;
@@ -590,14 +601,14 @@ namespace BaseSystem
         void Rotate()
         {
             // HPが一定以下かどうかチェックし、フラグを切り替える。
-            isHpLow = Hp < sSOI.Hp * pSOB.AxisSlopeStartHpCoef ? true : false;
+            isHpLow = Hp < S_SOI.Hp * P_SOB.AxisSlopeStartHpCoef ? true : false;
 
             // 回転処理を行う前に、ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
             Ray shotRay = new Ray(transform.position, -transform.up);
             if (Physics.Raycast(shotRay, out RaycastHit ground))
             {
                 Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
-                transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, pSOB.PlayerMainAxisChangeSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, P_SOB.PlayerMainAxisChangeSpeed * Time.deltaTime);
             }
 
             // HPが一定以下になったら、歳差運動をする。
@@ -605,15 +616,15 @@ namespace BaseSystem
             {
                 // 指定秒数ごとに回転軸の傾きを変化させる。
                 axisTimer += Time.deltaTime;
-                if (axisTimer > pSOB.AxisSlopeChangeInterval)
+                if (axisTimer > P_SOB.AxisSlopeChangeInterval)
                 {
-                    axisTimer -= pSOB.AxisSlopeChangeInterval;
-                    float theta = UnityEngine.Random.Range(pSOB.AxisSlopRange.x, pSOB.AxisSlopRange.y);
+                    axisTimer -= P_SOB.AxisSlopeChangeInterval;
+                    float theta = UnityEngine.Random.Range(P_SOB.AxisSlopRange.x, P_SOB.AxisSlopRange.y);
                     axis = Quaternion.AngleAxis(theta, transform.forward) * transform.up;
                 }
 
                 // 回転軸を中心軸（transform.up）周りに回転させる。
-                float axisSpeed = pSOB.AxisRotateSpeed / sSOI.Hp * Hp;
+                float axisSpeed = P_SOB.AxisRotateSpeed / S_SOI.Hp * Hp;
                 axis = Quaternion.AngleAxis(axisSpeed * Time.deltaTime, transform.up) * axis;
             }
             // そうでないなら、自転する。
@@ -623,9 +634,9 @@ namespace BaseSystem
             }
 
             // ベイを回転軸周りに回転させる。
-            float rotSpeed = rotSpe / sSOI.Hp * Hp;
-            float minRotSpeed = pSOB.RotationSpeedCoefRange.x * rotSpe;
-            float maxRotSpeed = pSOB.RotationSpeedCoefRange.y * rotSpe;
+            float rotSpeed = rotSpe / S_SOI.Hp * Hp;
+            float minRotSpeed = P_SOB.RotationSpeedCoefRange.x * rotSpe;
+            float maxRotSpeed = P_SOB.RotationSpeedCoefRange.y * rotSpe;
             rotSpeed = Mathf.Clamp(rotSpeed, minRotSpeed, maxRotSpeed); // 角速度を制限する。
             transform.localRotation = Quaternion.AngleAxis(rotSpeed * Time.deltaTime, axis) * transform.localRotation;
         }
@@ -647,7 +658,7 @@ namespace BaseSystem
                 if (!IsPushBehaviourDone)
                 {
                     IsPushBehaviourDone = true;
-                    rb.AddForce((opponent.transform.position - transform.position).normalized * sSOI.PushPower, ForceMode.Impulse);
+                    rb.AddForce((opponent.transform.position - transform.position).normalized * S_SOI.PushPower, ForceMode.Impulse);
                 }
             }
         }
@@ -660,7 +671,7 @@ namespace BaseSystem
                 if (!IsCounterBehaviourDone)
                 {
                     IsCounterBehaviourDone = true;
-                    knoRes *= pSOB.KnockbackResistanceCoefOnCounter;
+                    knoRes *= P_SOB.KnockbackResistanceCoefOnCounter;
                 }
             }
         }
@@ -677,10 +688,10 @@ namespace BaseSystem
 
                     float self = (weight * rb.velocity).magnitude;
                     float oppo = (opponentPm.weight * opponentRb.velocity).magnitude;
-                    float power = (self + oppo) * pSOB.PowerCoefOnKnockbacked;
-                    if (power < pSOB.MinPowerOnKnockbacked)
+                    float power = (self + oppo) * P_SOB.PowerCoefOnKnockbacked;
+                    if (power < P_SOB.MinPowerOnKnockbacked)
                     {
-                        power = pSOB.MinPowerOnKnockbacked;
+                        power = P_SOB.MinPowerOnKnockbacked;
                     }
                     rb.AddForce((transform.position - opponent.transform.position).normalized * power, ForceMode.Impulse);
 
@@ -695,20 +706,14 @@ namespace BaseSystem
         }
         #endregion
 
-        #region ベイのスクリプトの、各種変数の表示の詳細
-        void ShowHP()
+        #region デス判定の詳細
+        void JudgeDeath()
         {
-            if (Hp < 0) // デス判定
+            if (Hp < 0)
             {
-                GameManager.Instance.IsGameEnded = true; // ゲーム終了の合図を送る
                 StopAllCoroutines(); // コルーチンをすべて停止
-                text.text = "0"; // HP表示を0にする
 
                 gameObject.SetActive(false); // 非アクティブにする
-            }
-            else
-            {
-                text.text = $"{Hp}\n{State}";
             }
         }
         #endregion

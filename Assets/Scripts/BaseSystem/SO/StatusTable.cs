@@ -14,6 +14,9 @@ namespace BaseSystem
         [Header("【ステータス情報（初期値）】")] public StatusTableInitStatus StatusTableInitStatus;
     }
 
+    /// <summary>
+    /// 名前
+    /// </summary>
     [Serializable]
     public class StatusTableName
     {
@@ -22,13 +25,20 @@ namespace BaseSystem
         [Header("必殺技の名前")] public string SpecialName;
     }
 
+    /// <summary>
+    /// プレイアブル
+    /// </summary>
     [Serializable]
     public class StatusTablePlayable
     {
         [Header("プッシュキー")] public KeyCode PushKey;
         [Header("カウンターキー")] public KeyCode CounterKey;
+        [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
+    /// <summary>
+    /// アンプレイアブル
+    /// </summary>
     [Serializable]
     public class StatusTableUnPlayable
     {
@@ -37,8 +47,12 @@ namespace BaseSystem
         [Header("プッシュ→スキルの間隔の誤差（±）")] public float Push2SkillIntervalOffset;
         [Header("スキル→プッシュの間隔")] public float Skill2PushInterval;
         [Header("スキル→プッシュの間隔の誤差（±）")] public float Skill2PushIntervalOffset;
+        [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
+    /// <summary>
+    /// ステータス情報（初期値）
+    /// </summary>
     [Serializable]
     public class StatusTableInitStatus
     {

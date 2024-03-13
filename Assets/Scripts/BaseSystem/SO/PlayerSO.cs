@@ -45,6 +45,9 @@ namespace BaseSystem
     }
 
     #region Table
+    /// <summary>
+    /// 挙動関係
+    /// </summary>
     [Serializable]
     public class BehaviourTable
     {
@@ -63,6 +66,9 @@ namespace BaseSystem
         [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
     }
 
+    /// <summary>
+    /// ダメージ処理関係
+    /// </summary>
     [Serializable]
     public class DamageTable
     {
@@ -79,6 +85,9 @@ namespace BaseSystem
         [Header("ダメージ計算の詳細")] public DamageTableDescription DamageDescriptionTable;
     }
 
+    /// <summary>
+    /// ダメージ計算の詳細
+    /// </summary>
     [Serializable]
     public class DamageTableDescription
     {
