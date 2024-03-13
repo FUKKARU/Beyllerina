@@ -48,11 +48,15 @@ namespace BaseSystem
         bool isDamagable = false; // 【一人しか行わない】ダメージを食らえるか（＝無敵時間でないか）
         bool isPushIfUnplayable = false; // アンプレイアブルである時、プッシュを使うフラグ
         bool isCounterIfUnplayable = false; // アンプレイアブルである時、カウンターを使うフラグ
-        bool isSkillIfUnplayable = false; // アンプレイアブルである時、スキルを使うフラグ
+        bool[] isSkillIfUnplayables; // アンプレイアブルである時、スキルを使うフラグのリスト
         bool isSpecialIfUnplayable = false; // アンプレイアブルである時、必殺技を使うフラグ
         bool IsPushBehaviourDone { get; set; } = false; // プッシュの処理を、完了しているか
         bool IsCounterBehaviourDone { get; set; } = false; // カウンターの処理を、完了しているか
         bool isKnockbackedBehaviourDone = false; // ノックバックされた時の処理を、完了しているか
+        bool isOnPushCooltime = false; // プッシュのクールタイム中であるかどうか
+        bool isOnCounterCooltime = false; // カウンターのクールタイム中であるかどうか
+        bool[] isOnSkillCooltimes; // スキルのクールタイム中であるかどうか
+        bool isOnSpecialCooltime = false; // 必殺技のクールタイム中であるかどうか
         bool isOnStateChangeCooltime = false; // 時間経過による状態変化中であるかどうか
         Vector3 axis; // ベイの回転軸
         float axisTimer = 0; // ベイの回転軸を傾ける時間
@@ -126,6 +130,30 @@ namespace BaseSystem
             opponentPm = opponent.GetComponent<PlayerMove>();
             opponentRb = opponent.GetComponent<Rigidbody>();
 
+            // ベイの行動処理用の配列をインスタンス化して、初期化する。
+            if (S_SO.IsPlayable)
+            {
+                isOnSkillCooltimes = new bool[S_SOP.SkillNum];
+                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
+                {
+                    isOnSkillCooltimes[i] = false;
+                }
+            }
+            else
+            {
+                isOnSkillCooltimes = new bool[S_SOU.SkillNum];
+                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
+                {
+                    isOnSkillCooltimes[i] = false;
+                }
+
+                isSkillIfUnplayables = new bool[S_SOU.SkillNum];
+                for (int i = 0; i < isSkillIfUnplayables.Length; i++)
+                {
+                    isSkillIfUnplayables[i] = false;
+                }
+            }
+            
             // ゲーム開始から少しの間は、無敵時間になっている。
             StartCoroutine(CountDamagableDuration());
 
@@ -160,7 +188,8 @@ namespace BaseSystem
                     float ofst = S_SOU.Push2SkillIntervalOffset;
                     float time = Random.Range(dTime - ofst, dTime + ofst);
                     yield return new WaitForSeconds(time);
-                    isSkillIfUnplayable = true;
+                    int i = Random.Range(0, S_SOU.SkillNum); // ランダムなスキル
+                    isSkillIfUnplayables[i] = true;
                 }
             }
         }
@@ -216,6 +245,11 @@ namespace BaseSystem
             Counter2Push();
             Idle2Counter();
             Push2Counter();
+            #endregion
+
+            #region スキル・必殺技：プレイヤーからの入力またはコルーチンからのフラグを取得
+            Skill();
+            Special();
             #endregion
 
             #region PlayerStateに基づくベイの行動処理
@@ -394,12 +428,12 @@ namespace BaseSystem
                 // Barを変化させる
                 if (pm.S_SO.IsPlayable)
                 {
-                    pm.gm.P_Bar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                    pm.gm.PlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
                     pm.gm.IsChangePlayableBar = true;
                 }
                 else
                 {
-                    pm.gm.U_Bar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                    pm.gm.UnplayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
                     pm.gm.IsChangeUnPlayableBar = true;
                 }
             }
@@ -432,9 +466,11 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(S_SOP.PushKey))
+                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey))
                     {
                         State = PlayerState.PUSH;
+                        isOnPushCooltime = true;
+                        StartCoroutine(CountPushCooltime());
                     }
                 }
                 else
@@ -457,11 +493,13 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(S_SOP.PushKey))
+                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey))
                     {
                         State = PlayerState.PUSH;
+                        isOnPushCooltime = true;
                         knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
+                        StartCoroutine(CountPushCooltime());
                     }
                 }
                 else
@@ -478,6 +516,22 @@ namespace BaseSystem
             }
         }
 
+        IEnumerator CountPushCooltime()
+        {
+            float ct = S_SOI.PushCoolTime;
+            float time = ct;
+            float interval = P_SOB.CooltimeBehaviourInterval;
+
+            while (time > 0f)
+            {
+                gm.PushCooltimeGauge.fillAmount = -time / ct + 1;
+                yield return new WaitForSeconds(interval);
+                time -= interval;
+            }
+
+            isOnPushCooltime = false;
+        }
+
         // IDLE => COUNTER
         // 【条件】プレイアブルかつカウンターキーが押された、またはアンプレイアブルかつカウンターのフラグを受け取った。
         void Idle2Counter()
@@ -486,9 +540,11 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(S_SOP.CounterKey))
+                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey))
                     {
                         State = PlayerState.COUNTER;
+                        isOnCounterCooltime = true;
+                        StartCoroutine(CountCounterCooltime());
                     }
                 }
                 else
@@ -511,10 +567,12 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (Input.GetKeyDown(S_SOP.CounterKey))
+                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey))
                     {
                         State = PlayerState.COUNTER;
+                        isOnCounterCooltime= true;
                         IsPushBehaviourDone = false;
+                        StartCoroutine(CountCounterCooltime());
                     }
                 }
                 else
@@ -528,6 +586,22 @@ namespace BaseSystem
                     }
                 }
             }
+        }
+
+        IEnumerator CountCounterCooltime()
+        {
+            float ct = S_SOI.CounterCoolTime;
+            float time = ct;
+            float interval = P_SOB.CooltimeBehaviourInterval;
+
+            while (time > 0f)
+            {
+                gm.CounterCooltimeGauge.fillAmount = -time / ct + 1;
+                yield return new WaitForSeconds(interval);
+                time -= interval;
+            }
+
+            isOnCounterCooltime = false;
         }
 
         // PUSH => IDLE
@@ -595,6 +669,102 @@ namespace BaseSystem
         }
         #endregion
 
+        #region スキル・必殺技の詳細
+        void Skill()
+        {
+            if (S_SO.IsPlayable)
+            {
+                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
+                {
+                    if (!isOnSkillCooltimes[i] && Input.GetKeyDown(S_SOP.SkillKeys[i]))
+                    {
+                        isOnSkillCooltimes[i] = true;
+                        /*
+                        // スキルを使う
+                         switch (i)
+                        {
+
+                        }
+                        */
+                        StartCoroutine(CountSkillCooltime(i));
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < isSkillIfUnplayables.Length; i++)
+                {
+                    if (isSkillIfUnplayables[i])
+                    {
+                        isSkillIfUnplayables[i] = false;
+                        /*
+                        // スキルを使う
+                         switch (i)
+                        {
+
+                        }
+                        */
+                        StartCoroutine(CountSkillCooltime(i));
+                    }
+                }
+            }
+        }
+
+        IEnumerator CountSkillCooltime(int idx) // idxは0始まりなことに注意！
+        {
+            float ct = S_SOI.SkillCooltimes[idx];
+            float time = ct;
+            float interval = P_SOB.CooltimeBehaviourInterval;
+
+            while (time > 0f)
+            {
+                gm.SkillCooltimeGauges[0].fillAmount = -time / ct + 1;
+                yield return new WaitForSeconds(interval);
+                time -= interval;
+            }
+
+            isOnSkillCooltimes[idx] = false;
+        }
+
+        void Special()
+        {
+            if (S_SO.IsPlayable)
+            {
+                if (!isOnSpecialCooltime && Input.GetKeyDown(S_SOP.SpecialKey))
+                {
+                    isOnSpecialCooltime = true;
+                    /* 必殺技を使う */
+                    StartCoroutine(CountSpecialCooltime());
+                }
+            }
+            else
+            {
+                if (isSpecialIfUnplayable)
+                {
+                    isSpecialIfUnplayable = false;
+                    /* 必殺技を使う */
+                    StartCoroutine(CountSpecialCooltime());
+                }
+            }
+        }
+
+        IEnumerator CountSpecialCooltime()
+        {
+            float ct = S_SOI.SpecialCooltime;
+            float time = ct;
+            float interval = P_SOB.CooltimeBehaviourInterval;
+
+            while (time > 0f)
+            {
+                 // gm.SpecialCooltimeGauge.fillAmount = -time / ct + 1;
+                yield return new WaitForSeconds(interval);
+                time -= interval;
+            }
+
+            isOnSpecialCooltime = false;
+        }
+        #endregion
+
         #region PlayerStateに基づくベイの行動処理の詳細
         // 1.地面に垂直な姿勢制御をする。
         // 2.自転する。ただし、HPが低くなったら歳差運動に切り替わる。
@@ -619,7 +789,7 @@ namespace BaseSystem
                 if (axisTimer > P_SOB.AxisSlopeChangeInterval)
                 {
                     axisTimer -= P_SOB.AxisSlopeChangeInterval;
-                    float theta = UnityEngine.Random.Range(P_SOB.AxisSlopRange.x, P_SOB.AxisSlopRange.y);
+                    float theta = Random.Range(P_SOB.AxisSlopRange.x, P_SOB.AxisSlopRange.y);
                     axis = Quaternion.AngleAxis(theta, transform.forward) * transform.up;
                 }
 

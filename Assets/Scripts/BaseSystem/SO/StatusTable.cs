@@ -14,34 +14,29 @@ namespace BaseSystem
         [Header("【ステータス情報（初期値）】")] public StatusTableInitStatus StatusTableInitStatus;
     }
 
-    /// <summary>
-    /// 名前
-    /// </summary>
     [Serializable]
     public class StatusTableName
     {
         [Header("名前")] public string Name;
-        [Header("スキルの名前")] public string SkillName;
+        [Header("スキルの名前")] public string[] SkillNames;
         [Header("必殺技の名前")] public string SpecialName;
     }
 
-    /// <summary>
-    /// プレイアブル
-    /// </summary>
     [Serializable]
     public class StatusTablePlayable
     {
-        [Header("プッシュキー")] public KeyCode PushKey;
-        [Header("カウンターキー")] public KeyCode CounterKey;
+        [Header("使うスキルの数")] public int SkillNum;
+        [Header("プッシュのキー")] public KeyCode PushKey;
+        [Header("カウンターのキー")] public KeyCode CounterKey;
+        [Header("スキルのキー")] public KeyCode[] SkillKeys;
+        [Header("必殺技のキー")] public KeyCode SpecialKey;
         [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
-    /// <summary>
-    /// アンプレイアブル
-    /// </summary>
     [Serializable]
     public class StatusTableUnPlayable
     {
+        [Header("使うスキルの数（ランダム）")] public int SkillNum;
         [Header("プッシュ→スキル→プッシュ→…")]
         [Header("プッシュ→スキルの間隔")] public float Push2SkillInterval;
         [Header("プッシュ→スキルの間隔の誤差（±）")] public float Push2SkillIntervalOffset;
@@ -50,9 +45,6 @@ namespace BaseSystem
         [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
-    /// <summary>
-    /// ステータス情報（初期値）
-    /// </summary>
     [Serializable]
     public class StatusTableInitStatus
     {
@@ -64,7 +56,7 @@ namespace BaseSystem
         [Header("必殺技の発動に必要なゲージ量")] public float GaugeAmountUntilSpecial;
         [Header("プッシュのクールタイム")] public float PushCoolTime;
         [Header("カウンターのクールタイム")] public float CounterCoolTime;
-        [Header("スキルのクールタイム")] public float SkillCooltime;
+        [Header("スキルのクールタイム")] public float[] SkillCooltimes;
         [Header("必殺技のクールタイム")] public float SpecialCooltime;
     }
 }

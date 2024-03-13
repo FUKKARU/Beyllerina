@@ -25,15 +25,18 @@ namespace BaseSystem
         #endregion
 
         [Header("ベイ（プレイアブル/アンプレイアブル）")] public GameObject[] Beys;
-        [Header("プレイアブルのBar")] public Image P_Bar;
-        [Header("プレイアブルのDamagedBar")] public Image P_DBar;
-        [Header("アンプレイアブルのBar")] public Image U_Bar;
-        [Header("アンプレイアブルのDamagedBar")] public Image U_DBar;
+        [Header("プレイアブルのBar")] public Image PlayableBar;
+        [Header("プレイアブルのDamagedBar")] public Image PlayableDamagedBar;
+        [Header("アンプレイアブルのBar")] public Image UnplayableBar;
+        [Header("アンプレイアブルのDamagedBar")] public Image UnplayableDamagedBar;
+        [Header("プッシュのクールタイムGauge")] public Image PushCooltimeGauge;
+        [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
+        [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
 
         [NonSerialized] public bool IsChangePlayableBar = false; // プレイアブルのバーを変化させるかどうか
         [NonSerialized] public bool IsChangeUnPlayableBar = false; // アンプレイアブルのバーを変化させるかどうか
 
-        // PlayerMoveクラスのインスタンス
+        // PlayerMoveクラスのインスタンス（PvEかつ1v1の想定）
         PlayerMove pPm;
         PlayerMove uPm;
 
@@ -53,12 +56,12 @@ namespace BaseSystem
         {
             if (IsChangePlayableBar)
             {
-                float targetValue = P_Bar.fillAmount; // ここまでバーを減らす
-                float nowValue = P_DBar.fillAmount; // 現在のバーの進捗
+                float targetValue = PlayableBar.fillAmount; // ここまでバーを減らす
+                float nowValue = PlayableDamagedBar.fillAmount; // 現在のバーの進捗
 
                 if (nowValue > targetValue) // 目標値を越えていないとき
                 {
-                    P_DBar.fillAmount -= pPm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
+                    PlayableDamagedBar.fillAmount -= pPm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
                 }
                 else
                 {
@@ -68,12 +71,12 @@ namespace BaseSystem
 
             if (IsChangeUnPlayableBar)
             {
-                float targetValue = U_Bar.fillAmount; // ここまでバーを減らす
-                float nowValue = U_DBar.fillAmount; // 現在のバーの進捗
+                float targetValue = UnplayableBar.fillAmount; // ここまでバーを減らす
+                float nowValue = UnplayableDamagedBar.fillAmount; // 現在のバーの進捗
 
                 if (nowValue > targetValue) // 目標値を越えていないとき
                 {
-                    U_DBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
+                    UnplayableDamagedBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
                 }
                 else
                 {

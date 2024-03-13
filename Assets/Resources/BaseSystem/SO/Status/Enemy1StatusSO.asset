@@ -16,17 +16,21 @@ MonoBehaviour:
     IsPlayable: 0
     StatusTableName:
       Name: 
-      SkillName: 
+      SkillNames:
+      - 
       SpecialName: 
     StatusTablePlayable:
       PushKey: 0
       CounterKey: 0
+      SKillKeys: 
+      SpecialKey: 0
       HpBarChangeSpeed: 0
     StatusTableUnPlayable:
       Push2SkillInterval: 10
       Push2SkillIntervalOffset: 5
       Skill2PushInterval: 10
       Skill2PushIntervalOffset: 5
+      SkillNum: 1
       HpBarChangeSpeed: 0.1
     StatusTableInitStatus:
       Hp: 100
@@ -35,7 +39,8 @@ MonoBehaviour:
       PushPower: 10
       KnockbackResistance: 0.1
       GaugeAmountUntilSpecial: 0
-      PushCoolTime: 0
-      CounterCoolTime: 0
-      SkillCooltime: 0
-      SpecialCooltime: 0
+      PushCoolTime: 5
+      CounterCoolTime: 10
+      SkillCooltimes:
+      - 10
+      SpecialCooltime: 20

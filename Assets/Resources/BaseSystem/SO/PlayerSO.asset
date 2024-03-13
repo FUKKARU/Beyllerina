@@ -34,6 +34,7 @@ MonoBehaviour:
     Duration2IdleOnPushFailed: 0.3
     Duration2IdleOnCounterFailed: 0.3
     Duration2IdleWhenKnockbacked: 1
+    CooltimeBehaviourInterval: 0.1
   DamageTable:
     DamagableDuration: 0.1
     MinDamage: 0
