@@ -62,6 +62,7 @@ namespace BaseSystem
         [Header("カウンター失敗後、何秒でIDLE状態に戻すか")] public float Duration2IdleOnCounterFailed;
         [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
         [Header("クールタイムの処理を何秒ごとに行うか")] public float CooltimeBehaviourInterval;
+        [Header("クールタイムが空けていないとき、Gaugeの透明度"), Range(0, 255)] public byte GaugeAOnCooltime;
     }
 
     [Serializable]

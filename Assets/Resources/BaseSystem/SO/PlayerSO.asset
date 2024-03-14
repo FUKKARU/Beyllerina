@@ -35,6 +35,7 @@ MonoBehaviour:
     Duration2IdleOnCounterFailed: 0.3
     Duration2IdleWhenKnockbacked: 1
     CooltimeBehaviourInterval: 0.1
+    GaugeAOnCooltime: 100
   DamageTable:
     DamagableDuration: 0.1
     MinDamage: 0

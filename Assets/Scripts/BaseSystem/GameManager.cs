@@ -27,8 +27,8 @@ namespace BaseSystem
         [Header("ベイ（プレイアブル/アンプレイアブル）")] public GameObject[] Beys;
         [Header("プレイアブルのBar")] public Image PlayableBar;
         [Header("プレイアブルのDamagedBar")] public Image PlayableDamagedBar;
-        [Header("アンプレイアブルのBar")] public Image UnplayableBar;
-        [Header("アンプレイアブルのDamagedBar")] public Image UnplayableDamagedBar;
+        [Header("アンプレイアブルのBar")] public Image UnPlayableBar;
+        [Header("アンプレイアブルのDamagedBar")] public Image UnPlayableDamagedBar;
         [Header("プッシュのクールタイムGauge")] public Image PushCooltimeGauge;
         [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
         [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
@@ -44,6 +44,9 @@ namespace BaseSystem
         {
             pPm = Beys[0].GetComponent<PlayerMove>();
             uPm = Beys[1].GetComponent<PlayerMove>();
+
+            PlayableDamagedBar.fillAmount = 1f;
+            UnPlayableDamagedBar.fillAmount = 1f;
         }
 
         void Update()
@@ -71,12 +74,12 @@ namespace BaseSystem
 
             if (IsChangeUnPlayableBar)
             {
-                float targetValue = UnplayableBar.fillAmount; // ここまでバーを減らす
-                float nowValue = UnplayableDamagedBar.fillAmount; // 現在のバーの進捗
+                float targetValue = UnPlayableBar.fillAmount; // ここまでバーを減らす
+                float nowValue = UnPlayableDamagedBar.fillAmount; // 現在のバーの進捗
 
                 if (nowValue > targetValue) // 目標値を越えていないとき
                 {
-                    UnplayableDamagedBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
+                    UnPlayableDamagedBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
                 }
                 else
                 {

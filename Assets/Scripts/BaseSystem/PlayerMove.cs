@@ -153,14 +153,14 @@ namespace BaseSystem
                     isSkillIfUnplayables[i] = false;
                 }
             }
-            
+
             // ゲーム開始から少しの間は、無敵時間になっている。
-            StartCoroutine(CountDamagableDuration());
+            if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration());
 
             // アンプレイアブルなら、プッシュとスキルを使うフラグを、周期的かつ交互にUpdateメソッドに送る
             if (!S_SO.IsPlayable)
             {
-                StartCoroutine(InputPushAndSkillPeriodically());
+                if (gameObject.activeSelf) StartCoroutine(InputPushAndSkillPeriodically());
             }
         }
 
@@ -226,7 +226,7 @@ namespace BaseSystem
                 {
                     isDamagable = false;
                     HitBehaviour(); // PlayerStateの遷移など
-                    StartCoroutine(CountDamagableDuration()); // 無敵時間のカウント
+                    if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration()); // 無敵時間のカウント
                 }
             }
         }
@@ -433,7 +433,7 @@ namespace BaseSystem
                 }
                 else
                 {
-                    pm.gm.UnplayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                    pm.gm.UnPlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
                     pm.gm.IsChangeUnPlayableBar = true;
                 }
             }
@@ -470,7 +470,7 @@ namespace BaseSystem
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
-                        StartCoroutine(CountPushCooltime());
+                        if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
                     }
                 }
                 else
@@ -499,7 +499,7 @@ namespace BaseSystem
                         isOnPushCooltime = true;
                         knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
-                        StartCoroutine(CountPushCooltime());
+                        if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
                     }
                 }
                 else
@@ -522,12 +522,26 @@ namespace BaseSystem
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
-            while (time > 0f)
+            // 半透明にする。
+            Color _col = gm.PushCooltimeGauge.color;
+            _col.a = P_SOB.GaugeAOnCooltime / (float)255;
+            gm.PushCooltimeGauge.color = _col;
+
+            gm.PushCooltimeGauge.fillAmount = 0f;
+
+            while (time >= 0f)
             {
                 gm.PushCooltimeGauge.fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
+
+            gm.PushCooltimeGauge.fillAmount = 1f;
+
+            // 不透明に戻す。
+            Color col = gm.PushCooltimeGauge.color;
+            col.a = 255 / (float)255;
+            gm.PushCooltimeGauge.color = col;
 
             isOnPushCooltime = false;
         }
@@ -544,7 +558,7 @@ namespace BaseSystem
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
-                        StartCoroutine(CountCounterCooltime());
+                        if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
                     }
                 }
                 else
@@ -572,7 +586,7 @@ namespace BaseSystem
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime= true;
                         IsPushBehaviourDone = false;
-                        StartCoroutine(CountCounterCooltime());
+                        if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
                     }
                 }
                 else
@@ -594,12 +608,26 @@ namespace BaseSystem
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
-            while (time > 0f)
+            // 半透明にする。
+            Color _col = gm.CounterCooltimeGauge.color;
+            _col.a = P_SOB.GaugeAOnCooltime / (float)255;
+            gm.CounterCooltimeGauge.color = _col;
+
+            gm.CounterCooltimeGauge.fillAmount = 0f;
+
+            while (time >= 0f)
             {
                 gm.CounterCooltimeGauge.fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
+
+            gm.CounterCooltimeGauge.fillAmount = 1f;
+
+            // 不透明に戻す。
+            Color col = gm.CounterCooltimeGauge.color;
+            col.a = 255 / (float)255;
+            gm.CounterCooltimeGauge.color = col;
 
             isOnCounterCooltime = false;
         }
@@ -610,7 +638,7 @@ namespace BaseSystem
         {
             if (State == PlayerState.PUSH && !isOnStateChangeCooltime)
             {
-                StartCoroutine(Push2IdleWithCount());
+                if (gameObject.activeSelf) StartCoroutine(Push2IdleWithCount());
             }
         }
         IEnumerator Push2IdleWithCount()
@@ -631,7 +659,7 @@ namespace BaseSystem
         {
             if (State == PlayerState.COUNTER && !isOnStateChangeCooltime)
             {
-                StartCoroutine(Counter2IdleWithCount());
+                if (gameObject.activeSelf) StartCoroutine(Counter2IdleWithCount());
             }
         }
         IEnumerator Counter2IdleWithCount()
@@ -653,7 +681,7 @@ namespace BaseSystem
         {
             if (State == PlayerState.KNOCKBACKED && !isOnStateChangeCooltime)
             {
-                StartCoroutine(Knockbacked2IdleWithCount());
+                if (gameObject.activeSelf) StartCoroutine(Knockbacked2IdleWithCount());
             }
         }
         IEnumerator Knockbacked2IdleWithCount()
@@ -679,14 +707,14 @@ namespace BaseSystem
                     if (!isOnSkillCooltimes[i] && Input.GetKeyDown(S_SOP.SkillKeys[i]))
                     {
                         isOnSkillCooltimes[i] = true;
-                        /*
-                        // スキルを使う
-                         switch (i)
-                        {
 
-                        }
-                        */
-                        StartCoroutine(CountSkillCooltime(i));
+                        //// スキルを使う
+                        // switch (i)
+                        //{
+
+                        //}
+
+                        if (gameObject.activeSelf) StartCoroutine(CountSkillCooltime(i));
                     }
                 }
             }
@@ -697,14 +725,12 @@ namespace BaseSystem
                     if (isSkillIfUnplayables[i])
                     {
                         isSkillIfUnplayables[i] = false;
-                        /*
-                        // スキルを使う
-                         switch (i)
-                        {
 
-                        }
-                        */
-                        StartCoroutine(CountSkillCooltime(i));
+                        //// スキルを使う
+                        // switch (i)
+                        //{
+
+                        //}
                     }
                 }
             }
@@ -716,12 +742,26 @@ namespace BaseSystem
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
-            while (time > 0f)
+            // 半透明にする。
+            Color _col = gm.SkillCooltimeGauges[idx].color;
+            _col.a = P_SOB.GaugeAOnCooltime / (float)255;
+            gm.SkillCooltimeGauges[idx].color = _col;
+
+            gm.SkillCooltimeGauges[0].fillAmount = 0f;
+
+            while (time >= 0f)
             {
                 gm.SkillCooltimeGauges[0].fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
+
+            gm.SkillCooltimeGauges[0].fillAmount = 1f;
+
+            // 不透明に戻す。
+            Color col = gm.SkillCooltimeGauges[idx].color;
+            col.a = 255 / (float)255;
+            gm.SkillCooltimeGauges[idx].color = col;
 
             isOnSkillCooltimes[idx] = false;
         }
@@ -733,8 +773,10 @@ namespace BaseSystem
                 if (!isOnSpecialCooltime && Input.GetKeyDown(S_SOP.SpecialKey))
                 {
                     isOnSpecialCooltime = true;
+
                     /* 必殺技を使う */
-                    StartCoroutine(CountSpecialCooltime());
+
+                    if (gameObject.activeSelf) StartCoroutine(CountSpecialCooltime());
                 }
             }
             else
@@ -742,8 +784,8 @@ namespace BaseSystem
                 if (isSpecialIfUnplayable)
                 {
                     isSpecialIfUnplayable = false;
+
                     /* 必殺技を使う */
-                    StartCoroutine(CountSpecialCooltime());
                 }
             }
         }
@@ -754,12 +796,26 @@ namespace BaseSystem
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
-            while (time > 0f)
+            //// 半透明にする。
+            //Color _col = gm.SpecialCooltimeGauge.color;
+            //_col.a = P_SOB.GaugeAOnCooltime / (float)255;
+            //gm.SpecialCooltimeGauge.color = _col;
+
+            // gm.SpecialCooltimeGauge.fillAmount = 0f;
+
+            while (time >= 0f)
             {
                  // gm.SpecialCooltimeGauge.fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
+
+            // gm.SpecialCooltimeGauge.fillAmount = 1f;
+
+            //// 不透明に戻す。
+            //Color col = gm.SpecialCooltimeGauge.color;
+            //col.a = 255 / (float)255;
+            //gm.SpecialCooltimeGauge.color = col;
 
             isOnSpecialCooltime = false;
         }
@@ -882,6 +938,14 @@ namespace BaseSystem
             if (Hp < 0)
             {
                 StopAllCoroutines(); // コルーチンをすべて停止
+                if (S_SO.IsPlayable)
+                {
+                    gm.PlayableBar.fillAmount = 0f;
+                }
+                else
+                {
+                    gm.UnPlayableBar.fillAmount = 0f;
+                }
 
                 gameObject.SetActive(false); // 非アクティブにする
             }
