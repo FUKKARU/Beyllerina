@@ -24,6 +24,9 @@ namespace BaseSystem
         //　カメラシェイク
         [SerializeField] CameraShake_Battle CameraS_B;
 
+        //ヒットエフェクト
+        [SerializeField] GameObject hitEffect;
+
         // GMからデータを取得するよう
         GameManager gm;
 
@@ -226,6 +229,7 @@ namespace BaseSystem
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
+                Instantiate(hitEffect,( gameObject.transform.position + collision.gameObject.transform.position ) / 2 ,Quaternion.identity);
                 if (isDamagable)
                 {
                     isDamagable = false;
