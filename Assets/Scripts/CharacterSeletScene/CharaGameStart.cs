@@ -20,5 +20,6 @@ public class CharaGameStart : MonoBehaviour
         Instantiate(characterDate.GetPlayer01(), Player01position, Quaternion.identity);
         Instantiate(characterDate.GetPlayer02(), Player02position, Quaternion.identity);
 
+        
     }
 }

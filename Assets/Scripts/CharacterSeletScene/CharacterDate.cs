@@ -13,7 +13,7 @@ public class CharacterDate : ScriptableObject
     private string nextSceneName;
     //　1P 2Pに代入
     [SerializeField]
-    private GameObject Player01, Player02;
+    private GameObject Player01, Player02, CPU ;
     //　データの初期化
     private void OnEnable()
     {
@@ -22,7 +22,8 @@ public class CharacterDate : ScriptableObject
         {
             nextSceneName = "";
             Player01 = null;
-            Player02 = null; 
+            Player02 = null;
+            CPU = null;
         }
     }
 
@@ -44,6 +45,13 @@ public class CharacterDate : ScriptableObject
         this.Player02 = character02;
         DontDestroyOnLoad(Player02);
     }
+
+    public void SetCPU01(GameObject CPU01)
+    {
+        this.CPU = CPU01;
+        DontDestroyOnLoad(CPU);
+    }
+
     public GameObject GetPlayer01()
     {
         return Player01;
@@ -54,7 +62,10 @@ public class CharacterDate : ScriptableObject
         return Player02;
     }
 
-
+    public GameObject GetCPU01()
+    {
+        return CPU;
+    }
 }
 
   
