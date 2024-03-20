@@ -1634,27 +1634,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73de7b64ca3b07e4a9a30dede0087062, type: 3}
+  m_Script: {fileID: 11500000, guid: ba06f0587f574ba4ab515fecc055a314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shake: 0
   curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.8396574
-      outSlope: 0.8396574
+      inSlope: 0.8056399
+      outSlope: 0.8056399
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.25000608
-      value: 0.20991947
-      inSlope: 0.27988127
-      outSlope: 0.27988127
+      time: 0.3723748
+      value: 0.3
+      inSlope: 0.16382383
+      outSlope: 0.16382383
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -1662,8 +1661,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -0.2798949
-      outSlope: -0.2798949
+      inSlope: -0.47799227
+      outSlope: -0.47799227
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -1867,6 +1866,11 @@ PrefabInstance:
       propertyPath: hpText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4612616547821689827, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
+        type: 3}
+      propertyPath: CameraS_B
+      value: 
+      objectReference: {fileID: 963194230}
     - target: {fileID: 5271330238584847510, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
         type: 3}
       propertyPath: m_LocalPosition.x

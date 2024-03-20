@@ -21,6 +21,9 @@ namespace BaseSystem
         Rigidbody rb;
         GameObject stageCenter;
 
+        //　カメラシェイク
+        [SerializeField] CameraShake_Battle CameraS_B;
+
         // GMからデータを取得するよう
         GameManager gm;
 
@@ -222,6 +225,7 @@ namespace BaseSystem
         {
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
+                CameraS_B.ShakeOn();
                 if (isDamagable)
                 {
                     isDamagable = false;

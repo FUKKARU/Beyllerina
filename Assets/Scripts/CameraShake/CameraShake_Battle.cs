@@ -2,20 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+public class CameraShake_Battle : MonoBehaviour
 {
-    public bool shake = false;
     [SerializeField] AnimationCurve curve;
     float duration = 0.3f;
-
-    void Update()
-    {
-        if (shake)
-        {
-            ShakeOn();
-            shake = false;
-        }
-    }
 
     public void ShakeOn()
     {
