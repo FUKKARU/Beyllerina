@@ -40,7 +40,7 @@ namespace SelectTeam
             float dRad = rad - previousRad; // 前のフレームの角度との差
 
             tan += Mathf.Tan(dRad); //タンジェント // * mPos.magnitude;
-            text.text = tan + "";
+            text.text = Mathf.Abs(tan) + "";
 
             previousRad = rad; // 今のフレームの角度を保存
         }
