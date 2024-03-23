@@ -523,6 +523,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tornado_effects_001
       objectReference: {fileID: 0}
+    - target: {fileID: 2466471109199375682, guid: 78f7e68a0bf6844408fc0e0d50bd5d8c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2869511814872650201, guid: 78f7e68a0bf6844408fc0e0d50bd5d8c,
         type: 3}
       propertyPath: m_LocalPosition.x
