@@ -52,6 +52,8 @@ namespace BaseSystem
         // ベイの行動処理用
         bool isDamageManager = false; // ダメージ処理を行うインスタンスであるかどうか
         bool isDamagable = false; // 【一人しか行わない】ダメージを食らえるか（＝無敵時間でないか）
+        bool IsSkillDirection { get; set; } = false; // スキルの演出中かどうか
+        bool IsSpecialDirection { get; set; } = false; // 必殺技の演出中かどうか
         bool isPushIfUnplayable = false; // アンプレイアブルである時、プッシュを使うフラグ
         bool isCounterIfUnplayable = false; // アンプレイアブルである時、カウンターを使うフラグ
         bool[] isSkillIfUnplayables; // アンプレイアブルである時、スキルを使うフラグのリスト
@@ -223,14 +225,14 @@ namespace BaseSystem
         }
         #endregion
 
-        #region 【OnCollision】【一人しか行わない】敵との接触を検知し、無敵時間でないならば、ダメージ処理を行いかつ条件によって自分または敵をKNOCKBACKED状態にする。
+        #region 【OnCollision】【一人しか行わない】敵との接触を検知し、無敵時間でないかつ両者がスキル・必殺技の演出中でないならば、ダメージ処理を行いかつ条件によって自分または敵をKNOCKBACKED状態にする。
         void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
                 Instantiate(hitEffect,( gameObject.transform.position + collision.gameObject.transform.position ) / 2 ,Quaternion.identity);
-                if (isDamagable)
+                if (isDamagable && (!IsSpecialDirection && !opponentPm.IsSpecialDirection) && (!IsSkillDirection && !opponentPm.IsSkillDirection))
                 {
                     isDamagable = false;
                     HitBehaviour(); // PlayerStateの遷移など
@@ -427,25 +429,24 @@ namespace BaseSystem
             // ダメージ係数
             float damageCoef = P_SOD.DamageCoef;
 
-            float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef; // ダメージ計算
+            // ダメージ計算
+            float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef;
+            damage = Mathf.Clamp(damage, P_SOD.MinDamage, P_SOD.MaxDamage);
 
-            if (P_SOD.MinDamage <= damage && damage <= P_SOD.MaxDamage)
+            pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
+
+            // Barを変化させる
+            if (pm.S_SO.IsPlayable)
             {
-                pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
-
-                // Barを変化させる
-                if (pm.S_SO.IsPlayable)
-                {
-                    pm.gm.PlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
-                    pm.gm.IsChangePlayableBar = true;
-                }
-                else
-                {
-                    pm.gm.UnPlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
-                    pm.gm.IsChangeUnPlayableBar = true;
-                }
+                pm.gm.PlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                pm.gm.IsChangePlayableBar = true;
             }
-            
+            else
+            {
+                pm.gm.UnPlayableBar.fillAmount = pm.Hp / pm.S_SOI.Hp;
+                pm.gm.IsChangeUnPlayableBar = true;
+            }
+
             if (P_SO.IsShowNormalLog) // ログを表示
             {
                 Debug.Log($"<color=#64ff64>{pm.gameObject.name} に {damage} ダメージ！</color>");
@@ -467,14 +468,15 @@ namespace BaseSystem
         }
 
         // IDLE => PUSH
-        // 【条件】プレイアブルかつプッシュキーが押された、またはアンプレイアブルかつプッシュのフラグを受け取った。
+        // 【条件】スキル・必殺技の演出中でない、かつ、プレイアブルかつプッシュキーが押されたまたはアンプレイアブルかつプッシュのフラグを受け取った。
+        // アンプレイアブルの時、プッシュのフラグを受け取る間隔によっては、プッシュがスキップされる。
         void Idle2Push()
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey))
+                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -483,7 +485,7 @@ namespace BaseSystem
                 }
                 else
                 {
-                    if (isPushIfUnplayable)
+                    if (isPushIfUnplayable && !IsSkillDirection && !IsSpecialDirection)
                     {
                         isPushIfUnplayable = false;
 
@@ -494,14 +496,15 @@ namespace BaseSystem
         }
 
         // COUNTER => PUSH
-        // 【条件】プレイアブルかつプッシュキーが押された、またはアンプレイアブルかつプッシュのフラグを受け取った。
+        // 【条件】スキル・必殺技の演出中でない、かつ、プレイアブルかつプッシュキーが押されたまたはアンプレイアブルかつプッシュのフラグを受け取った。
+        // アンプレイアブルの時、プッシュのフラグを受け取る間隔によっては、プッシュがスキップされる。
         void Counter2Push()
         {
             if (State == PlayerState.COUNTER && !isOnStateChangeCooltime)
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey))
+                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -512,7 +515,7 @@ namespace BaseSystem
                 }
                 else
                 {
-                    if (isPushIfUnplayable)
+                    if (isPushIfUnplayable && !IsSkillDirection && !IsSpecialDirection)
                     {
                         isPushIfUnplayable = false;
 
@@ -555,14 +558,15 @@ namespace BaseSystem
         }
 
         // IDLE => COUNTER
-        // 【条件】プレイアブルかつカウンターキーが押された、またはアンプレイアブルかつカウンターのフラグを受け取った。
+        // 【条件】スキル・必殺技の演出中でない、かつ、プレイアブルかつカウンターキーが押されたまたはアンプレイアブルかつカウンターのフラグを受け取った。
+        // アンプレイアブルの時、カウンターのフラグを受け取る間隔によっては、カウンターがスキップされる。
         void Idle2Counter()
         {
             if (State == PlayerState.IDLE && !isOnStateChangeCooltime)
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey))
+                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
@@ -571,7 +575,7 @@ namespace BaseSystem
                 }
                 else
                 {
-                    if (isCounterIfUnplayable)
+                    if (isCounterIfUnplayable && !IsSkillDirection && !IsSpecialDirection)
                     {
                         isCounterIfUnplayable = false;
 
@@ -582,14 +586,15 @@ namespace BaseSystem
         }
 
         // PUSH => COUNTER
-        // 【条件】プレイアブルかつカウンターキーが押された、またはアンプレイアブルかつカウンターのフラグを受け取った。
+        // 【条件】スキル・必殺技の演出中でない、かつ、プレイアブルかつカウンターキーが押されたまたはアンプレイアブルかつカウンターのフラグを受け取った。
+        // アンプレイアブルの時、カウンターのフラグを受け取る間隔によっては、カウンターがスキップされる。
         void Push2Counter()
         {
             if (State == PlayerState.PUSH && !isOnStateChangeCooltime)
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey))
+                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime= true;
@@ -599,7 +604,7 @@ namespace BaseSystem
                 }
                 else
                 {
-                    if (isCounterIfUnplayable)
+                    if (isCounterIfUnplayable && !IsSkillDirection && !IsSpecialDirection)
                     {
                         isCounterIfUnplayable = false;
 
@@ -716,13 +721,9 @@ namespace BaseSystem
                     {
                         isOnSkillCooltimes[i] = true;
 
-                        //// スキルを使う
-                        // switch (i)
-                        //{
-
-                        //}
-
                         if (gameObject.activeSelf) StartCoroutine(CountSkillCooltime(i));
+
+                        SkillBehaviour(i);
                     }
                 }
             }
@@ -734,14 +735,49 @@ namespace BaseSystem
                     {
                         isSkillIfUnplayables[i] = false;
 
-                        //// スキルを使う
-                        // switch (i)
-                        //{
-
-                        //}
+                        SkillBehaviour(i);
                     }
                 }
             }
+        }
+
+        // i番目のスキルを使う
+        void SkillBehaviour(int i)
+        {
+            IsSkillDirection = true;
+
+            StartCoroutine(SkillBehaviourDirection());
+
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }
+        }
+
+        IEnumerator SkillBehaviourDirection()
+        {
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }
+
+            IsSkillDirection = false;
+
+            yield break;
         }
 
         IEnumerator CountSkillCooltime(int idx) // idxは0始まりなことに注意！
@@ -782,9 +818,9 @@ namespace BaseSystem
                 {
                     isOnSpecialCooltime = true;
 
-                    /* 必殺技を使う */
-
                     if (gameObject.activeSelf) StartCoroutine(CountSpecialCooltime());
+
+                    SpecialBehaviour();
                 }
             }
             else
@@ -793,9 +829,49 @@ namespace BaseSystem
                 {
                     isSpecialIfUnplayable = false;
 
-                    /* 必殺技を使う */
+                    SpecialBehaviour();
                 }
             }
+        }
+
+        // 必殺技を使う
+        void SpecialBehaviour()
+        {
+            IsSpecialDirection = true;
+
+            StartCoroutine(SpecialBehaviourDirection());
+
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }
+        }
+
+        // 必殺技の演出を行う
+        IEnumerator SpecialBehaviourDirection()
+        {
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }
+            
+            IsSpecialDirection = false;
+
+            yield break;
         }
 
         IEnumerator CountSpecialCooltime()
