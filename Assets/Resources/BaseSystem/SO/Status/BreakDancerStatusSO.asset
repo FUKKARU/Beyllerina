@@ -9,22 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98396b16256741e488d8840bf7654c9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 03916c165559a844ba3470886898c3f9, type: 3}
   m_Name: BreakDancerStatusSO
   m_EditorClassIdentifier: 
   StatusTable:
     IsPlayable: 1
     StatusTableName:
       Name: 
-      SkillNames:
-      - 
+      SkillNames: []
       SpecialName: 
     StatusTablePlayable:
       SkillNum: 1
-      PushKey: 122
-      CounterKey: 120
-      SkillKeys: 63000000
-      SpecialKey: 118
+      PushKey: 117
+      CounterKey: 105
+      SkillKeys: 6f000000
+      SpecialKey: 112
       HpBarChangeSpeed: 0.1
     StatusTableUnPlayable:
       SkillNum: 0
@@ -43,5 +42,10 @@ MonoBehaviour:
       PushCoolTime: 5
       CounterCoolTime: 10
       SkillCooltimes:
-      - 10
-      SpecialCooltime: 20
+      - 20
+      SpecialCooltime: 45
+  SkillRotChangeDur: 2
+  SkillDur: 10
+  SpecialPushPowerCoefCoef: 2
+  SpecialRotSpeedCoef: 2
+  SpecialDur: 10

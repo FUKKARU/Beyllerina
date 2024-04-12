@@ -726,6 +726,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4402395887252485125}
     m_Modifications:
+    - target: {fileID: 959173340557468136, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
+        type: 3}
+      propertyPath: m_TagString
+      value: RightWeapon
+      objectReference: {fileID: 0}
     - target: {fileID: 4612616547821689827, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
         type: 3}
       propertyPath: hpText
@@ -801,6 +806,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260960086517981935, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
+        type: 3}
+      propertyPath: m_TagString
+      value: LeftWeapon
       objectReference: {fileID: 0}
     - target: {fileID: 7130009007109555456, guid: ae593fc3836bb2c42ae9f9f1edf506dd,
         type: 3}

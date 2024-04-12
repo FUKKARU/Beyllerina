@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -70,6 +71,9 @@ namespace BaseSystem
         float axisTimer = 0; // ベイの回転軸を傾ける時間
         bool isHpLow = false; // HPが一定以下になって、歳差運動をしているかどうか
         Vector3 rePos; // リスポーンポイント
+        float genericDamageCoef = 1; // 汎用ダメージ係数
+        float rotDir = 1; // 正回転なら1、逆回転なら-1
+        float pushPowerCoef = 1; // プッシュ力の係数（調整用）
         #endregion
 
 
@@ -438,6 +442,7 @@ namespace BaseSystem
             // ダメージ計算
             float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef;
             damage = Mathf.Clamp(damage, P_SOD.MinDamage, P_SOD.MaxDamage);
+            damage *= genericDamageCoef;
 
             pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
 
@@ -461,6 +466,7 @@ namespace BaseSystem
         // 重量補正値/回転速度補正値/ノックバック耐性補正値 の計算
         float CalcMrkDamage(float x, float d)
         {
+            x = Mathf.Abs(x);
             float k = -2 / d * Mathf.Log(2 - P_SOD.MrkAdjustValueY);
             if (x < d)
             {
@@ -811,6 +817,7 @@ namespace BaseSystem
                     break;
 
                 case TYPE.BreakDancer:
+                    StartCoroutine(RotationChange());
                     break;
 
                 case TYPE.Enemy1:
@@ -834,6 +841,40 @@ namespace BaseSystem
             }
 
             yield break;
+        }
+
+        IEnumerator RotationChange()
+        {
+            float t = 0;
+            float d = BreakDancerStatusSO.Entity.SkillRotChangeDur;
+            while (true)
+            {
+                t += Time.deltaTime;
+                rotDir = -2 * t / d + 1;
+                if (t > d)
+                {
+                    rotDir = -1;
+                    break;
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(BreakDancerStatusSO.Entity.SkillDur);
+
+            t = 0;
+            while (true)
+            {
+                t += Time.deltaTime;
+                rotDir = 2 * t / d - 1;
+                if (t > d)
+                {
+                    rotDir = 1;
+                    break;
+                }
+
+                yield return null;
+            }
         }
 
         IEnumerator CountSkillCooltime(int idx) // idxは0始まりなことに注意！
@@ -903,8 +944,6 @@ namespace BaseSystem
             IsSpecialDirection = true;
 
             StartCoroutine(SpecialBehaviourDirection());
-
-
         }
 
         // 必殺技の演出を行う
@@ -922,18 +961,60 @@ namespace BaseSystem
                 case TYPE.Enemy1:
                     break;
             }*/
+
             IsSpecialDirection = false;
             switch (type)
             {
                 case TYPE.Ballerina:
+                    StartCoroutine(BallerinaCountSpecialTime());
                     break;
 
                 case TYPE.BreakDancer:
+                    StartCoroutine(BreakDancerCountSpecialTime());
                     break;
 
                 case TYPE.Enemy1:
                     break;
             }
+            yield break;
+        }
+
+        IEnumerator BallerinaCountSpecialTime()
+        {
+            genericDamageCoef *= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
+
+            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(true);
+            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(BallerinaStatusSO.Entity.SpecialDur);
+
+            genericDamageCoef /= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
+            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(false); ;
+            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(false);
+
+
+
+            genericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
+
+            yield return new WaitForSeconds(BallerinaStatusSO.Entity.WeakDur);
+
+            genericDamageCoef *= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
+
+            yield break;
+        }
+
+        IEnumerator BreakDancerCountSpecialTime()
+        {
+            /*光る*/
+            pushPowerCoef *= BreakDancerStatusSO.Entity.SpecialPushPowerCoefCoef;
+            rotSpe *= BreakDancerStatusSO.Entity.SpecialRotSpeedCoef;
+
+            yield return new WaitForSeconds(BreakDancerStatusSO.Entity.SpecialDur);
+
+            /*光らなくする*/
+            pushPowerCoef /= BreakDancerStatusSO.Entity.SpecialPushPowerCoefCoef;
+            rotSpe /= BreakDancerStatusSO.Entity.SpecialRotSpeedCoef;
+
             yield break;
         }
 
@@ -1011,6 +1092,7 @@ namespace BaseSystem
             float minRotSpeed = P_SOB.RotationSpeedCoefRange.x * rotSpe;
             float maxRotSpeed = P_SOB.RotationSpeedCoefRange.y * rotSpe;
             rotSpeed = Mathf.Clamp(rotSpeed, minRotSpeed, maxRotSpeed); // 角速度を制限する。
+            rotSpeed *= rotDir; 
             transform.localRotation = Quaternion.AngleAxis(rotSpeed * Time.deltaTime, axis) * transform.localRotation;
         }
 
@@ -1031,7 +1113,9 @@ namespace BaseSystem
                 if (!IsPushBehaviourDone)
                 {
                     IsPushBehaviourDone = true;
-                    rb.AddForce((opponent.transform.position - transform.position).normalized * S_SOI.PushPower, ForceMode.Impulse);
+
+                    float power = S_SOI.PushPower * pushPowerCoef;
+                    rb.AddForce((opponent.transform.position - transform.position).normalized * power, ForceMode.Impulse);
                 }
             }
         }

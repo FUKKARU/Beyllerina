@@ -89,12 +89,13 @@ namespace BaseSystem
     [Serializable]
     public class DamageTableDescription
     {
-        [Header("ダメージ＝\r\n（基礎ダメージ）＊\r\n（ステータス補正値）＊\r\n（状態補正値）＊\r\n（ダメージ係数）")]
+        [Header("ダメージ＝\r\n（基礎ダメージ）＊\r\n（ステータス補正値）＊\r\n（状態補正値）＊\r\n（ダメージ係数） * \r\n（汎用ダメージ係数）")]
         [Space(50)]
         [Header("基礎ダメージ＝\r\n（｜自分の運動量｜＋｜相手の運動量｜）")]
         [Header("ステータス補正値＝\r\n（重量補正値）＊\r\n（回転速度補正値）＊\r\n（ノックバック耐性補正値）＊\r\n（体力補正値）")]
         [Header("状態補正値＝\r\n（IDLEなら1）、\r\n（PUSHなら0.5）、\r\n（COUNTERなら0）、\r\n（KNOCKBACKEDなら2）")]
         [Header("ダメージ係数：調整用")]
+        [Header("汎用ダメージ係数：各ベイごとの調整用。内部的に計算される")]
         [Space(50)]
         [Header("（※値をx、デフォルト値をd、上記の値をY,Xとする。）\r\n（※ k = (-2/d)log(2 - Y) ）\r\n（※ m = (-k)exp(k(X - d)) ）\r\n重量補正値＝\r\n回転速度補正値＝\r\nノックバック耐性補正値＝\r\n（x < d なら -exp(k(x - d)) + 2）、\r\n（そうでないなら m(x - d) + 1）")]
         [Header("体力補正値＝\r\n（歳差運動をしているなら0.9）、\r\n（そうでないなら1）")]

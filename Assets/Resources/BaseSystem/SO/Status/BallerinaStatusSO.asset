@@ -43,9 +43,13 @@ MonoBehaviour:
       PushCoolTime: 5
       CounterCoolTime: 10
       SkillCooltimes:
-      - 10
-      SpecialCooltime: 20
+      - 20
+      SpecialCooltime: 45
   SkillPushPowerCoef: 8.5
   SkillRiseDur: 0.5
   SkillRushDur: 0.2
   SkillPow: 2
+  GenericDamageCoefCoef: 1.5
+  SpecialDur: 10
+  OnWeakGenericDamageCoefCoef: 1.5
+  WeakDur: 10

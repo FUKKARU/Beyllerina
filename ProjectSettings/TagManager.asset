@@ -8,6 +8,8 @@ TagManager:
   - ExceptPlayer
   - PlayableRespawnPoint
   - UnPlayableRespawnPoint
+  - LeftWeapon
+  - RightWeapon
   layers:
   - Default
   - TransparentFX

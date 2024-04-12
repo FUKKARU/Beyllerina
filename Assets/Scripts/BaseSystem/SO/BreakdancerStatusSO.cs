@@ -33,5 +33,10 @@ namespace BaseSystem
         #endregion
 
         public StatusTable StatusTable;
+        [Header("スキル使用時に、回転方向を何秒で逆にするか")] public float SkillRotChangeDur;
+        [Header("スキルの継続時間")] public float SkillDur;
+        [Header("必殺技使用時に、プッシュ力を何倍にするか")] public float SpecialPushPowerCoefCoef;
+        [Header("必殺技使用時に、回転速度を何倍にするか")] public float SpecialRotSpeedCoef;
+        [Header("必殺技の継続時間")] public float SpecialDur;
     }
 }
