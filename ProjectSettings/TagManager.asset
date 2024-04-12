@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Center
   - ExceptPlayer
+  - PlayableRespawnPoint
+  - UnPlayableRespawnPoint
   layers:
   - Default
   - TransparentFX

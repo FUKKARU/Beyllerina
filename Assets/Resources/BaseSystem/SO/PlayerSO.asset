@@ -36,6 +36,10 @@ MonoBehaviour:
     Duration2IdleWhenKnockbacked: 1
     CooltimeBehaviourInterval: 0.1
     GaugeAOnCooltime: 100
+    FallJudgeY: -5
+    FallResetY: 10
+    P_RePosTag: PlayableRespawnPoint
+    U_RePosTag: UnPlayableRespawnPoint
   DamageTable:
     DamagableDuration: 0.1
     MinDamage: 0

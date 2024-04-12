@@ -45,3 +45,7 @@ MonoBehaviour:
       SkillCooltimes:
       - 10
       SpecialCooltime: 20
+  SkillPushPowerCoef: 8.5
+  SkillRiseDur: 0.5
+  SkillRushDur: 0.2
+  SkillPow: 2

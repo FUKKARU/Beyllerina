@@ -37,13 +37,13 @@ namespace BaseSystem
         [NonSerialized] public bool IsChangeUnPlayableBar = false; // アンプレイアブルのバーを変化させるかどうか
 
         // PlayerMoveクラスのインスタンス（PvEかつ1v1の想定）
-        PlayerMove pPm;
-        PlayerMove uPm;
+        [NonSerialized] public PlayerMove P_Pm;
+        [NonSerialized] public PlayerMove U_Pm;
 
         void Start()
         {
-            pPm = Beys[0].GetComponent<PlayerMove>();
-            uPm = Beys[1].GetComponent<PlayerMove>();
+            P_Pm = Beys[0].GetComponent<PlayerMove>();
+            U_Pm = Beys[1].GetComponent<PlayerMove>();
 
             PlayableDamagedBar.fillAmount = 1f;
             UnPlayableDamagedBar.fillAmount = 1f;
@@ -64,7 +64,7 @@ namespace BaseSystem
 
                 if (nowValue > targetValue) // 目標値を越えていないとき
                 {
-                    PlayableDamagedBar.fillAmount -= pPm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
+                    PlayableDamagedBar.fillAmount -= P_Pm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace BaseSystem
 
                 if (nowValue > targetValue) // 目標値を越えていないとき
                 {
-                    UnPlayableDamagedBar.fillAmount -= uPm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
+                    UnPlayableDamagedBar.fillAmount -= U_Pm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
                 }
                 else
                 {

@@ -17,7 +17,6 @@ public class MeshTrail : MonoBehaviour
         {
             isTrailActive = true;
             StartCoroutine(TrailCreate(trailActiveTime));
-            Debug.Log("w");
         }
     }
 

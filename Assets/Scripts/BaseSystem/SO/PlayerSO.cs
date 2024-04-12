@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace BaseSystem
@@ -63,6 +64,10 @@ namespace BaseSystem
         [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
         [Header("クールタイムの処理を何秒ごとに行うか")] public float CooltimeBehaviourInterval;
         [Header("クールタイムが空けていないとき、Gaugeの透明度"), Range(0, 255)] public byte GaugeAOnCooltime;
+        [Header("落下判定位置")] public float FallJudgeY;
+        [Header("落下修正位置")] public float FallResetY;
+        [Header("Playable respawn point tag")] public string P_RePosTag;
+        [Header("UnPlayable respawn point tag")] public string U_RePosTag;
     }
 
     [Serializable]
