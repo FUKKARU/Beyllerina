@@ -69,6 +69,7 @@ namespace BaseSystem
         Vector3 axis; // ベイの回転軸
         float axisTimer = 0; // ベイの回転軸を傾ける時間
         bool isHpLow = false; // HPが一定以下になって、歳差運動をしているかどうか
+        Vector3 rePos; // リスポーンポイント
         #endregion
 
 
@@ -161,6 +162,10 @@ namespace BaseSystem
                     isSkillIfUnplayables[i] = false;
                 }
             }
+
+            // リスポーンポイントの取得
+            string tag = (this == GameManager.Instance.P_Pm) ? P_SOB.P_RePosTag : P_SOB.U_RePosTag;
+            rePos = GameObject.FindGameObjectWithTag(tag).transform.position;
 
             // ゲーム開始から少しの間は、無敵時間になっている。
             if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration());
@@ -271,6 +276,7 @@ namespace BaseSystem
             #endregion
 
             #region デス判定
+            JudgeFall(); // 場外判定
             JudgeDeath();
             #endregion
 
@@ -747,25 +753,61 @@ namespace BaseSystem
             IsSkillDirection = true;
 
             StartCoroutine(SkillBehaviourDirection());
-
-            switch (type)
-            {
-                case TYPE.Ballerina:
-                    break;
-
-                case TYPE.BreakDancer:
-                    break;
-
-                case TYPE.Enemy1:
-                    break;
-            }
         }
 
+
+        Vector3 sp, op;
+        bool action = true, _action = true;
         IEnumerator SkillBehaviourDirection()
         {
             switch (type)
             {
                 case TYPE.Ballerina:
+                    int pow = BallerinaStatusSO.Entity.SkillPow;
+                    float _t = 0;
+                    float _d = BallerinaStatusSO.Entity.SkillRiseDur;
+
+                    float t = 0;
+                    float d = BallerinaStatusSO.Entity.SkillRushDur;
+                    sp = transform.position;
+                    op = opponent.transform.position;
+                    float ax = (Mathf.Pow(d, pow) + sp.x - op.x) / (pow * d);
+                    float ay = (Mathf.Pow(d, pow) + sp.y - op.y) / (pow * d);
+                    float az = (Mathf.Pow(d, pow) + sp.z - op.z) / (pow * d);
+                    Vector3 a = new Vector3(ax, ay, az);
+                    float bx = sp.x - Mathf.Pow(a.x, pow);
+                    float by = sp.y - Mathf.Pow(a.y, pow);
+                    float bz = sp.z - Mathf.Pow(a.z, pow);
+                    Vector3 b = new Vector3(bx, by, bz);
+
+                    while (_action)
+                    {
+                        _t += Time.deltaTime;
+
+                        Vector3 pos = transform.position;
+                        pos.y = -_t * (_t - 2 * _d);
+                        transform.position = pos;
+                        if (_t > _d)
+                        {
+                            _action = false;
+                        }
+
+                        yield return null;
+                    }
+                    while (action)
+                    {
+                        t += Time.deltaTime;
+
+                        float yx = Mathf.Pow(t - a.x, pow) + b.x;
+                        float yy = Mathf.Pow(t - a.y, pow) + b.y;
+                        float yz = Mathf.Pow(t - a.z, pow) + b.z;
+
+                        transform.position = new Vector3(yx, yy, yz);
+                        if (t > d) action = false;
+
+                        yield return null;
+                    }
+
                     break;
 
                 case TYPE.BreakDancer:
@@ -776,6 +818,20 @@ namespace BaseSystem
             }
 
             IsSkillDirection = false;
+
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    opponentRb.AddForce((op - sp).normalized * S_SOI.PushPower * BallerinaStatusSO.Entity.SkillPushPowerCoef, ForceMode.Impulse);
+                    Damage(opponentPm, PlayerState.KNOCKBACKED);
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }
 
             yield break;
         }
@@ -808,6 +864,13 @@ namespace BaseSystem
             gm.SkillCooltimeGauges[idx].color = col;
 
             isOnSkillCooltimes[idx] = false;
+
+            switch (idx)
+            {
+                case 0:
+                    action = true; _action = true;
+                    break;
+            }
         }
 
         void Special()
@@ -841,22 +904,25 @@ namespace BaseSystem
 
             StartCoroutine(SpecialBehaviourDirection());
 
-            switch (type)
-            {
-                case TYPE.Ballerina:
-                    break;
 
-                case TYPE.BreakDancer:
-                    break;
-
-                case TYPE.Enemy1:
-                    break;
-            }
         }
 
         // 必殺技の演出を行う
         IEnumerator SpecialBehaviourDirection()
         {
+            /*
+            switch (type)
+            {
+                case TYPE.Ballerina:
+                    break;
+
+                case TYPE.BreakDancer:
+                    break;
+
+                case TYPE.Enemy1:
+                    break;
+            }*/
+            IsSpecialDirection = false;
             switch (type)
             {
                 case TYPE.Ballerina:
@@ -868,9 +934,6 @@ namespace BaseSystem
                 case TYPE.Enemy1:
                     break;
             }
-            
-            IsSpecialDirection = false;
-
             yield break;
         }
 
@@ -1017,6 +1080,12 @@ namespace BaseSystem
         #endregion
 
         #region デス判定の詳細
+
+        void JudgeFall()
+        {
+            if (transform.position.y < P_SOB.FallJudgeY) transform.position = rePos;
+        }
+
         void JudgeDeath()
         {
             if (Hp < 0)
