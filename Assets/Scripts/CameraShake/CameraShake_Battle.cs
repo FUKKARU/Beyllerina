@@ -7,25 +7,34 @@ public class CameraShake_Battle : MonoBehaviour
     [SerializeField] AnimationCurve curve;
     float duration = 0.3f;
 
+    RectTransform rectTransform;
+
+    private void Start()
+    {
+        rectTransform = GetComponent<RectTransform>();
+
+    }
+
     public void ShakeOn()
     {
-        //StartCoroutine(Shake());
+        StartCoroutine(Shake());
     }
 
     IEnumerator Shake()
     {
-        Vector3 startPosition = transform.position;
+
+        Vector3 startPosition = rectTransform.position;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float strength = curve.Evaluate(elapsedTime / duration);
-            transform.position = startPosition + UnityEngine.Random.insideUnitSphere * strength;
+            rectTransform.position = startPosition + UnityEngine.Random.insideUnitSphere * strength;
             yield return null;
         }
 
-        transform.position = startPosition;
+        rectTransform.position = startPosition;
     }
 }
 
