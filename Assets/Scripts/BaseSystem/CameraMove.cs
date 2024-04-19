@@ -8,15 +8,13 @@ namespace BaseSystem
     {
         [SerializeField] GameObject center;
         [SerializeField] GameObject lookingPosition;
-        float stageRadius = 14f;
-        float duration = 60f;
 
         CalcCircle.RotateCircle rotInfo;
         float time = 0;
 
         void Start()
         {
-            rotInfo = new CalcCircle.RotateCircle(gameObject, center.transform.position, PlayerSO.Entity.CameraRadius, new CalcCircle.AxisAngle(Vector3.right, 0), lookingPosition.transform.position);
+            rotInfo = new CalcCircle.RotateCircle(gameObject, center.transform.position, PlayerSO.Entity.CameraRadius, new CalcCircle.AxisAngle(Vector3.right, 15), lookingPosition.transform.position);
         }
 
         void Update()
@@ -59,20 +57,18 @@ namespace BaseSystem
             {
                 float angle = time * speed;
 
-                // 1st : Assume that this.rotation is default, then calcurate the position on the normalized circle.
+                // 1st : Calcurate the position.
                 float x = Mathf.Sin(angle);
-                float y = -Mathf.Cos(angle);
-                float z = 0;
-                Vector3 positionOnNormalizedCircle = new Vector3(x, y, z);
+                float y = 0;
+                float z = -Mathf.Cos(angle);
+                Vector3 position1 = new Vector3(x, y, z);
+                Vector3 position2 = position1 * this.radius;
+                Vector3 position3 = Quaternion.AngleAxis(rotation.angle, rotation.axis) * position2;
+                Vector3 position4 = position3 + this.center;
+                camera.transform.position = position4;
 
-                // 2nd : Consider this.rotation, then calcurate the position on the circle.
-                positionOnNormalizedCircle = Quaternion.AngleAxis(rotation.angle, rotation.axis) * positionOnNormalizedCircle;
-                Vector3 positionOnCircle = positionOnNormalizedCircle * this.radius + this.center;
-
-                // 3rd : Calcurate the camera's looking position.
-                Vector3 dir = lookingPosition - positionOnCircle;
-                Quaternion rot = Quaternion.LookRotation(dir);
-                camera.transform.rotation = rot * camera.transform.rotation;
+                // 2nd : Look at the center.
+                camera.transform.LookAt(lookingPosition);
             }
         }
 

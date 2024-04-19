@@ -3011,6 +3011,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1362989347907967852, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_Name
+      value: PreCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1362989347907967852, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_TagString
+      value: PreCamera
+      objectReference: {fileID: 0}
     - target: {fileID: 1557102538867283575, guid: 804a2c22ceab93649807d856e1e4cfea,
         type: 3}
       propertyPath: m_Name
