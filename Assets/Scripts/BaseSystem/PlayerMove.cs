@@ -836,6 +836,7 @@ namespace BaseSystem
                         yield return null;
                     }
                     transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
+                    weight *= Enemy1StatusSO.Entity.SkillWeightCoef;
                     antiGravity = false;
                     break;
             }
@@ -853,6 +854,18 @@ namespace BaseSystem
                     break;
 
                 case TYPE.Enemy1:
+                    float time = 0;
+                    while (true)
+                    {
+                        time += Time.deltaTime;
+                        if (time >= Enemy1StatusSO.Entity.SkillDuration)
+                        {
+                            transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
+                            weight /= Enemy1StatusSO.Entity.SkillWeightCoef;
+                            break;
+                        }
+                        yield return null;
+                    }
                     break;
             }
 

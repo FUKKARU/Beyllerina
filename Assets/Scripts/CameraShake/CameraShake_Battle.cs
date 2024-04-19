@@ -9,7 +9,7 @@ public class CameraShake_Battle : MonoBehaviour
 
     public void ShakeOn()
     {
-        StartCoroutine(Shake());
+        //StartCoroutine(Shake());
     }
 
     IEnumerator Shake()

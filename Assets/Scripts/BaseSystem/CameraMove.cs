@@ -10,11 +10,20 @@ namespace BaseSystem
         [SerializeField] GameObject lookingPosition;
 
         CalcCircle.RotateCircle rotInfo;
+        float theta = 0; // ang of the circle around Vector3.up. Used to calcurate rotInfo.rotation.axis.
+        float angle = 0; // rotInfo.rotation.angle.
         float time = 0;
 
         void Start()
         {
-            rotInfo = new CalcCircle.RotateCircle(gameObject, center.transform.position, PlayerSO.Entity.CameraRadius, new CalcCircle.AxisAngle(Vector3.right, 15), lookingPosition.transform.position);
+            // Calcurated once on entering the game scene.
+            theta = Random.Range(PlayerSO.Entity.CameraThetaRange.x, PlayerSO.Entity.CameraThetaRange.y);
+            angle = 30;/*Random.Range(PlayerSO.Entity.CameraAngleRange.x, PlayerSO.Entity.CameraAngleRange.y);*/
+            Vector3 newAxis = Quaternion.AngleAxis(theta, Vector3.up) * Vector3.right;
+
+            rotInfo = new CalcCircle.RotateCircle(gameObject, center.transform.position, PlayerSO.Entity.CameraRadius, new CalcCircle.AxisAngle(newAxis, angle), lookingPosition.transform.position);
+
+            time = 0;
         }
 
         void Update()

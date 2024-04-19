@@ -34,8 +34,9 @@ namespace BaseSystem
 
         public StatusTable StatusTable;
         [Header("スキル使用時何倍大きくなるか")] public float SkillSizeCoef;
+        [Header("スキル使用時質量を何倍にするか")] public float SkillWeightCoef;
         [Header("スキル使用時どこまで上昇するか")] public float SkillHeight;
         [Header("スキル使用時どのようなスピードで上昇するか")] public float SkillSpeed;
-        [Header("スキルの巨大化を何秒継続するか")] public float a;
+        [Header("スキルの継続時間")] public float SkillDuration;
     }
 }

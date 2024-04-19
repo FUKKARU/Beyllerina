@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 
 namespace BaseSystem
@@ -40,6 +39,8 @@ namespace BaseSystem
         [Header("重力を何倍にするか")] public float GravityScale;
         [Header("プレイヤーの高さ")] public float PlayerHeight;
         [Header("中心への移動速度")] public float SpeedTowardCenter;
+        [Header("カメラの'theta'の範囲(min, max)")] public Vector2 CameraThetaRange;
+        [Header("カメラの'angle'の範囲(min, max)")] public Vector2 CameraAngleRange;
         [Header("カメラが動く軌跡の、円の半径")] public float CameraRadius;
         [Header("カメラがステージを1周するのにかかる時間[s]")] public float CameraDuration;
         [Space(25)]

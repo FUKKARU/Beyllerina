@@ -45,6 +45,8 @@ MonoBehaviour:
       SkillCooltimes:
       - 10
       SpecialCooltime: 20
-  SkillSizeCoef: 2
+  SkillSizeCoef: 5
+  SkillWeightCoef: 2
   SkillHeight: 15
   SkillSpeed: 7.5
+  SkillDuration: 10
