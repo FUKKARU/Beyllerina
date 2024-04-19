@@ -33,5 +33,8 @@ namespace BaseSystem
         #endregion
 
         public StatusTable StatusTable;
+        [Header("スキル使用時何倍大きくなるか")] public float SkillSizeCoef;
+        [Header("スキル使用時どこまで上昇するか")] public float SkillHeight;
+        [Header("スキル使用時どのようなスピードで上昇するか")] public float SkillSpeed;
     }
 }

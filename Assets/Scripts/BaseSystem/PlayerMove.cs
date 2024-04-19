@@ -827,15 +827,15 @@ namespace BaseSystem
 
                 case TYPE.Enemy1:
                     antiGravity = true;
-                    while (transform.position.y < 15)
+                    while (transform.position.y < Enemy1StatusSO.Entity.SkillHeight)
                     {
                         Vector3 cPos = transform.position;
-                        cPos.y += 7.5f * Time.deltaTime;
+                        cPos.y += Enemy1StatusSO.Entity.SkillSpeed * Time.deltaTime;
                         transform.position = cPos;
 
                         yield return null;
                     }
-                    transform.localScale *= 2;
+                    transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
                     antiGravity = false;
                     break;
             }
