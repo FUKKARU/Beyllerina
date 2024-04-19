@@ -836,6 +836,8 @@ namespace BaseSystem
                         yield return null;
                     }
                     transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
+                    ParticleSystem.MainModule tornado =  transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+                    tornado.startSize = 10;
                     weight *= Enemy1StatusSO.Entity.SkillWeightCoef;
                     antiGravity = false;
                     break;
