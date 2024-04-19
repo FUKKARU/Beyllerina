@@ -73,6 +73,8 @@ namespace BaseSystem
         float genericDamageCoef = 1; // 汎用ダメージ係数
         float rotDir = 1; // 正回転なら1、逆回転なら-1
         float pushPowerCoef = 1; // プッシュ力の係数（調整用）
+
+        bool antiGravity = false;//重力停止
         #endregion
 
 
@@ -217,11 +219,15 @@ namespace BaseSystem
             // ベイの物理状態の更新
             ChangeRigidbodyParameters();
 
-            // 重力
-            rb.AddForce(Vector3.down * 9.81f * P_SO.GravityScale, ForceMode.Force);
+            if (!antiGravity)
+            {
+                // 重力
+                rb.AddForce(Vector3.down * 9.81f * P_SO.GravityScale, ForceMode.Force);
 
-            // 常に中心へ移動
-            rb.AddForce((stageCenter.transform.position - transform.position).normalized * P_SO.SpeedTowardCenter, ForceMode.Force);
+                // 常に中心へ移動
+                rb.AddForce((stageCenter.transform.position - transform.position).normalized * P_SO.SpeedTowardCenter, ForceMode.Force);
+            }
+
 
         }
 
@@ -239,7 +245,7 @@ namespace BaseSystem
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
-                Instantiate(hitEffect,( gameObject.transform.position + collision.gameObject.transform.position ) / 2 ,Quaternion.identity);
+                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity);
                 if (isDamagable && (!IsSpecialDirection && !opponentPm.IsSpecialDirection) && (!IsSkillDirection && !opponentPm.IsSkillDirection))
                 {
                     isDamagable = false;
@@ -608,7 +614,7 @@ namespace BaseSystem
                     if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
-                        isOnCounterCooltime= true;
+                        isOnCounterCooltime = true;
                         IsPushBehaviourDone = false;
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
                     }
@@ -820,6 +826,8 @@ namespace BaseSystem
                     break;
 
                 case TYPE.Enemy1:
+                    antiGravity = true;
+                    StartCoroutine(Up());
                     break;
             }
 
@@ -836,10 +844,24 @@ namespace BaseSystem
                     break;
 
                 case TYPE.Enemy1:
+                    transform.localScale *= 2;
+                    antiGravity = false;
                     break;
             }
 
             yield break;
+        }
+
+        IEnumerator Up()
+        {
+            while (transform.position.y < 15)
+            {
+                Vector3 cPos = transform.position;
+                cPos.y += 7.5f * Time.deltaTime;
+                transform.position = cPos;
+
+                yield return null;
+            }
         }
 
         IEnumerator RotationChange()
@@ -1032,7 +1054,7 @@ namespace BaseSystem
 
             while (time >= 0f)
             {
-                 // gm.SpecialCooltimeGauge.fillAmount = -time / ct + 1;
+                // gm.SpecialCooltimeGauge.fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
@@ -1091,7 +1113,7 @@ namespace BaseSystem
             float minRotSpeed = P_SOB.RotationSpeedCoefRange.x * rotSpe;
             float maxRotSpeed = P_SOB.RotationSpeedCoefRange.y * rotSpe;
             rotSpeed = Mathf.Clamp(rotSpeed, minRotSpeed, maxRotSpeed); // 角速度を制限する。
-            rotSpeed *= rotDir; 
+            rotSpeed *= rotDir;
             transform.localRotation = Quaternion.AngleAxis(rotSpeed * Time.deltaTime, axis) * transform.localRotation;
         }
 

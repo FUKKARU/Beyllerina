@@ -13,7 +13,7 @@ namespace BaseSystem
 
         void Start()
         {
-            rotInfo = new RotateCircle(center.transform.position, new AxisAngle(Vector3.right, 0), lookingPosition.transform.position);
+            //rotInfo = new RotateCircle(center.transform.position, new AxisAngle(Vector3.right, 0), lookingPosition.transform.position);
         }
 
         void Update()

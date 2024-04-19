@@ -33,6 +33,8 @@ namespace BaseSystem
         [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
         [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
 
+
+
         [NonSerialized] public bool IsChangePlayableBar = false; // プレイアブルのバーを変化させるかどうか
         [NonSerialized] public bool IsChangeUnPlayableBar = false; // アンプレイアブルのバーを変化させるかどうか
 
