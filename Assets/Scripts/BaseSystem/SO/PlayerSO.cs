@@ -40,6 +40,7 @@ namespace BaseSystem
         [Header("d—Í‚ğ‰½”{‚É‚·‚é‚©")] public float GravityScale;
         [Header("ƒvƒŒƒCƒ„[‚Ì‚‚³")] public float PlayerHeight;
         [Header("’†S‚Ö‚ÌˆÚ“®‘¬“x")] public float SpeedTowardCenter;
+        [Header("ƒJƒƒ‰‚ÌŠp‘¬“x[rad/s]")] public float CameraSpeed;
         [Space(25)]
         [Header("y‹““®ŠÖŒWz")] public BehaviourTable BehaviourTable;
         [Header("yƒ_ƒ[ƒWˆ—ŠÖŒWz")] public DamageTable DamageTable;
