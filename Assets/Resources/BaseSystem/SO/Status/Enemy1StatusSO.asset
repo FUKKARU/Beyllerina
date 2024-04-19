@@ -28,9 +28,9 @@ MonoBehaviour:
       HpBarChangeSpeed: 0
     StatusTableUnPlayable:
       SkillNum: 1
-      Push2SkillInterval: 3
+      Push2SkillInterval: 5
       Push2SkillIntervalOffset: 0
-      Skill2PushInterval: 1000
+      Skill2PushInterval: 5
       Skill2PushIntervalOffset: 0
       HpBarChangeSpeed: 0.1
     StatusTableInitStatus:

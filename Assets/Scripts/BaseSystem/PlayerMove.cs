@@ -827,7 +827,16 @@ namespace BaseSystem
 
                 case TYPE.Enemy1:
                     antiGravity = true;
-                    StartCoroutine(Up());
+                    while (transform.position.y < 15)
+                    {
+                        Vector3 cPos = transform.position;
+                        cPos.y += 7.5f * Time.deltaTime;
+                        transform.position = cPos;
+
+                        yield return null;
+                    }
+                    transform.localScale *= 2;
+                    antiGravity = false;
                     break;
             }
 
@@ -844,24 +853,10 @@ namespace BaseSystem
                     break;
 
                 case TYPE.Enemy1:
-                    transform.localScale *= 2;
-                    antiGravity = false;
                     break;
             }
 
             yield break;
-        }
-
-        IEnumerator Up()
-        {
-            while (transform.position.y < 15)
-            {
-                Vector3 cPos = transform.position;
-                cPos.y += 7.5f * Time.deltaTime;
-                transform.position = cPos;
-
-                yield return null;
-            }
         }
 
         IEnumerator RotationChange()
