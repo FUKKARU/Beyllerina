@@ -20,6 +20,8 @@ MonoBehaviour:
   GravityScale: 2
   PlayerHeight: 2
   SpeedTowardCenter: 5
+  CameraRadius: 14
+  CameraDuration: 60
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360

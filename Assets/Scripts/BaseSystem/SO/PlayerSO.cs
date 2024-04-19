@@ -40,7 +40,8 @@ namespace BaseSystem
         [Header("重力を何倍にするか")] public float GravityScale;
         [Header("プレイヤーの高さ")] public float PlayerHeight;
         [Header("中心への移動速度")] public float SpeedTowardCenter;
-        [Header("カメラの角速度[rad/s]")] public float CameraSpeed;
+        [Header("カメラが動く軌跡の、円の半径")] public float CameraRadius;
+        [Header("カメラがステージを1周するのにかかる時間[s]")] public float CameraDuration;
         [Space(25)]
         [Header("【挙動関係】")] public BehaviourTable BehaviourTable;
         [Header("【ダメージ処理関係】")] public DamageTable DamageTable;
