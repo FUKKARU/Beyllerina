@@ -814,6 +814,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tornado_effects_001_Blue_2
       objectReference: {fileID: 0}
+    - target: {fileID: 2466471109199375682, guid: 78f7e68a0bf6844408fc0e0d50bd5d8c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2547824236772451376, guid: 78f7e68a0bf6844408fc0e0d50bd5d8c,
         type: 3}
       propertyPath: moveWithTransform
@@ -2230,7 +2235,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1672563374
 Transform:
   m_ObjectHideFlags: 0
@@ -2239,14 +2244,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672563373}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -1.21, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.49, y: -0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1691606156}
   m_Father: {fileID: 856758742001937083}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!65 &1672563375
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2953,7 +2958,7 @@ PrefabInstance:
     - target: {fileID: 7417848343607331679, guid: 804a2c22ceab93649807d856e1e4cfea,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878248921981604927, guid: 804a2c22ceab93649807d856e1e4cfea,
         type: 3}
@@ -2965,6 +2970,31 @@ PrefabInstance:
       propertyPath: CameraS_B
       value: 
       objectReference: {fileID: 69920344}
+    - target: {fileID: 8640866608883722746, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640866608883722746, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640866608883722746, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640866608883722746, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640866608883722746, guid: 804a2c22ceab93649807d856e1e4cfea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2536057698137166712, guid: 804a2c22ceab93649807d856e1e4cfea, type: 3}
