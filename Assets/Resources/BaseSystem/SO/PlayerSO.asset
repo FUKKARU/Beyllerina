@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dbg:
     IsShowNormalLog: 0
-    P_DamageMul: 1
+    P_DamageMul: 0
     U_DamageMul: 0
   WhatIsGround:
     serializedVersion: 2
@@ -27,10 +27,11 @@ MonoBehaviour:
   CameraAngleRange: {x: 0, y: 30}
   CameraRadius: 14
   CameraDuration: 60
-  UntilHpRecoverDur: 3
+  UntilHpRecoverDur: 2
   HpRecoverRatio: 50
-  FromHpRecoverDur: 3
+  FromHpRecoverDur: 2
   KODur: 0.1
+  KOFadeDur: 2
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360

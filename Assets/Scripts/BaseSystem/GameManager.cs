@@ -72,10 +72,6 @@ namespace BaseSystem
         {
             // バーを減少させる。
             ChangeBarsFillAmount();
-            /*
-            Transform trans = KOed_UI.transform;
-            trans.GetComponent<RectTransform>().localPosition = new Vector3 (0f, indexer, 0f);
-            */
         }
 
         void ChangeBarsFillAmount()
@@ -143,7 +139,7 @@ namespace BaseSystem
         {
             // KOの演出
             const int CANVAS_WIDTH = 800;
-            RectTransform trans = KO_UI.GetComponent<RectTransform>().transform as RectTransform;
+            RectTransform trans = KO_UI.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
             float time = 0;
             while (true)
@@ -152,19 +148,24 @@ namespace BaseSystem
 
                 if (time >= d)
                 {
-                    Vector3 p = trans.GetComponent<RectTransform>().localPosition;
-                    p.x = 0;
-                    trans.GetComponent<RectTransform>().localPosition = p;
+                    Vector3 p1 = trans.localPosition;
+                    p1.x = 0;
+                    trans.localPosition = p1;
                     break;
                 }
 
-                Vector3 pos = trans.GetComponent<RectTransform>().localPosition;
-                pos.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
+                Vector3 p2 = trans.localPosition;
+                p2.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
 
-                trans.GetComponent<RectTransform>().localPosition = pos;
+                trans.localPosition = p2;
 
                 yield return null;
             }
+
+            yield return new WaitForSeconds(PlayerSO.Entity.KOFadeDur);
+            Vector3 p3 = trans.localPosition;
+            p3.x = CANVAS_WIDTH;
+            trans.localPosition = p3;
 
             if (GameData.GameData.RoundNum < GameSO.Entity.RoundNum)
             {
@@ -198,7 +199,7 @@ namespace BaseSystem
         {
             // KOedの演出
             const int CANVAS_WIDTH = 800;
-            RectTransform trans = KOed_UI.GetComponent<RectTransform>().transform as RectTransform;
+            RectTransform trans = KOed_UI.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
             float time = 0;
             while (true)
@@ -207,20 +208,24 @@ namespace BaseSystem
 
                 if (time >= d)
                 {
-                    Vector3 p = trans.GetComponent<RectTransform>().localPosition;
-                    p.x = 0;
-                    trans.GetComponent<RectTransform>().localPosition = p;
+                    Vector3 p1 = trans.localPosition;
+                    p1.x = 0;
+                    trans.localPosition = p1;
                     break;
                 }
 
-                Vector3 pos = trans.GetComponent<RectTransform>().localPosition;
-                pos.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
+                Vector3 p2 = trans.localPosition;
+                p2.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
 
-                trans.GetComponent<RectTransform>().localPosition = pos;
+                trans.localPosition = p2;
 
                 yield return null;
             }
-          
+
+            yield return new WaitForSeconds(PlayerSO.Entity.KOFadeDur);
+            Vector3 p3 = trans.localPosition;
+            p3.x = CANVAS_WIDTH;
+            trans.localPosition = p3;
 
             // 敗北シーンに遷移
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
