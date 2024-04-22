@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d80aa9969654c646977f50061cd5c9d, type: 3}
   m_Name: PlayerSO
   m_EditorClassIdentifier: 
-  IsShowNormalLog: 0
+  Dbg:
+    IsShowNormalLog: 0
+    P_DamageMul: 0
+    U_DamageMul: 0
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -24,6 +27,9 @@ MonoBehaviour:
   CameraAngleRange: {x: 0, y: 30}
   CameraRadius: 14
   CameraDuration: 60
+  UntilHpRecoverDur: 3
+  HpRecoverRatio: 50
+  FromHpRecoverDur: 3
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360

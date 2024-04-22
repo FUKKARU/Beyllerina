@@ -121,7 +121,28 @@ namespace BaseSystem
             S_SOP = S_SO.StatusTablePlayable;
             S_SOU = S_SO.StatusTableUnPlayable;
             S_SOI = S_SO.StatusTableInitStatus;
-            Hp = S_SOI.Hp;
+            if (S_SO.IsPlayable)
+            {
+                if (GameData.GameData.RoundNum == 1)
+                {
+                    Hp = S_SOI.Hp;
+                    gm.PlayableBar.fillAmount = 1;
+                    gm.PlayableDamagedBar.fillAmount = 1;
+                }
+                else
+                {
+                    Hp = GameData.GameData.PlayableHp;
+                    gm.PlayableBar.fillAmount = Hp / S_SOI.Hp;
+                    gm.PlayableDamagedBar.fillAmount = Hp / S_SOI.Hp;
+                }
+            }
+            else
+            {
+                Hp = S_SOI.Hp;
+                gm.UnPlayableBar.fillAmount = 1;
+                gm.UnPlayableDamagedBar.fillAmount = 1;
+            }
+            
             weight = S_SOI.Weight;
             knoRes = S_SOI.KnockbackResistance;
             rotSpe = S_SOI.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
@@ -322,7 +343,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.PUSH);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
 
-                        if (P_SO.IsShowNormalLog)
+                        if (P_SO.Dbg.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{name} が {opponent.name} にプッシュした！</color>");
                         }
@@ -345,7 +366,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.KNOCKBACKED);
                         Damage(opponentPm, PlayerState.PUSH);
 
-                        if (P_SO.IsShowNormalLog)
+                        if (P_SO.Dbg.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{opponent.name} が {name} にプッシュした！</color>");
                         }
@@ -362,7 +383,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.COUNTER);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
 
-                        if (P_SO.IsShowNormalLog)
+                        if (P_SO.Dbg.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{name} が {opponent.name} にカウンターした！</color>");
                         }
@@ -387,7 +408,7 @@ namespace BaseSystem
                         Damage(this, PlayerState.KNOCKBACKED);
                         Damage(opponentPm, PlayerState.COUNTER);
 
-                        if (P_SO.IsShowNormalLog)
+                        if (P_SO.Dbg.IsShowNormalLog)
                         {
                             Debug.Log($"<color=#64ff64>{opponent.name} が {name} にカウンターした！</color>");
                         }
@@ -449,6 +470,15 @@ namespace BaseSystem
             damage = Mathf.Clamp(damage, P_SOD.MinDamage, P_SOD.MaxDamage);
             damage *= genericDamageCoef;
 
+            if (pm.S_SO.IsPlayable && pm.P_SO.Dbg.P_DamageMul)
+            {
+                damage *= 100;
+            }
+            else if (!pm.S_SO.IsPlayable && pm.P_SO.Dbg.U_DamageMul)
+            {
+                damage *= 100;
+            }
+
             pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
 
             // Barを変化させる
@@ -463,7 +493,7 @@ namespace BaseSystem
                 pm.gm.IsChangeUnPlayableBar = true;
             }
 
-            if (P_SO.IsShowNormalLog) // ログを表示
+            if (P_SO.Dbg.IsShowNormalLog) // ログを表示
             {
                 Debug.Log($"<color=#64ff64>{pm.gameObject.name} に {damage} ダメージ！</color>");
             }
@@ -1215,6 +1245,16 @@ namespace BaseSystem
                 else
                 {
                     gm.UnPlayableBar.fillAmount = 0f;
+                }
+
+                // 勝利/敗北の処理を発火する
+                if (!S_SO.IsPlayable)
+                {
+                    GameManager.Instance.Win();
+                }
+                else
+                {
+                    GameManager.Instance.Lose();
                 }
 
                 gameObject.SetActive(false); // 非アクティブにする
