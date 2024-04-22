@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BaseSystem
 {
@@ -47,6 +48,7 @@ namespace BaseSystem
         [Header("Ÿ—˜‚µ‚½uŠÔ‚©‚ç‰½•bŒã‚ÉHP‚ğ‰ñ•œ‚·‚é‚©")] public float UntilHpRecoverDur;
         [Header("Ÿ—˜‚ÉAÅ‘åHP - Œ»İHP‚Ì‰½%•ª‰ñ•œ‚·‚é‚©")] public float HpRecoverRatio;
         [Header("HP‚ğ‰ñ•œ‚µ‚Ä‚©‚ç‰½•bŒã‚ÉƒV[ƒ“‘JˆÚ‚·‚é‚©")] public float FromHpRecoverDur;
+        [FormerlySerializedAs("KOSpeed"), Header("K.O. ‚Ì•¶š‚ğ‰½•b‚Å‰æ–Ê‚Ì’†‰›‚É‚Á‚Ä‚­‚é‚©")] public float KODur;
         [Space(25)]
         [Header("y‹““®ŠÖŒWz")] public BehaviourTable BehaviourTable;
         [Header("yƒ_ƒ[ƒWˆ—ŠÖŒWz")] public DamageTable DamageTable;
