@@ -9,7 +9,7 @@ public class MeshTrail : MonoBehaviour
     float meshDestroyTime = 3f;
     public Transform positionToSpawn;
     bool isTrailActive;
-    public SkinnedMeshRenderer[] usedMeshes;
+    public MeshRenderer[] usedMeshes;
     public Material mat;
     void Update()
     {
@@ -25,6 +25,7 @@ public class MeshTrail : MonoBehaviour
         while(timer > 0)
         {
             timer -= meshRecretateRate;
+            /*
             for(int i = 0; i < usedMeshes.Length; i++) 
             {
                 GameObject gO = new GameObject();
@@ -32,14 +33,17 @@ public class MeshTrail : MonoBehaviour
                 MeshRenderer mR =  gO.AddComponent<MeshRenderer>();
                 MeshFilter mF = gO.AddComponent<MeshFilter>();
 
-                Mesh mesh = new Mesh();
-                usedMeshes[i].BakeMesh(mesh);
+                
+
 
                 mF.mesh = mesh;
                 mR.material = mat;
 
-                Destroy(gO, meshDestroyTime);
+                
             }
+            */
+            GameObject copy = Instantiate(gameObject);
+            Destroy(copy, meshDestroyTime);
             yield return new WaitForSeconds(meshRecretateRate);
         }
 
