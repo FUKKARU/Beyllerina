@@ -15,7 +15,7 @@ MonoBehaviour:
   Dbg:
     IsShowNormalLog: 0
     P_DamageMul: 0
-    U_DamageMul: 0
+    U_DamageMul: 1
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -30,6 +30,7 @@ MonoBehaviour:
   UntilHpRecoverDur: 3
   HpRecoverRatio: 50
   FromHpRecoverDur: 3
+  KODur: 0.1
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360

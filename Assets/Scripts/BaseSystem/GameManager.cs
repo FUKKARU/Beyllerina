@@ -34,6 +34,9 @@ namespace BaseSystem
         [Header("プッシュのクールタイムGauge")] public Image PushCooltimeGauge;
         [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
         [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
+        [Header("ラウンドUI")] public GameObject RoundUI;
+        [Header("KOしたUI")] public GameObject KO_UI;
+        [Header("KOされたUI")] public GameObject KOed_UI;
         [Header("Now Loading のテキスト")] public TextMeshProUGUI NowLoadingText;
 
 
@@ -47,10 +50,22 @@ namespace BaseSystem
 
         [NonSerialized] public bool IsGameResultJudged = false; // 勝利/敗北の処理を、行っている/行ったかどうか
 
+        Image[] roundUIs = new Image[3];
+
         void Start()
         {
             P_Pm = Beys[0].GetComponent<PlayerMove>();
             U_Pm = Beys[1].GetComponent<PlayerMove>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                roundUIs[i] = RoundUI.transform.GetChild(i).GetComponent<Image>();
+            }
+
+            for (int i = 0; i < GameData.GameData.RoundNum; i++)
+            {
+                roundUIs[i].enabled = false;
+            }
         }
 
         void Update()
@@ -122,10 +137,27 @@ namespace BaseSystem
 
         IEnumerator KOBehaviourIfWin()
         {
-            //KOの演出
+            // KOの演出
+            const int CANVAS_WIDTH = 800;
+            Transform trans = KO_UI.transform;
+            float d = PlayerSO.Entity.KODur;
+            float time = 0;
             while (true)
             {
-                if (1 == 1) break;
+                time += Time.deltaTime;
+
+                if (time >= d)
+                {
+                    Vector3 p = trans.position;
+                    p.x = 0;
+                    trans.position = p;
+                    break;
+                }
+
+                Vector3 pos = trans.position;
+                pos.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
+                trans.position = pos;
+
                 yield return null;
             }
 
@@ -159,10 +191,27 @@ namespace BaseSystem
 
         IEnumerator KOBehaviourIfLose()
         {
-            //KOの演出
+            // KOedの演出
+            const int CANVAS_WIDTH = 800;
+            Transform trans = KOed_UI.transform;
+            float d = PlayerSO.Entity.KODur;
+            float time = 0;
             while (true)
             {
-                if (1==1) break;
+                time += Time.deltaTime;
+
+                if (time >= d)
+                {
+                    Vector3 p = trans.position;
+                    p.x = 0;
+                    trans.position = p;
+                    break;
+                }
+
+                Vector3 pos = trans.position;
+                pos.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
+                trans.position = pos;
+
                 yield return null;
             }
 
@@ -171,20 +220,20 @@ namespace BaseSystem
         }
         #endregion
     }
+}
 
-    namespace LoadSceneAsync
+namespace LoadSceneAsync
+{
+    public static class LoadSceneAsync
     {
-        public static class LoadSceneAsync
+        public static void Load(string sceneName, bool isShowMessage = false)
         {
-            public static void Load(string sceneName, bool isShowMessage = false)
+            if (isShowMessage)
             {
-                if (isShowMessage)
-                {
-                    GameManager.Instance.NowLoadingText.enabled = true;
-                }
-                
-                SceneManager.LoadSceneAsync(sceneName);
+                BaseSystem.GameManager.Instance.NowLoadingText.enabled = true;
             }
+
+            SceneManager.LoadSceneAsync(sceneName);
         }
     }
 }
