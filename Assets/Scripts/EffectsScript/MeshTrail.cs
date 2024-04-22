@@ -10,7 +10,7 @@ public class MeshTrail : MonoBehaviour
     public Transform positionToSpawn;
     bool isTrailActive;
     public MeshRenderer[] usedMeshes;
-    public Material mat;
+    public Material effectMat;
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space) && !isTrailActive)
@@ -43,6 +43,7 @@ public class MeshTrail : MonoBehaviour
             }
             */
             GameObject copy = Instantiate(gameObject);
+            copy.GetComponent<MeshRenderer>().material = effectMat;
             Destroy(copy, meshDestroyTime);
             yield return new WaitForSeconds(meshRecretateRate);
         }

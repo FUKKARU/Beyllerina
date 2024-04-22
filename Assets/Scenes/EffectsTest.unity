@@ -5046,7 +5046,7 @@ MonoBehaviour:
   positionToSpawn: {fileID: 55723478}
   usedMeshes:
   - {fileID: 55723479}
-  mat: {fileID: 2100000, guid: 5d113a9fdc52d0e42b9685006c267dfa, type: 2}
+  effectMat: {fileID: 0}
 --- !u!65 &55723475
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -39808,7 +39808,7 @@ MonoBehaviour:
   positionToSpawn: {fileID: 8479969604004579458}
   usedMeshes:
   - {fileID: 8479969604004579459}
-  mat: {fileID: 5955844840416208063, guid: 20ef6f134f14bb04788c55562738af00, type: 3}
+  effectMat: {fileID: 2100000, guid: 998f2ccdbdc92c047a046ce40bb748cc, type: 2}
 --- !u!4 &149833279804373455
 Transform:
   m_ObjectHideFlags: 0
@@ -40832,7 +40832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4716518657779306756
 Transform:
   m_ObjectHideFlags: 0
