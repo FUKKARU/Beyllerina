@@ -2,39 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraShake_Battle : MonoBehaviour
+namespace BaseSystem
 {
-    [SerializeField] AnimationCurve curve;
-    float duration = 0.3f;
-
-    RectTransform rectTransform;
-
-    private void Start()
+    public class CameraShake_Battle : MonoBehaviour
     {
-        rectTransform = GetComponent<RectTransform>();
+        [SerializeField] AnimationCurve curve;
+        float duration = 0.3f;
 
-    }
+        RectTransform rectTransform;
 
-    public void ShakeOn()
-    {
-        StartCoroutine(Shake());
-    }
-
-    IEnumerator Shake()
-    {
-
-        Vector3 startPosition = rectTransform.position;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
+        private void Start()
         {
-            elapsedTime += Time.deltaTime;
-            float strength = curve.Evaluate(elapsedTime / duration);
-            rectTransform.position = startPosition + UnityEngine.Random.insideUnitSphere * strength;
-            yield return null;
+            rectTransform = GetComponent<RectTransform>();
+
         }
 
-        rectTransform.position = startPosition;
+        public void ShakeOn()
+        {
+            StartCoroutine(Shake());
+        }
+
+        IEnumerator Shake()
+        {
+
+            Vector3 startPosition = rectTransform.position;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float strength = curve.Evaluate(elapsedTime / duration);
+                rectTransform.position = startPosition + UnityEngine.Random.insideUnitSphere * strength;
+                yield return null;
+            }
+
+            rectTransform.position = startPosition;
+        }
     }
 }
-

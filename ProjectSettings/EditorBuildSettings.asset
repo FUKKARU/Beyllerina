@@ -6,15 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BaseSystem/Game.unity
-    guid: 12cc9beef51e3da4282d6e57515db40e
+    path: Assets/Scenes/Title.unity
+    guid: 97f6c3ece5edae241860b9db8b7d7f56
   - enabled: 1
-    path: Assets/Scenes/Character Select.unity
+    path: Assets/Scenes/CharacterSelect.unity
     guid: d6d0115ad19d9d545bb7d31d9adf0dc9
-  - enabled: 1
-    path: Assets/Scenes/TestTest.unity
-    guid: 6d116238fcda0204da90b0a949961727
   - enabled: 1
     path: Assets/Scenes/Rotate.unity
     guid: 03ed61a0c717d4541a42113439c3e8f0
+  - enabled: 1
+    path: Assets/Scenes/BaseSystem/Game.unity
+    guid: 12cc9beef51e3da4282d6e57515db40e
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 08c88ebadbad6774ca3a7bd14ad95203
+  - enabled: 1
+    path: Assets/Scenes/Lose.unity
+    guid: c9bdc2f6dbbe0d84690acf8996910f30
   m_configObjects: {}

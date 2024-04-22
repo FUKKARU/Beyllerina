@@ -33,7 +33,8 @@ namespace BaseSystem
         }
         #endregion
 
-        [Header("ログを出すかどうか（WarningとErrorは除く）")] public bool IsShowNormalLog;
+        [Header("【デバッグ関係】")] public DebugTable Dbg;
+        [Space(25)]
         [Header("地面として使うオブジェクトのレイヤー")] public LayerMask WhatIsGround;
         [Header("ベイのタグ")] public string BeyTagName;
         [Header("重力を何倍にするか")] public float GravityScale;
@@ -43,12 +44,23 @@ namespace BaseSystem
         [Header("カメラの'angle'の範囲(min, max)")] public Vector2 CameraAngleRange;
         [Header("カメラが動く軌跡の、円の半径")] public float CameraRadius;
         [Header("カメラがステージを1周するのにかかる時間[s]")] public float CameraDuration;
+        [Header("勝利した瞬間から何秒後にHPを回復するか")] public float UntilHpRecoverDur;
+        [Header("勝利時に、最大HP - 現在HPの何%分回復するか")] public float HpRecoverRatio;
+        [Header("HPを回復してから何秒後にシーン遷移するか")] public float FromHpRecoverDur;
         [Space(25)]
         [Header("【挙動関係】")] public BehaviourTable BehaviourTable;
         [Header("【ダメージ処理関係】")] public DamageTable DamageTable;
     }
 
     #region Table
+    [Serializable]
+    public class DebugTable
+    {
+        [Header("ログを出す（WarningとErrorは除く）")] public bool IsShowNormalLog;
+        [Header("プレイアブルの受けるダメージを100倍にする")] public bool P_DamageMul;
+        [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
+    }
+
     [Serializable]
     public class BehaviourTable
     {
