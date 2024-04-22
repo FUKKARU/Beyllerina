@@ -48,6 +48,9 @@ MonoBehaviour:
     Duration2IdleWhenKnockbacked: 1
     CooltimeBehaviourInterval: 0.1
     GaugeAOnCooltime: 100
+    PointDur: 1
+    PointAmount: 1
+    BonusPoint: 0500000003000000020000000100000000000000
     FallJudgeY: -5
     FallResetY: 10
     P_RePosTag: PlayableRespawnPoint

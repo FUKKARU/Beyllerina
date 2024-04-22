@@ -34,6 +34,8 @@ namespace BaseSystem
         [Header("プッシュのクールタイムGauge")] public Image PushCooltimeGauge;
         [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
         [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
+        [Header("必殺技のクールタイムGauge")] public Image SpecialCooltimeGauge;
+        [Header("必殺技のGauge")] public Image SpecialGauge;
         [Header("ラウンドUI")] public GameObject RoundUI;
         [Header("KOしたUI")] public GameObject KO_UI;
         [Header("KOされたUI")] public GameObject KOed_UI;

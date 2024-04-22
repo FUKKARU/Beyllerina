@@ -82,6 +82,9 @@ namespace BaseSystem
         [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
         [Header("クールタイムの処理を何秒ごとに行うか")] public float CooltimeBehaviourInterval;
         [Header("クールタイムが空けていないとき、Gaugeの透明度"), Range(0, 255)] public byte GaugeAOnCooltime;
+        [Header("何秒おきにポイントを貯めるか")] public float PointDur;
+        [Header("〇秒おきに貯めるポイントの量")] public int PointAmount;
+        [Header("ボーナスポイントの量\r\n（要素数で、体力の判定境界を識別する。体力が少ない→多いの順）")] public int[] BonusPoint;
         [Header("落下判定位置")] public float FallJudgeY;
         [Header("落下修正位置")] public float FallResetY;
         [Header("Playable respawn point tag")] public string P_RePosTag;
