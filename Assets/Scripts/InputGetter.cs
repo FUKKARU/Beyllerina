@@ -5,23 +5,11 @@ namespace IA
 {
     public class InputGetter : MonoBehaviour
     {
-        #region インスタンスの管理、コールバックとのリンク、staticかつシングルトン化
+        #region インスタンスの管理、コールバックとのリンク
         IA _inputs;
-
-        public static InputGetter Instance { get; set; } = null;
 
         void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-
             _inputs = new IA();
 
             Link(true);
@@ -45,6 +33,7 @@ namespace IA
         }
         #endregion
 
+        #region 変数宣言
         public bool IsPush { get; set; } = false;
         public bool IsCounter { get; set; } = false;
         public bool IsSkill { get; set; } = false;
@@ -53,115 +42,87 @@ namespace IA
         public bool IsSelect { get; set; } = false;
         public bool IsCancel { get; set; } = false;
         public bool IsQuit { get; set; } = false;
+        #endregion
 
-        void Update()
+        #region【LateUpdate】毎フレームの最後で、フラグを初期化する
+        void LateUpdate()
         {
-            if (BaseSystem.PlayerSO.Entity.Dbg.IsShowNormalLog)
-            {
-                Debug.Log($"<color=#64ff64>IsPush:{IsPush}</color>");
-                Debug.Log($"<color=#64ff64>IsCounter:{IsCounter}</color>");
-                Debug.Log($"<color=#64ff64>IsSkill:{IsSkill}</color>");
-                Debug.Log($"<color=#64ff64>IsSpecial:{IsSpecial}</color>");
-                Debug.Log($"<color=#64ff64>ValueRotate:{ValueRotate}</color>");
-                Debug.Log($"<color=#64ff64>IsSelect:{IsSelect}</color>");
-                Debug.Log($"<color=#64ff64>IsCancel:{IsCancel}</color>");
-                Debug.Log($"<color=#64ff64>IsQuit:{IsQuit}</color>");
-            }
+            if (IsPush) IsPush = false;
+            if (IsCounter) IsCounter = false;
+            if (IsSkill) IsSkill = false;
+            if (IsSpecial) IsSpecial = false;
+            if (IsSelect) IsSelect = false;
+            if (IsCancel) IsCancel = false;
+            if (IsQuit) IsQuit = false;
         }
+        #endregion
 
+        #region コールバックとのリンク
         void Link(bool isLink)
         {
-            // _inputs.Map名.Action名.コールバック
+            // インスタンス名.Map名.Action名.コールバック名
             if (isLink)
             {
                 _inputs.MainGame.Push.performed += OnPush;
-                _inputs.MainGame.Push.canceled += _OnPush;
 
                 _inputs.MainGame.Counter.performed += OnCounter;
-                _inputs.MainGame.Counter.canceled += _OnCounter;
 
                 _inputs.MainGame.Skill.performed += OnSkill;
-                _inputs.MainGame.Skill.canceled += _OnSkill;
 
                 _inputs.MainGame.Special.performed += OnSpecial;
-                _inputs.MainGame.Special.canceled += _OnSpecial;
 
                 _inputs.SubGame.Rotate.started += ReadRotate;
                 _inputs.SubGame.Rotate.performed += ReadRotate;
                 _inputs.SubGame.Rotate.canceled += ReadRotate;
 
                 _inputs.System.Select.performed += OnSelect;
-                _inputs.System.Select.canceled += _OnSelect;
 
                 _inputs.System.Cancel.performed += OnCancel;
-                _inputs.System.Cancel.canceled += _OnCancel;
                 
                 _inputs.System.Quit.performed += OnQuit;
-                _inputs.System.Quit.canceled += _OnQuit;
             }
             else
             {
                 _inputs.MainGame.Push.performed -= OnPush;
-                _inputs.MainGame.Push.canceled -= _OnPush;
 
                 _inputs.MainGame.Counter.performed -= OnCounter;
-                _inputs.MainGame.Counter.canceled -= _OnCounter;
 
                 _inputs.MainGame.Skill.performed -= OnSkill;
-                _inputs.MainGame.Skill.canceled -= _OnSkill;
 
                 _inputs.MainGame.Special.performed -= OnSpecial;
-                _inputs.MainGame.Special.canceled -= _OnSpecial;
 
                 _inputs.SubGame.Rotate.started -= ReadRotate;
                 _inputs.SubGame.Rotate.performed -= ReadRotate;
                 _inputs.SubGame.Rotate.canceled -= ReadRotate;
 
                 _inputs.System.Select.performed -= OnSelect;
-                _inputs.System.Select.canceled -= _OnSelect;
 
                 _inputs.System.Cancel.performed -= OnCancel;
-                _inputs.System.Cancel.canceled -= _OnCancel;
 
                 _inputs.System.Quit.performed -= OnQuit;
-                _inputs.System.Quit.canceled -= _OnQuit;
             }
         }
+        #endregion
 
+        #region 処理の詳細
         void OnPush(InputAction.CallbackContext context)
         {
             IsPush = true;
-        }
-        void _OnPush(InputAction.CallbackContext context)
-        {
-            IsPush = false;
         }
 
         void OnCounter(InputAction.CallbackContext context)
         {
             IsCounter = true;
         }
-        void _OnCounter(InputAction.CallbackContext context)
-        {
-            IsCounter = false;
-        }
 
         void OnSkill(InputAction.CallbackContext context)
         {
-            IsSkill = true;
-        }
-        void _OnSkill(InputAction.CallbackContext context)
-        {
-            IsSkill = false;
+            IsSkill = true;   
         }
 
         void OnSpecial(InputAction.CallbackContext context)
         {
-            IsSpecial = true;
-        }
-        void _OnSpecial(InputAction.CallbackContext context)
-        {
-            IsSpecial = false;
+            IsSpecial = true;   
         }
 
         void ReadRotate(InputAction.CallbackContext context)
@@ -173,27 +134,16 @@ namespace IA
         {
             IsSelect = true;
         }
-        void _OnSelect(InputAction.CallbackContext context)
-        {
-            IsSelect = false;
-        }
 
         void OnCancel(InputAction.CallbackContext context)
         {
             IsCancel = true;
-        }
-        void _OnCancel(InputAction.CallbackContext context)
-        {
-            IsCancel = false;
         }
 
         void OnQuit(InputAction.CallbackContext context)
         {
             IsQuit = true;
         }
-        void _OnQuit(InputAction.CallbackContext context)
-        {
-            IsQuit = false;
-        }
+        #endregion
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "InputAction",
+    "name": "IA",
     "maps": [
         {
             "name": "MainGame",
@@ -11,7 +11,7 @@
                     "id": "3d878511-380e-4782-b740-d6a91051c5cc",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
@@ -20,7 +20,7 @@
                     "id": "41ea0204-58d3-45c8-bd3f-ced5bd7fe82e",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
@@ -29,7 +29,7 @@
                     "id": "1359ef5a-5d73-45d2-aa7b-61879fbebda4",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
@@ -38,7 +38,7 @@
                     "id": "da655ae7-c7ca-4fd7-9685-e3ffda141a07",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
@@ -270,7 +270,7 @@
                     "id": "1469d5bd-48de-45b2-8ed1-b84cf6590c90",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
@@ -279,7 +279,7 @@
                     "id": "9a794d85-366e-4316-9453-e286d0029dcc",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
