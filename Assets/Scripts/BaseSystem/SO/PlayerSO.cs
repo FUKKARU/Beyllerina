@@ -63,6 +63,7 @@ namespace BaseSystem
         [Header("プレイアブルの受けるダメージを100倍にする")] public bool P_DamageMul;
         [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
         [Header("プレイアブルの受けるダメージを0倍にする")] public bool P_DamageImmune;
+        [Header("アンプレイアブルの受けるダメージを0倍にする")] public bool U_DamageImmune;
     }
 
     [Serializable]

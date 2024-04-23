@@ -17,6 +17,7 @@ MonoBehaviour:
     P_DamageMul: 0
     U_DamageMul: 0
     P_DamageImmune: 0
+    U_DamageImmune: 0
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64

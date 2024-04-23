@@ -10,7 +10,7 @@ namespace BaseSystem
 {
     public class GameManager : MonoBehaviour
     {
-        #region static‚©‚ÂƒVƒ“ƒOƒ‹ƒgƒ“‚É‚·‚é
+        #region staticã‹ã¤ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã«ã™ã‚‹
         public static GameManager Instance { get; set; }
 
         private void Awake()
@@ -26,31 +26,34 @@ namespace BaseSystem
         }
         #endregion
 
-        [Header("ƒxƒCiƒvƒŒƒCƒAƒuƒ‹/ƒAƒ“ƒvƒŒƒCƒAƒuƒ‹j")] public GameObject[] Beys;
-        [Header("ƒvƒŒƒCƒAƒuƒ‹‚ÌBar")] public Image PlayableBar;
-        [Header("ƒvƒŒƒCƒAƒuƒ‹‚ÌDamagedBar")] public Image PlayableDamagedBar;
-        [Header("ƒAƒ“ƒvƒŒƒCƒAƒuƒ‹‚ÌBar")] public Image UnPlayableBar;
-        [Header("ƒAƒ“ƒvƒŒƒCƒAƒuƒ‹‚ÌDamagedBar")] public Image UnPlayableDamagedBar;
-        [Header("ƒvƒbƒVƒ…‚ÌƒN[ƒ‹ƒ^ƒCƒ€Gauge")] public Image PushCooltimeGauge;
-        [Header("ƒJƒEƒ“ƒ^[‚ÌƒN[ƒ‹ƒ^ƒCƒ€Gauge")] public Image CounterCooltimeGauge;
-        [Header("ƒXƒLƒ‹‚ÌƒN[ƒ‹ƒ^ƒCƒ€Gauge")] public Image[] SkillCooltimeGauges;
-        [Header("•KE‹Z‚ÌƒN[ƒ‹ƒ^ƒCƒ€Gauge")] public Image SpecialCooltimeGauge;
-        [Header("•KE‹Z‚ÌGauge")] public Image SpecialGauge;
-        [Header("ƒ‰ƒEƒ“ƒhUI")] public GameObject RoundUI;
-        [Header("KO‚µ‚½UI")] public GameObject KO_UI;
-        [Header("KO‚³‚ê‚½UI")] public GameObject KOed_UI;
-        [Header("Now Loading ‚ÌƒeƒLƒXƒg")] public TextMeshProUGUI NowLoadingText;
+        [Header("ãƒ™ã‚¤ï¼ˆãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«/ã‚¢ãƒ³ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ï¼‰")] public GameObject[] Beys;
+        [Header("ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®Bar")] public Image PlayableBar;
+        [Header("ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®DamagedBar")] public Image PlayableDamagedBar;
+        [Header("ã‚¢ãƒ³ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®Bar")] public Image UnPlayableBar;
+        [Header("ã‚¢ãƒ³ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®DamagedBar")] public Image UnPlayableDamagedBar;
+        [Header("ãƒ—ãƒƒã‚·ãƒ¥ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ Gauge")] public Image PushCooltimeGauge;
+        [Header("ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ Gauge")] public Image CounterCooltimeGauge;
+        [Header("ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ Gauge")] public Image[] SkillCooltimeGauges;
+        [Header("å¿…æ®ºæŠ€ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ Gauge")] public Image SpecialCooltimeGauge;
+        [Header("å¿…æ®ºæŠ€ã®Gauge")] public Image SpecialGauge;
+        [Header("ãƒ©ã‚¦ãƒ³ãƒ‰UI")] public GameObject RoundUI;
+        [Header("KOã—ãŸUI")] public GameObject KO_UI;
+        [Header("KOã•ã‚ŒãŸUI")] public GameObject KOed_UI;
+        [Header("Now Loading ã®ãƒ†ã‚­ã‚¹ãƒˆ")] public TextMeshProUGUI NowLoadingText;
+        [Header("ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®åå‰UI")] public GameObject PlayableNameUI;
+        [Header("ã‚¢ãƒ³ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®åå‰UI")] public GameObject UnPlayableNameUI;
+        [Header("ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã‚’ä¸­ç¶™ã—ã¦ã„ã‚‹ã‚«ãƒ¡ãƒ©")] public GameObject GameCamera;
 
 
 
-        [NonSerialized] public bool IsChangePlayableBar = false; // ƒvƒŒƒCƒAƒuƒ‹‚Ìƒo[‚ğ•Ï‰»‚³‚¹‚é‚©‚Ç‚¤‚©
-        [NonSerialized] public bool IsChangeUnPlayableBar = false; // ƒAƒ“ƒvƒŒƒCƒAƒuƒ‹‚Ìƒo[‚ğ•Ï‰»‚³‚¹‚é‚©‚Ç‚¤‚©
+        [NonSerialized] public bool IsChangePlayableBar = false; // ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®ãƒãƒ¼ã‚’å¤‰åŒ–ã•ã›ã‚‹ã‹ã©ã†ã‹
+        [NonSerialized] public bool IsChangeUnPlayableBar = false; // ã‚¢ãƒ³ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ã®ãƒãƒ¼ã‚’å¤‰åŒ–ã•ã›ã‚‹ã‹ã©ã†ã‹
 
-        // PlayerMoveƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXiPvE‚©‚Â1v1‚Ì‘z’èj
+        // PlayerMoveã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ï¼ˆPvEã‹ã¤1v1ã®æƒ³å®šï¼‰
         [NonSerialized] public PlayerMove P_Pm;
         [NonSerialized] public PlayerMove U_Pm;
 
-        [NonSerialized] public bool IsGameResultJudged = false; // Ÿ—˜/”s–k‚Ìˆ—‚ğAs‚Á‚Ä‚¢‚é/s‚Á‚½‚©‚Ç‚¤‚©
+        [NonSerialized] public bool IsGameResultJudged = false; // å‹åˆ©/æ•—åŒ—ã®å‡¦ç†ã‚’ã€è¡Œã£ã¦ã„ã‚‹/è¡Œã£ãŸã‹ã©ã†ã‹
 
         Image[] roundUIs = new Image[3];
 
@@ -72,18 +75,25 @@ namespace BaseSystem
 
         void Update()
         {
-            // ƒo[‚ğŒ¸­‚³‚¹‚éB
+            // ãƒãƒ¼ã‚’æ¸›å°‘ã•ã›ã‚‹ã€‚
             ChangeBarsFillAmount();
+        }
+
+        void LateUpdate()
+        {
+            // åå‰UIã®è¡¨ç¤º
+            NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, 1.75f);
+            NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, 1.75f);
         }
 
         void ChangeBarsFillAmount()
         {
             if (IsChangePlayableBar)
             {
-                float targetValue = PlayableBar.fillAmount; // ‚±‚±‚Ü‚Åƒo[‚ğŒ¸‚ç‚·
-                float nowValue = PlayableDamagedBar.fillAmount; // Œ»İ‚Ìƒo[‚Ìi’»
+                float targetValue = PlayableBar.fillAmount; // ã“ã“ã¾ã§ãƒãƒ¼ã‚’æ¸›ã‚‰ã™
+                float nowValue = PlayableDamagedBar.fillAmount; // ç¾åœ¨ã®ãƒãƒ¼ã®é€²æ—
 
-                if (nowValue > targetValue) // –Ú•W’l‚ğ‰z‚¦‚Ä‚¢‚È‚¢‚Æ‚«
+                if (nowValue > targetValue) // ç›®æ¨™å€¤ã‚’è¶Šãˆã¦ã„ãªã„ã¨ã
                 {
                     PlayableDamagedBar.fillAmount -= P_Pm.S_SOP.HpBarChangeSpeed * Time.deltaTime;
                 }
@@ -95,10 +105,10 @@ namespace BaseSystem
 
             if (IsChangeUnPlayableBar)
             {
-                float targetValue = UnPlayableBar.fillAmount; // ‚±‚±‚Ü‚Åƒo[‚ğŒ¸‚ç‚·
-                float nowValue = UnPlayableDamagedBar.fillAmount; // Œ»İ‚Ìƒo[‚Ìi’»
+                float targetValue = UnPlayableBar.fillAmount; // ã“ã“ã¾ã§ãƒãƒ¼ã‚’æ¸›ã‚‰ã™
+                float nowValue = UnPlayableDamagedBar.fillAmount; // ç¾åœ¨ã®ãƒãƒ¼ã®é€²æ—
 
-                if (nowValue > targetValue) // –Ú•W’l‚ğ‰z‚¦‚Ä‚¢‚È‚¢‚Æ‚«
+                if (nowValue > targetValue) // ç›®æ¨™å€¤ã‚’è¶Šãˆã¦ã„ãªã„ã¨ã
                 {
                     UnPlayableDamagedBar.fillAmount -= U_Pm.S_SOU.HpBarChangeSpeed * Time.deltaTime;
                 }
@@ -109,10 +119,25 @@ namespace BaseSystem
             }
         }
 
-        #region Ÿ—˜/”s–k
+        void NameUIConstrain(GameObject camera, GameObject constraint, GameObject nameUI, float offset = 0)
+        {
+            // "nameUI"ã‚’ã€"constraint"ã‚ˆã‚Šã€yåº§æ¨™ãŒï¼ˆãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã§ï¼‰"offset"å¤§ãã„ä½ç½®ã«ã™ã‚‹ã€‚
+            nameUI.transform.position = constraint.transform.position;
+            Vector3 nameUILPos = nameUI.transform.localPosition;
+            nameUILPos.y += offset;
+            nameUI.transform.localPosition = nameUILPos;
+
+            // "camera"ã®æ–¹ã‚’å‘ã‹ã›ã‚‹ã€‚
+            nameUI.transform.LookAt(camera.transform.position);
+
+            // åå¯¾æ–¹å‘ã‚’å‘ã‹ã›ã‚‹ã€‚
+            nameUI.transform.rotation = Quaternion.AngleAxis(180, nameUI.transform.up) * nameUI.transform.rotation;
+        }
+
+        #region å‹åˆ©/æ•—åŒ—
 
         /// <summary>
-        /// ƒvƒŒƒCƒAƒuƒ‹‚ªŸ—˜
+        /// ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ãŒå‹åˆ©
         /// </summary>
         public void Win()
         {
@@ -125,7 +150,7 @@ namespace BaseSystem
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒAƒuƒ‹‚ª”s–k
+        /// ãƒ—ãƒ¬ã‚¤ã‚¢ãƒ–ãƒ«ãŒæ•—åŒ—
         /// </summary>
         public void Lose()
         {
@@ -139,7 +164,7 @@ namespace BaseSystem
 
         IEnumerator KOBehaviourIfWin()
         {
-            // KO‚Ì‰‰o
+            // KOã®æ¼”å‡º
             const int CANVAS_WIDTH = 800;
             RectTransform trans = KO_UI.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
@@ -171,35 +196,35 @@ namespace BaseSystem
 
             if (GameData.GameData.RoundNum < GameSO.Entity.RoundNum)
             {
-                // ƒ‰ƒEƒ“ƒh”‚ğ‘‚â‚·
+                // ãƒ©ã‚¦ãƒ³ãƒ‰æ•°ã‚’å¢—ã‚„ã™
                 GameData.GameData.RoundNum += 1;
 
-                // HP‚ğ–ß‚µAŸƒ‰ƒEƒ“ƒh‚ÌƒV[ƒ“‚É‘JˆÚ‚·‚é
+                // HPã‚’æˆ»ã—ã€æ¬¡ãƒ©ã‚¦ãƒ³ãƒ‰ã®ã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
                 StartCoroutine(WinBehaviour());
             }
             else
             {
-                // Ÿ—˜ƒV[ƒ“‚É‘JˆÚ
+                // å‹åˆ©ã‚·ãƒ¼ãƒ³ã«é·ç§»
                 LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Win, true);
             }
         }
 
         IEnumerator WinBehaviour()
         {
-            // HP‚ğ–ß‚·‰‰o
+            // HPã‚’æˆ»ã™æ¼”å‡º
             yield return new WaitForSeconds(PlayerSO.Entity.UntilHpRecoverDur);
             P_Pm.Hp += (P_Pm.S_SOI.Hp - P_Pm.Hp) * PlayerSO.Entity.HpRecoverRatio / 100;
             PlayableBar.fillAmount = P_Pm.Hp / P_Pm.S_SOI.Hp;
-            GameData.GameData.PlayableHp = P_Pm.Hp; // ƒV[ƒ“‘JˆÚ‘O‚ÌHp‚ğ‹L˜^‚µ‚Ä‚¨‚­
+            GameData.GameData.PlayableHp = P_Pm.Hp; // ã‚·ãƒ¼ãƒ³é·ç§»å‰ã®Hpã‚’è¨˜éŒ²ã—ã¦ãŠã
             yield return new WaitForSeconds(PlayerSO.Entity.FromHpRecoverDur);
 
-            // Ÿƒ‰ƒEƒ“ƒh‚ÌƒV[ƒ“‚É‘JˆÚ
+            // æ¬¡ãƒ©ã‚¦ãƒ³ãƒ‰ã®ã‚·ãƒ¼ãƒ³ã«é·ç§»
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
         }
         [SerializeField,Range(0,100)] float indexer;
         IEnumerator KOBehaviourIfLose()
         {
-            // KOed‚Ì‰‰o
+            // KOedã®æ¼”å‡º
             const int CANVAS_WIDTH = 800;
             RectTransform trans = KOed_UI.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
@@ -229,7 +254,7 @@ namespace BaseSystem
             p3.x = CANVAS_WIDTH;
             trans.localPosition = p3;
 
-            // ”s–kƒV[ƒ“‚É‘JˆÚ
+            // æ•—åŒ—ã‚·ãƒ¼ãƒ³ã«é·ç§»
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
         }
         #endregion

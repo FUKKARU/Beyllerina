@@ -22,10 +22,11 @@ namespace BaseSystem
         GameObject stageCenter;
 
         //　カメラシェイク
-        [SerializeField] CameraShake_Battle CameraS_B;
+        CameraShake_Battle CameraS_B;
 
         //ヒットエフェクト
         [SerializeField] GameObject hitEffect;
+        Transform hit_effect_parent;
 
         // GMからデータを取得するよう
         GameManager gm;
@@ -194,6 +195,12 @@ namespace BaseSystem
             string tag = (this == GameManager.Instance.P_Pm) ? P_SOB.P_RePosTag : P_SOB.U_RePosTag;
             rePos = GameObject.FindGameObjectWithTag(tag).transform.position;
 
+            // CameraShake_Battle を取得
+            CameraS_B = GameObject.FindGameObjectWithTag("CameraShakeGameObject").GetComponent<CameraShake_Battle>();
+
+            // ヒットエフェクトの親を取得
+            hit_effect_parent = GameObject.FindGameObjectWithTag("hit_effect_parent").transform;
+
             // ゲーム開始から少しの間は、無敵時間になっている。
             if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration());
 
@@ -306,7 +313,7 @@ namespace BaseSystem
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
-                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity);
+                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity, hit_effect_parent);
                 if (isDamagable && (!IsSpecialDirection && !opponentPm.IsSpecialDirection) && (!IsSkillDirection && !opponentPm.IsSkillDirection))
                 {
                     isDamagable = false;
@@ -520,6 +527,10 @@ namespace BaseSystem
                 damage *= 100;
             }
             else if (pm.S_SO.IsPlayable && pm.P_SO.Dbg.P_DamageImmune)
+            {
+                damage *= 0;
+            }
+            else if (!pm.S_SO.IsPlayable && pm.P_SO.Dbg.U_DamageImmune)
             {
                 damage *= 0;
             }
