@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using static UnityEngine.GraphicsBuffer;
+using Unity.VisualScripting;
 
 namespace BaseSystem
 {
@@ -40,6 +42,9 @@ namespace BaseSystem
         [Header("KOしたUI")] public GameObject KO_UI;
         [Header("KOされたUI")] public GameObject KOed_UI;
         [Header("Now Loading のテキスト")] public TextMeshProUGUI NowLoadingText;
+        [Header("プレイアブルの名前UI")] public GameObject PlayableNameUI;
+        [Header("アンプレイアブルの名前UI")] public GameObject UnPlayableNameUI;
+        [Header("ゲームシーンを中継しているカメラ")] public Camera GameCamera;
 
 
 
@@ -74,6 +79,10 @@ namespace BaseSystem
         {
             // バーを減少させる。
             ChangeBarsFillAmount();
+
+            // 名前UIの表示（プレイアブルのUIが優先）
+            ShowNameUI(U_Pm.gameObject, UnPlayableNameUI);
+            ShowNameUI(P_Pm.gameObject, PlayableNameUI);
         }
 
         void ChangeBarsFillAmount()
@@ -107,6 +116,29 @@ namespace BaseSystem
                     IsChangeUnPlayableBar = false;
                 }
             }
+        }
+
+        void ShowNameUI(GameObject constraint, GameObject obj)
+        {
+#if false
+            // オブジェクトのワールド座標→スクリーン座標変換
+            var targetScreenPos = GameCamera.WorldToScreenPoint(constraint.transform.position);
+
+            // スクリーン座標変換→UIローカル座標変換
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRt, targetScreenPos, null, out Vector2 uiLocalPos);
+
+            // RectTransformのローカル座標を更新
+            obj.transform.localPosition = uiLocalPos;
+#else
+            // オブジェクトのワールド座標→スクリーン座標変換
+            var targetScreenPos = GameCamera.WorldToScreenPoint(constraint.transform.position + constraint.transform.up*2);
+
+            // スクリーン座標変換→UIローカル座標変換
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(obj.GetComponent<RectTransform>(), targetScreenPos, null, out Vector2 uiLocalPos);
+
+            // RectTransformのローカル座標を更新
+            obj.transform.localPosition = uiLocalPos;
+#endif
         }
 
         #region 勝利/敗北
