@@ -26,10 +26,6 @@ namespace BaseSystem
     public class StatusTablePlayable
     {
         [Header("使うスキルの数")] public int SkillNum;
-        [Header("プッシュのキー")] public KeyCode PushKey;
-        [Header("カウンターのキー")] public KeyCode CounterKey;
-        [Header("スキルのキー")] public KeyCode[] SkillKeys;
-        [Header("必殺技のキー")] public KeyCode SpecialKey;
         [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 

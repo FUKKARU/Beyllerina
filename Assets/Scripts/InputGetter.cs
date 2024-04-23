@@ -5,11 +5,23 @@ namespace IA
 {
     public class InputGetter : MonoBehaviour
     {
-        #region インスタンスの管理、コールバックとのリンク
+        #region インスタンスの管理、コールバックとのリンク、staticかつシングルトンにする
         IA _inputs;
+
+        public static InputGetter Instance { get; set; } = null;
 
         void Awake()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
             _inputs = new IA();
 
             Link(true);

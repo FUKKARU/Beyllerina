@@ -564,7 +564,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnPushCooltime && IA.InputGetter.Instance.IsPush && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -592,7 +592,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnPushCooltime && IA.InputGetter.Instance.IsPush && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -654,7 +654,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
@@ -682,7 +682,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
@@ -805,7 +805,7 @@ namespace BaseSystem
             {
                 for (int i = 0; i < isOnSkillCooltimes.Length; i++)
                 {
-                    if (!isOnSkillCooltimes[i] && Input.GetKeyDown(S_SOP.SkillKeys[i]))
+                    if (!isOnSkillCooltimes[i] && IA.InputGetter.Instance.IsSkill/*[i]*/)
                     {
                         isOnSkillCooltimes[i] = true;
 
@@ -1022,7 +1022,7 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime && Input.GetKeyDown(S_SOP.SpecialKey))
+                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
                 {
                     isOnSpecialCooltime = true;
 
