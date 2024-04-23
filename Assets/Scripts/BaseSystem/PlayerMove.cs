@@ -244,8 +244,8 @@ namespace BaseSystem
             while (true)
             {
                 specialPoint += P_SOB.PointAmount;
-                specialPoint = Mathf.Clamp(specialPoint, 0, S_SOI.SpecialPoint);
                 PointBonus();
+                specialPoint = Mathf.Clamp(specialPoint, 0, S_SOI.SpecialPoint);
                 yield return new WaitForSeconds(P_SOB.PointDur);
             }
         }
@@ -518,6 +518,10 @@ namespace BaseSystem
             else if (!pm.S_SO.IsPlayable && pm.P_SO.Dbg.U_DamageMul)
             {
                 damage *= 100;
+            }
+            else if (pm.S_SO.IsPlayable && pm.P_SO.Dbg.P_DamageImmune)
+            {
+                damage *= 0;
             }
 
             pm.Hp -= damage; // 与えられたインスタンスにダメージを与える

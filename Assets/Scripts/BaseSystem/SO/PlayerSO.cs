@@ -62,6 +62,7 @@ namespace BaseSystem
         [Header("ログを出す（WarningとErrorは除く）")] public bool IsShowNormalLog;
         [Header("プレイアブルの受けるダメージを100倍にする")] public bool P_DamageMul;
         [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
+        [Header("プレイアブルの受けるダメージを0倍にする")] public bool P_DamageImmune;
     }
 
     [Serializable]
