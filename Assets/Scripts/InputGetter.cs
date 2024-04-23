@@ -15,7 +15,6 @@ namespace IA
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -69,7 +68,7 @@ namespace IA
         }
         #endregion
 
-        #region コールバックとのリンク
+        #region コールバックとのリンクの詳細
         void Link(bool isLink)
         {
             // インスタンス名.Map名.Action名.コールバック名
