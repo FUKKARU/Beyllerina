@@ -5,12 +5,13 @@ using UnityEngine;
 public class MeshTrail : MonoBehaviour
 {
     float trailActiveTime = 2.0f;
-    float meshRecretateRate = 0.1f;
+    float meshRecretateRate = 0.025f;
     float meshDestroyTime = 3f;
     public Transform positionToSpawn;
     bool isTrailActive;
     public MeshRenderer[] usedMeshes;
     public Material effectMat;
+    public SwordFadeOut swordFadeOut;
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space) && !isTrailActive)
@@ -44,6 +45,7 @@ public class MeshTrail : MonoBehaviour
             */
             GameObject copy = Instantiate(gameObject);
             copy.GetComponent<MeshRenderer>().material = effectMat;
+            copy.GetComponent<SwordFadeOut>().fadeOutRequest = true;
             Destroy(copy, meshDestroyTime);
             yield return new WaitForSeconds(meshRecretateRate);
         }
