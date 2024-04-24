@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ namespace SelectTeam
         IEnumerator CountAndChangeScene(float time)
         {
             yield return new WaitForSeconds(time);
-            SceneManager.LoadScene("Game");
+            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
         }
     }
 }

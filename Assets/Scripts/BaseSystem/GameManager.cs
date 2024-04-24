@@ -39,7 +39,6 @@ namespace BaseSystem
         [Header("ラウンドUI")] public GameObject RoundUI;
         [Header("KOしたUI")] public GameObject KO_UI;
         [Header("KOされたUI")] public GameObject KOed_UI;
-        [Header("Now Loading のテキスト")] public TextMeshProUGUI NowLoadingText;
         [Header("プレイアブルの名前UI")] public GameObject PlayableNameUI;
         [Header("アンプレイアブルの名前UI")] public GameObject UnPlayableNameUI;
         [Header("ゲームシーンを中継しているカメラ")] public GameObject GameCamera;
@@ -269,7 +268,8 @@ namespace LoadSceneAsync
         {
             if (isShowMessage)
             {
-                BaseSystem.GameManager.Instance.NowLoadingText.enabled = true;
+                GameObject nowLoadingText = GameObject.FindGameObjectWithTag("NowLoading");
+                nowLoadingText.GetComponent<TextMeshProUGUI>().enabled = true;
             }
 
             SceneManager.LoadSceneAsync(sceneName);
