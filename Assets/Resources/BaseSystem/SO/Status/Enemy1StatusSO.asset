@@ -39,7 +39,7 @@ MonoBehaviour:
       RotationSpeed: 1800
       PushPower: 10
       KnockbackResistance: 0.1
-      GaugeAmountUntilSpecial: 0
+      SpecialPoint: 100
       PushCoolTime: 5
       CounterCoolTime: 10
       SkillCooltimes:

@@ -11,6 +11,9 @@ TagManager:
   - LeftWeapon
   - RightWeapon
   - PreCamera
+  - CameraShakeGameObject
+  - hit_effect_parent
+  - NowLoading
   layers:
   - Default
   - TransparentFX

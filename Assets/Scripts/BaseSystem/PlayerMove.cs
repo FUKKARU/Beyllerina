@@ -22,10 +22,11 @@ namespace BaseSystem
         GameObject stageCenter;
 
         //　カメラシェイク
-        [SerializeField] CameraShake_Battle CameraS_B;
+        CameraShake_Battle CameraS_B;
 
         //ヒットエフェクト
         [SerializeField] GameObject hitEffect;
+        Transform hit_effect_parent;
 
         // GMからデータを取得するよう
         GameManager gm;
@@ -73,6 +74,7 @@ namespace BaseSystem
         float genericDamageCoef = 1; // 汎用ダメージ係数
         float rotDir = 1; // 正回転なら1、逆回転なら-1
         float pushPowerCoef = 1; // プッシュ力の係数（調整用）
+        int specialPoint = 0; // 必殺技の発動ポイント
 
         bool antiGravity = false;//重力停止
         #endregion
@@ -145,7 +147,7 @@ namespace BaseSystem
             
             weight = S_SOI.Weight;
             knoRes = S_SOI.KnockbackResistance;
-            rotSpe = S_SOI.RotationSpeed + SelectTeam.SceneChange.RotateNumber;
+            rotSpe = S_SOI.RotationSpeed * SelectTeam.RotData.RotateNumber;
 
             // 敵への参照を取得
             int idx = Array.IndexOf(gm.Beys, gameObject);
@@ -193,13 +195,24 @@ namespace BaseSystem
             string tag = (this == GameManager.Instance.P_Pm) ? P_SOB.P_RePosTag : P_SOB.U_RePosTag;
             rePos = GameObject.FindGameObjectWithTag(tag).transform.position;
 
+            // CameraShake_Battle を取得
+            CameraS_B = GameObject.FindGameObjectWithTag("CameraShakeGameObject").GetComponent<CameraShake_Battle>();
+
+            // ヒットエフェクトの親を取得
+            hit_effect_parent = GameObject.FindGameObjectWithTag("hit_effect_parent").transform;
+
             // ゲーム開始から少しの間は、無敵時間になっている。
             if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration());
 
-            // アンプレイアブルなら、プッシュとスキルを使うフラグを、周期的かつ交互にUpdateメソッドに送る
             if (!S_SO.IsPlayable)
             {
+                // アンプレイアブルなら、プッシュとスキルを使うフラグを、周期的かつ交互にUpdateメソッドに送る
                 if (gameObject.activeSelf) StartCoroutine(InputPushAndSkillPeriodically());
+            }
+            else
+            {
+                // そうでないなら、毎秒ポイントを貯める
+                if (gameObject.activeSelf) StartCoroutine(PointIncrease());
             }
         }
 
@@ -229,6 +242,40 @@ namespace BaseSystem
                     yield return new WaitForSeconds(time);
                     int i = Random.Range(0, S_SOU.SkillNum); // ランダムなスキル
                     isSkillIfUnplayables[i] = true;
+                }
+            }
+        }
+
+        IEnumerator PointIncrease()
+        {
+            while (true)
+            {
+                specialPoint += P_SOB.PointAmount;
+                PointBonus();
+                specialPoint = Mathf.Clamp(specialPoint, 0, S_SOI.SpecialPoint);
+                yield return new WaitForSeconds(P_SOB.PointDur);
+            }
+        }
+
+        // 体力が減るほど、ボーナスポイントがもらえる。
+        void PointBonus()
+        {
+            int[] bonusPoint = P_SOB.BonusPoint;
+            int len = bonusPoint.Length;
+            float hpRange = S_SOI.Hp / len; // 判定境界間の長さ
+            if (Hp == 0)
+            {
+                return;
+            }
+            else
+            {
+                // (0, S_SOI.Hp] まで判定できる。
+                for (int i = 0; i < len; i++)
+                {
+                    if (hpRange * i < Hp && Hp <= hpRange * (i + 1))
+                    {
+                        specialPoint += bonusPoint[i];
+                    }
                 }
             }
         }
@@ -266,7 +313,7 @@ namespace BaseSystem
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
-                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity);
+                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity, hit_effect_parent);
                 if (isDamagable && (!IsSpecialDirection && !opponentPm.IsSpecialDirection) && (!IsSkillDirection && !opponentPm.IsSkillDirection))
                 {
                     isDamagable = false;
@@ -295,6 +342,7 @@ namespace BaseSystem
             #region スキル・必殺技：プレイヤーからの入力またはコルーチンからのフラグを取得
             Skill();
             Special();
+            ShowSpecialPoint();
             #endregion
 
             #region PlayerStateに基づくベイの行動処理
@@ -478,6 +526,14 @@ namespace BaseSystem
             {
                 damage *= 100;
             }
+            else if (pm.S_SO.IsPlayable && pm.P_SO.Dbg.P_DamageImmune)
+            {
+                damage *= 0;
+            }
+            else if (!pm.S_SO.IsPlayable && pm.P_SO.Dbg.U_DamageImmune)
+            {
+                damage *= 0;
+            }
 
             pm.Hp -= damage; // 与えられたインスタンスにダメージを与える
 
@@ -523,7 +579,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnPushCooltime && IA.InputGetter.Instance.IsPush && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -551,7 +607,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnPushCooltime && Input.GetKeyDown(S_SOP.PushKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnPushCooltime && IA.InputGetter.Instance.IsPush && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
@@ -613,7 +669,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
@@ -641,7 +697,7 @@ namespace BaseSystem
             {
                 if (S_SO.IsPlayable)
                 {
-                    if (!isOnCounterCooltime && Input.GetKeyDown(S_SOP.CounterKey) && !IsSkillDirection && !IsSpecialDirection)
+                    if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
                         isOnCounterCooltime = true;
@@ -764,7 +820,7 @@ namespace BaseSystem
             {
                 for (int i = 0; i < isOnSkillCooltimes.Length; i++)
                 {
-                    if (!isOnSkillCooltimes[i] && Input.GetKeyDown(S_SOP.SkillKeys[i]))
+                    if (!isOnSkillCooltimes[i] && IA.InputGetter.Instance.IsSkill/*[i]*/)
                     {
                         isOnSkillCooltimes[i] = true;
 
@@ -981,9 +1037,11 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                if (!isOnSpecialCooltime && Input.GetKeyDown(S_SOP.SpecialKey))
+                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
                 {
                     isOnSpecialCooltime = true;
+
+                    specialPoint = 0;
 
                     if (gameObject.activeSelf) StartCoroutine(CountSpecialCooltime());
 
@@ -1087,28 +1145,35 @@ namespace BaseSystem
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
-            //// 半透明にする。
-            //Color _col = gm.SpecialCooltimeGauge.color;
-            //_col.a = P_SOB.GaugeAOnCooltime / (float)255;
-            //gm.SpecialCooltimeGauge.color = _col;
-
-            // gm.SpecialCooltimeGauge.fillAmount = 0f;
+            gm.SpecialCooltimeGauge.fillAmount = 1f;
 
             while (time >= 0f)
             {
-                // gm.SpecialCooltimeGauge.fillAmount = -time / ct + 1;
+                gm.SpecialCooltimeGauge.fillAmount = time / ct;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
 
-            // gm.SpecialCooltimeGauge.fillAmount = 1f;
-
-            //// 不透明に戻す。
-            //Color col = gm.SpecialCooltimeGauge.color;
-            //col.a = 255 / (float)255;
-            //gm.SpecialCooltimeGauge.color = col;
+            gm.SpecialCooltimeGauge.fillAmount = 0f;
 
             isOnSpecialCooltime = false;
+        }
+
+        void ShowSpecialPoint()
+        {
+            if (S_SO.IsPlayable)
+            {
+                gm.SpecialGauge.fillAmount = specialPoint / (float)S_SOI.SpecialPoint;
+                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime)
+                {
+                    // 必殺技が発動できることを知らせる
+                    gm.SpecialGauge.color = Color.yellow;
+                }
+                else
+                {
+                    gm.SpecialGauge.color = Color.green;
+                }
+            }
         }
         #endregion
 

@@ -26,10 +26,6 @@ namespace BaseSystem
     public class StatusTablePlayable
     {
         [Header("使うスキルの数")] public int SkillNum;
-        [Header("プッシュのキー")] public KeyCode PushKey;
-        [Header("カウンターのキー")] public KeyCode CounterKey;
-        [Header("スキルのキー")] public KeyCode[] SkillKeys;
-        [Header("必殺技のキー")] public KeyCode SpecialKey;
         [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
@@ -53,7 +49,7 @@ namespace BaseSystem
         [Header("回転速度")] public float RotationSpeed;
         [Header("プッシュ力")] public float PushPower;
         [Header("ノックバック耐性"), Range(0, 1)] public float KnockbackResistance;
-        [Header("必殺技の発動に必要なゲージ量")] public float GaugeAmountUntilSpecial;
+        [Header("必殺技の発動に必要なポイント量")] public int SpecialPoint;
         [Header("プッシュのクールタイム")] public float PushCoolTime;
         [Header("カウンターのクールタイム")] public float CounterCoolTime;
         [Header("スキルのクールタイム")] public float[] SkillCooltimes;

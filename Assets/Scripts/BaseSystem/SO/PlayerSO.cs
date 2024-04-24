@@ -45,10 +45,12 @@ namespace BaseSystem
         [Header("カメラの'angle'の範囲(min, max)")] public Vector2 CameraAngleRange;
         [Header("カメラが動く軌跡の、円の半径")] public float CameraRadius;
         [Header("カメラがステージを1周するのにかかる時間[s]")] public float CameraDuration;
+        [Header("自分のy座標に対する、名前UIのy座標(offset)")] public float NameUIOffset;
         [Header("勝利した瞬間から何秒後にHPを回復するか")] public float UntilHpRecoverDur;
         [Header("勝利時に、最大HP - 現在HPの何%分回復するか")] public float HpRecoverRatio;
         [Header("HPを回復してから何秒後にシーン遷移するか")] public float FromHpRecoverDur;
-        [FormerlySerializedAs("KOSpeed"), Header("K.O. の文字を何秒で画面の中央に持ってくるか")] public float KODur;
+        [Header("K.O. の文字を何秒で画面の中央に持ってくるか")] public float KODur;
+        [Header("K.O. の文字が画面中央に来てから何秒で消すか")] public float KOFadeDur;
         [Space(25)]
         [Header("【挙動関係】")] public BehaviourTable BehaviourTable;
         [Header("【ダメージ処理関係】")] public DamageTable DamageTable;
@@ -61,6 +63,8 @@ namespace BaseSystem
         [Header("ログを出す（WarningとErrorは除く）")] public bool IsShowNormalLog;
         [Header("プレイアブルの受けるダメージを100倍にする")] public bool P_DamageMul;
         [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
+        [Header("プレイアブルの受けるダメージを0倍にする")] public bool P_DamageImmune;
+        [Header("アンプレイアブルの受けるダメージを0倍にする")] public bool U_DamageImmune;
     }
 
     [Serializable]
@@ -81,6 +85,9 @@ namespace BaseSystem
         [Header("Knockbacked状態から、何秒でIDLE状態に戻すか")] public float Duration2IdleWhenKnockbacked;
         [Header("クールタイムの処理を何秒ごとに行うか")] public float CooltimeBehaviourInterval;
         [Header("クールタイムが空けていないとき、Gaugeの透明度"), Range(0, 255)] public byte GaugeAOnCooltime;
+        [Header("何秒おきにポイントを貯めるか")] public float PointDur;
+        [Header("〇秒おきに貯めるポイントの量")] public int PointAmount;
+        [Header("ボーナスポイントの量\r\n（要素数で、体力の判定境界を識別する。体力が少ない→多いの順）")] public int[] BonusPoint;
         [Header("落下判定位置")] public float FallJudgeY;
         [Header("落下修正位置")] public float FallResetY;
         [Header("Playable respawn point tag")] public string P_RePosTag;

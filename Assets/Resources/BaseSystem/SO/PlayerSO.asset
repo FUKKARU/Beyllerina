@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dbg:
     IsShowNormalLog: 0
-    P_DamageMul: 1
+    P_DamageMul: 0
     U_DamageMul: 0
+    P_DamageImmune: 0
+    U_DamageImmune: 0
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -27,10 +29,12 @@ MonoBehaviour:
   CameraAngleRange: {x: 0, y: 30}
   CameraRadius: 14
   CameraDuration: 60
-  UntilHpRecoverDur: 3
+  NameUIOffset: 1.75
+  UntilHpRecoverDur: 2
   HpRecoverRatio: 50
-  FromHpRecoverDur: 3
+  FromHpRecoverDur: 2
   KODur: 0.1
+  KOFadeDur: 2
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360
@@ -47,6 +51,9 @@ MonoBehaviour:
     Duration2IdleWhenKnockbacked: 1
     CooltimeBehaviourInterval: 0.1
     GaugeAOnCooltime: 100
+    PointDur: 1
+    PointAmount: 1
+    BonusPoint: 0500000003000000020000000100000000000000
     FallJudgeY: -5
     FallResetY: 10
     P_RePosTag: PlayableRespawnPoint
