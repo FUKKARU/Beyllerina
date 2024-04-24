@@ -40,7 +40,7 @@ namespace SelectTeam
 
         private void OnDisable()
         {
-            SceneChange.RotateNumber = increaseSpeed;
+            RotData.RotateNumber = increaseSpeed;
         }
     }
 }

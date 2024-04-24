@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CharacterSelect
+namespace BaseSystem
 {
     public class SceneChange : MonoBehaviour
     {

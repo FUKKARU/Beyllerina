@@ -248,7 +248,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press Select
+  m_text: Press Select or Hold Quit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 60b64b54709a4504ba55cf107e710bbc, type: 2}
   m_sharedMaterial: {fileID: -280950021208164664, guid: 60b64b54709a4504ba55cf107e710bbc,

@@ -147,7 +147,7 @@ namespace BaseSystem
             
             weight = S_SOI.Weight;
             knoRes = S_SOI.KnockbackResistance;
-            rotSpe = S_SOI.RotationSpeed * SelectTeam.SceneChange.RotateNumber;
+            rotSpe = S_SOI.RotationSpeed * SelectTeam.RotData.RotateNumber;
 
             // “G‚Ö‚ÌQÆ‚ğæ“¾
             int idx = Array.IndexOf(gm.Beys, gameObject);

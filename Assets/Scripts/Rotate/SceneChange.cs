@@ -1,9 +1,17 @@
-namespace SelectTeam
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Rotate
 {
-    public static class SceneChange 
+    public class SceneChange : MonoBehaviour
     {
-        // ‰Šú‰ñ“]‘¬“x‚ÉæZ‚³‚ê‚éB
-        public static float RotateNumber { get; set; }
+        void Update()
+        {
+            if (IA.InputGetter.Instance.IsQuit)
+            {
+                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
+            }
+        }
     }
 }
-
