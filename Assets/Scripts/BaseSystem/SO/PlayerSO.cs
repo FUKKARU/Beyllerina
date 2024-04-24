@@ -45,6 +45,7 @@ namespace BaseSystem
         [Header("カメラの'angle'の範囲(min, max)")] public Vector2 CameraAngleRange;
         [Header("カメラが動く軌跡の、円の半径")] public float CameraRadius;
         [Header("カメラがステージを1周するのにかかる時間[s]")] public float CameraDuration;
+        [Header("自分のy座標に対する、名前UIのy座標(offset)")] public float NameUIOffset;
         [Header("勝利した瞬間から何秒後にHPを回復するか")] public float UntilHpRecoverDur;
         [Header("勝利時に、最大HP - 現在HPの何%分回復するか")] public float HpRecoverRatio;
         [Header("HPを回復してから何秒後にシーン遷移するか")] public float FromHpRecoverDur;

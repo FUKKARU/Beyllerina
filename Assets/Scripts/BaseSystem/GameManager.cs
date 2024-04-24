@@ -82,8 +82,8 @@ namespace BaseSystem
         void LateUpdate()
         {
             // 名前UIの表示
-            NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, 1.75f);
-            NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, 1.75f);
+            NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, PlayerSO.Entity.NameUIOffset);
+            NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, PlayerSO.Entity.NameUIOffset);
         }
 
         void ChangeBarsFillAmount()
