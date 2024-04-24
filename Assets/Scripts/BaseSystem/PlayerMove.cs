@@ -1104,18 +1104,21 @@ namespace BaseSystem
         {
             genericDamageCoef *= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
 
+            GameManager.Instance.OnSpecialLightDir(true);
             GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(true);
             GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(true);
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.SpecialDur);
 
             genericDamageCoef /= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
-            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(false); ;
-            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(false);
 
 
 
             genericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
+
+            GameManager.Instance.OnSpecialLightDir(false);
+            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(false); ;
+            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(false);
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.WeakDur);
 

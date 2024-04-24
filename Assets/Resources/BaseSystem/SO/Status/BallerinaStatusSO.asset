@@ -21,10 +21,6 @@ MonoBehaviour:
       SpecialName: 
     StatusTablePlayable:
       SkillNum: 1
-      PushKey: 113
-      CounterKey: 119
-      SkillKeys: 65000000
-      SpecialKey: 114
       HpBarChangeSpeed: 0.1
     StatusTableUnPlayable:
       SkillNum: 0

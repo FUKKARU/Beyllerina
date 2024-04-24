@@ -58,6 +58,11 @@ MonoBehaviour:
     FallResetY: 10
     P_RePosTag: PlayableRespawnPoint
     U_RePosTag: UnPlayableRespawnPoint
+  LightDirectionTable:
+    LightNormalColor: {r: 1, g: 0.8039216, b: 0, a: 1}
+    LampNormalIntensity: 1.25
+    LightSpecialColor: {r: 1, g: 0, b: 0, a: 1}
+    LampSpecialIntensity: 0.25
   DamageTable:
     DamagableDuration: 0.1
     MinDamage: 0
