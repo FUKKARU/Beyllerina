@@ -42,6 +42,8 @@ namespace BaseSystem
         [Header("プレイアブルの名前UI")] public GameObject PlayableNameUI;
         [Header("アンプレイアブルの名前UI")] public GameObject UnPlayableNameUI;
         [Header("ゲームシーンを中継しているカメラ")] public GameObject GameCamera;
+        [Header("シャンデリア")] public Light Chanderia;
+        [Header("ランタン")] public Light[] Lamps;
 
 
 
@@ -257,6 +259,28 @@ namespace BaseSystem
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
         }
         #endregion
+
+        public void OnSpecialLightDir(bool toSpecial /*強化状態になるならtrue、強化状態が終了したならfalse*/)
+        {
+            if (toSpecial)
+            {
+                Chanderia.color = PlayerSO.Entity.LightDirectionTable.LightSpecialColor;
+                foreach (Light lamp in Lamps)
+                {
+                    lamp.color = PlayerSO.Entity.LightDirectionTable.LightSpecialColor;
+                    lamp.intensity = PlayerSO.Entity.LightDirectionTable.LampSpecialIntensity;
+                }
+            }
+            else
+            {
+                Chanderia.color = PlayerSO.Entity.LightDirectionTable.LightNormalColor;
+                foreach (Light lamp in Lamps)
+                {
+                    lamp.color = PlayerSO.Entity.LightDirectionTable.LightNormalColor;
+                    lamp.intensity = PlayerSO.Entity.LightDirectionTable.LampNormalIntensity;
+                }
+            }
+        }
     }
 }
 

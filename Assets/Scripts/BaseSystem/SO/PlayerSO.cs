@@ -53,6 +53,7 @@ namespace BaseSystem
         [Header("K.O. の文字が画面中央に来てから何秒で消すか")] public float KOFadeDur;
         [Space(25)]
         [Header("【挙動関係】")] public BehaviourTable BehaviourTable;
+        [Header("【ライトの演出関係】")] public LightDirectionTable LightDirectionTable;
         [Header("【ダメージ処理関係】")] public DamageTable DamageTable;
     }
 
@@ -92,6 +93,15 @@ namespace BaseSystem
         [Header("落下修正位置")] public float FallResetY;
         [Header("Playable respawn point tag")] public string P_RePosTag;
         [Header("UnPlayable respawn point tag")] public string U_RePosTag;
+    }
+
+    [Serializable]
+    public class LightDirectionTable
+    {
+        [Header("ライトのデフォルトの色")] public Color LightNormalColor;
+        [Header("ランタンのデフォルトのintensity")] public float LampNormalIntensity;
+        [Header("必殺技発動時に、ライトを何色にするか")] public Color LightSpecialColor;
+        [Header("必殺技発動時に、ランタンのintensityをいくらにするか")] public float LampSpecialIntensity;
     }
 
     [Serializable]
