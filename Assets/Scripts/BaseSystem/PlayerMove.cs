@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -360,7 +362,6 @@ namespace BaseSystem
             Push();
             Counter();
             Knockbacked();
-            Clamp(); // ステージ内に収める。
             #endregion
 
             #region デス判定
@@ -1205,7 +1206,9 @@ namespace BaseSystem
 
             GameManager.Instance.OnSpecialLightDir(false);
             StopCoroutine(rightCor);
+            rightCor = null;
             StopCoroutine(leftCor);
+            leftCor = null;
             rightWeapon.SetActive(false);
             leftWeapon.SetActive(false);
 
@@ -1380,18 +1383,6 @@ namespace BaseSystem
                     //}
                 }
             }
-        }
-
-        void Clamp()
-        {
-            Vector3 pos = transform.position;
-            float r = Mathf.Sqrt(Mathf.Pow(pos.x, 2) + Mathf.Pow(pos.z, 2));
-            float theta = Mathf.Atan2(pos.z, pos.x);
-            r = Mathf.Clamp(r, P_SOB.ClampR.x, P_SOB.ClampR.y);
-            pos.x = r * Mathf.Cos(theta);
-            pos.z = r * Mathf.Sin(theta);
-            pos.y = Mathf.Clamp(pos.y, P_SOB.ClampY.x, P_SOB.ClampY.y);
-            transform.position = pos;
         }
         #endregion
 

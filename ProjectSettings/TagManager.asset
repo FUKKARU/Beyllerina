@@ -17,7 +17,6 @@ TagManager:
   - Shield
   - EnemyEffect
   - BackGrounds
-  - rapier_effect_parent
   layers:
   - Default
   - TransparentFX
