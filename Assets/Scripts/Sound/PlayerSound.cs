@@ -18,21 +18,7 @@ public class PlayerSound : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            var state = pm.GetState();
-            var opponentState = pm.GetOpponentState();
-
-            switch (state)
-            {
-                case PlayerMove.PlayerState.IDLE:
-                    break;
-                case PlayerMove.PlayerState.PUSH:
-                    break;
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Stage"))
-        {
-
+            SoundManager.Instance.HitSE();
         }
     }
 }
