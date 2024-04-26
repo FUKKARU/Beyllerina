@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -1329,5 +1330,15 @@ namespace BaseSystem
             }
         }
         #endregion
+
+        public PlayerState GetState()
+        {
+            return State;
+        }
+
+        public PlayerState GetOpponentState()
+        {
+            return opponentPm.GetState();
+        }
     }
 }
