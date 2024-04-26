@@ -16,8 +16,8 @@ MonoBehaviour:
     IsShowNormalLog: 0
     P_DamageMul: 0
     U_DamageMul: 0
-    P_DamageImmune: 1
-    U_DamageImmune: 1
+    P_DamageImmune: 0
+    U_DamageImmune: 0
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -54,6 +54,8 @@ MonoBehaviour:
     PointDur: 1
     PointAmount: 1
     BonusPoint: 0500000003000000020000000100000000000000
+    ClampR: {x: 0, y: 14.75}
+    ClampY: {x: 0, y: 12.5}
     FallJudgeY: -5
     FallResetY: 10
     P_RePosTag: PlayableRespawnPoint
