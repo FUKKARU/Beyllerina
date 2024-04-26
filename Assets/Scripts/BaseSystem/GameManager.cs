@@ -44,7 +44,6 @@ namespace BaseSystem
         [Header("ゲームシーンを中継しているカメラ")] public GameObject GameCamera;
         [Header("シャンデリア")] public Light Chanderia;
         [Header("ランタン")] public Light[] Lamps;
-        [NonSerialized] public Transform rapier_effect_parent;
 
 
 
@@ -73,8 +72,6 @@ namespace BaseSystem
             {
                 roundUIs[i].enabled = false;
             }
-
-            rapier_effect_parent = GameObject.FindGameObjectWithTag("rapier_effect_parent").transform;
         }
 
         void Update()
