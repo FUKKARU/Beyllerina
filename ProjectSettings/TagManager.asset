@@ -16,6 +16,7 @@ TagManager:
   - NowLoading
   - Shield
   - EnemyEffect
+  - BackGrounds
   layers:
   - Default
   - TransparentFX
