@@ -30,4 +30,41 @@ public class SoundManager : MonoBehaviour
 
         seSource.PlayOneShot(clips[index]);
     }
+
+    public void PushSE(bool isPlayable)
+    {
+
+    }
+
+    public void CounterSE(bool isPlayable)
+    {
+
+    }
+
+    public void SkillSE(bool isPlayable)
+    {
+
+    }
+
+    /// <summary>
+    /// •KE‹ZSE
+    /// </summary>
+    /// <param name="index">0.‹­‰»ó‘Ô‚É 1.Šãó‘Ô‚É 2.•KE‹Z‚ªI—¹ 3.Œ•‚ª‚Ô‚Â‚©‚é</param>
+    public void SpecialSE(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                break;
+
+            case 1:
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                break;
+        }
+    }
 }

@@ -21,10 +21,6 @@ MonoBehaviour:
       SpecialName: 
     StatusTablePlayable:
       SkillNum: 0
-      PushKey: 0
-      CounterKey: 0
-      SkillKeys: 
-      SpecialKey: 0
       HpBarChangeSpeed: 0
     StatusTableUnPlayable:
       SkillNum: 1
@@ -45,6 +41,9 @@ MonoBehaviour:
       SkillCooltimes:
       - 10
       SpecialCooltime: 20
+  PushEffectObj: {fileID: 118253155480359573, guid: 9605d371a6a2f104bb5f80b08efbeaf3,
+    type: 3}
+  PushDirDur: 0.5
   SkillSizeCoef: 5
   SkillWeightCoef: 2
   SkillHeight: 10
