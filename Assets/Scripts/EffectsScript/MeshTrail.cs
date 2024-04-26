@@ -2,43 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeshTrail : MonoBehaviour
+namespace BaseSystem
 {
-    float trailActiveTime = 2.0f;
-    float meshRecretateRate = 0.025f;
-    float meshDestroyTime = 3f;
-    public Transform positionToSpawn;
-    public bool isTrailActive;
-    public MeshRenderer[] usedMeshes;
-    public Material effectMat;
-    public SwordFadeOut swordFadeOut;
-
-    public IEnumerator TrailCreate()
+    public class MeshTrail : MonoBehaviour
     {
-        while (true)
+        float meshRecretateRate = 0.025f;
+        float meshDestroyTime = 3f;
+        public Transform positionToSpawn;
+        public bool isTrailActive;
+        public MeshRenderer[] usedMeshes;
+        public Material effectMat;
+        public SwordFadeOut swordFadeOut;
+
+        public IEnumerator TrailCreate()
         {
-            /*
-            for(int i = 0; i < usedMeshes.Length; i++) 
+            while (true)
             {
-                GameObject gO = new GameObject();
-                gO.transform.SetPositionAndRotation(positionToSpawn.position,positionToSpawn.rotation);
-                MeshRenderer mR =  gO.AddComponent<MeshRenderer>();
-                MeshFilter mF = gO.AddComponent<MeshFilter>();
-
-                
-
-
-                mF.mesh = mesh;
-                mR.material = mat;
-
-                
+                GameObject copy = Instantiate(gameObject, transform.position, transform.rotation, GameManager.Instance.rapier_effect_parent);
+                copy.GetComponent<MeshRenderer>().material = effectMat;
+                copy.GetComponent<SwordFadeOut>().fadeOutRequest = true;
+                Destroy(copy, meshDestroyTime);
+                yield return new WaitForSeconds(meshRecretateRate);
             }
-            */
-            GameObject copy = Instantiate(gameObject, transform.position, transform.rotation);
-            copy.GetComponent<MeshRenderer>().material = effectMat;
-            copy.GetComponent<SwordFadeOut>().fadeOutRequest = true;
-            Destroy(copy, meshDestroyTime);
-            yield return new WaitForSeconds(meshRecretateRate);
         }
     }
 }
