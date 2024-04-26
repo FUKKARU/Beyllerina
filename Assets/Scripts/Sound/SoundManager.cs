@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField, Tooltip("0:馬, 1:回復, 2:吹っ飛ばし, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション")]
+    [SerializeField, Tooltip("0:馬, 1:回復, 2:吹っ飛ばし, 3:プッシュ, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション")]
     AudioClip[] clips;
     [SerializeField] AudioSource seSource;
     [SerializeField] AudioSource bgmSource;

@@ -398,6 +398,7 @@ namespace BaseSystem
                         IsPushBehaviourDone = false;
 
                         opponentPm.State = PlayerState.KNOCKBACKED;
+                        SoundManager.Instance.PlaySE(2);
 
                         Damage(this, PlayerState.PUSH);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
@@ -439,6 +440,7 @@ namespace BaseSystem
 
                         opponentPm.State = PlayerState.KNOCKBACKED;
                         opponentPm.IsPushBehaviourDone = false;
+                        SoundManager.Instance.PlaySE(2);
 
                         Damage(this, PlayerState.COUNTER);
                         Damage(opponentPm, PlayerState.KNOCKBACKED);
@@ -460,6 +462,7 @@ namespace BaseSystem
                     {
                         State = PlayerState.KNOCKBACKED;
                         IsPushBehaviourDone = false;
+                        SoundManager.Instance.PlaySE(2);
 
                         opponentPm.State = PlayerState.IDLE;
                         opponentPm.Shield(false);
@@ -597,6 +600,7 @@ namespace BaseSystem
                         State = PlayerState.PUSH;
                         isOnPushCooltime = true;
                         if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
+                        SoundManager.Instance.PlaySE(3);
                     }
                 }
                 else
@@ -606,6 +610,8 @@ namespace BaseSystem
                         isPushIfUnplayable = false;
 
                         StartCoroutine(UnPlayablePushDir(true));
+
+                        SoundManager.Instance.PlaySE(3);
                     }
                 }
             }
@@ -628,8 +634,7 @@ namespace BaseSystem
                         knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
                         if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
-
-                        SoundManager.Instance.PushSE(true);
+                        SoundManager.Instance.PlaySE(3);
                     }
                 }
                 else
@@ -639,6 +644,8 @@ namespace BaseSystem
                         isPushIfUnplayable = false;
 
                         StartCoroutine(UnPlayablePushDir(false));
+
+                        SoundManager.Instance.PlaySE(3);
                     }
                 }
             }
@@ -711,7 +718,7 @@ namespace BaseSystem
                         isOnCounterCooltime = true;
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
 
-                        SoundManager.Instance.CounterSE(true);
+                        SoundManager.Instance.PlaySE(5);
                     }
                 }
                 else
@@ -721,6 +728,8 @@ namespace BaseSystem
                         isCounterIfUnplayable = false;
 
                         State = PlayerState.COUNTER;
+
+                        SoundManager.Instance.PlaySE(5);
                     }
                 }
             }
@@ -743,7 +752,7 @@ namespace BaseSystem
                         IsPushBehaviourDone = false;
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
 
-                        SoundManager.Instance.CounterSE(true);
+                        SoundManager.Instance.PlaySE(5);
                     }
                 }
                 else
@@ -754,6 +763,8 @@ namespace BaseSystem
 
                         State = PlayerState.COUNTER;
                         IsPushBehaviourDone = false;
+
+                        SoundManager.Instance.PlaySE(5);
                     }
                 }
             }
@@ -931,6 +942,8 @@ namespace BaseSystem
                     float bz = sp.z - Mathf.Pow(a.z, pow);
                     Vector3 b = new Vector3(bx, by, bz);
 
+                    SoundManager.Instance.PlaySE(8);
+
                     while (_action)
                     {
                         _t += Time.deltaTime;
@@ -945,6 +958,9 @@ namespace BaseSystem
 
                         yield return null;
                     }
+
+                    SoundManager.Instance.PlaySE(9);
+
                     while (action)
                     {
                         t += Time.deltaTime;
@@ -981,6 +997,8 @@ namespace BaseSystem
                     {
                         e.transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
                     }
+                    transform.GetChild(1).gameObject.SetActive(false);
+                    transform.GetChild(2).gameObject.SetActive(true);
                     weight *= Enemy1StatusSO.Entity.SkillWeightCoef;
                     antiGravity = false;
                     SoundManager.Instance.SkillSE(false);
@@ -1013,6 +1031,8 @@ namespace BaseSystem
                                 e.transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
                             }
                             weight /= Enemy1StatusSO.Entity.SkillWeightCoef;
+                            transform.GetChild(1).gameObject.SetActive(true);
+                            transform.GetChild(2).gameObject.SetActive(false);
                             break;
                         }
                         yield return null;
@@ -1163,8 +1183,8 @@ namespace BaseSystem
 
         IEnumerator BallerinaCountSpecialTime()
         {
-
-            SoundManager.Instance.SpecialSE(0);
+            SoundManager.Instance.PlaySE(6);
+            SoundManager.Instance.Special(true);
 
             genericDamageCoef *= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
 
@@ -1180,9 +1200,7 @@ namespace BaseSystem
 
             genericDamageCoef /= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
 
-
-
-            SoundManager.Instance.SpecialSE(1);
+            SoundManager.Instance.Special(false);
 
             genericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
 
@@ -1197,10 +1215,6 @@ namespace BaseSystem
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.WeakDur);
 
             genericDamageCoef *= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
-
-
-
-            SoundManager.Instance.SpecialSE(2);
 
             yield break;
         }
