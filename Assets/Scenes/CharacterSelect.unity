@@ -6027,11 +6027,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Basya01
       objectReference: {fileID: 0}
+    - target: {fileID: 1711002964400679843, guid: 18fade603c276e443828934ffa9b7239,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3755023407434190396, guid: 18fade603c276e443828934ffa9b7239,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 63a0cf0e29889964db9b0fd64c1b18be, type: 2}
+    - target: {fileID: 6392373927584031093, guid: 18fade603c276e443828934ffa9b7239,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7086770005933943907, guid: 18fade603c276e443828934ffa9b7239,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
