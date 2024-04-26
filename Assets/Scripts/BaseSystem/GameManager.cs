@@ -47,6 +47,7 @@ namespace BaseSystem
 
 
 
+        [NonSerialized] public Transform rapier_effect_parent;
         [NonSerialized] public bool IsChangePlayableBar = false; // プレイアブルのバーを変化させるかどうか
         [NonSerialized] public bool IsChangeUnPlayableBar = false; // アンプレイアブルのバーを変化させるかどうか
 
@@ -72,6 +73,8 @@ namespace BaseSystem
             {
                 roundUIs[i].enabled = false;
             }
+
+            rapier_effect_parent = GameObject.FindGameObjectWithTag("rapier_effect_parent").transform;
         }
 
         void Update()

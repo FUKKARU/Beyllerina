@@ -89,6 +89,8 @@ namespace BaseSystem
         [Header("何秒おきにポイントを貯めるか")] public float PointDur;
         [Header("〇秒おきに貯めるポイントの量")] public int PointAmount;
         [Header("ボーナスポイントの量\r\n（要素数で、体力の判定境界を識別する。体力が少ない→多いの順）")] public int[] BonusPoint;
+        [Header("Clampする r （半径）（min/max）")] public Vector2 ClampR;
+        [Header("Clampする y （高さ）（min/max）")] public Vector2 ClampY;
         [Header("落下判定位置")] public float FallJudgeY;
         [Header("落下修正位置")] public float FallResetY;
         [Header("Playable respawn point tag")] public string P_RePosTag;

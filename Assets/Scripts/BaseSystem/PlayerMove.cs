@@ -362,6 +362,7 @@ namespace BaseSystem
             Push();
             Counter();
             Knockbacked();
+            Clamp();
             #endregion
 
             #region ƒfƒX”»’è
@@ -997,8 +998,6 @@ namespace BaseSystem
                     {
                         e.transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
                     }
-                    transform.GetChild(1).gameObject.SetActive(false);
-                    transform.GetChild(2).gameObject.SetActive(true);
                     weight *= Enemy1StatusSO.Entity.SkillWeightCoef;
                     antiGravity = false;
                     SoundManager.Instance.SkillSE(false);
@@ -1031,8 +1030,6 @@ namespace BaseSystem
                                 e.transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
                             }
                             weight /= Enemy1StatusSO.Entity.SkillWeightCoef;
-                            transform.GetChild(1).gameObject.SetActive(true);
-                            transform.GetChild(2).gameObject.SetActive(false);
                             break;
                         }
                         yield return null;
@@ -1374,15 +1371,20 @@ namespace BaseSystem
                         power = P_SOB.MinPowerOnKnockbacked;
                     }
                     rb.AddForce((transform.position - opponent.transform.position).normalized * power, ForceMode.Impulse);
-
-                    //Vector3 self2Opponent = opponent.transform.position - transform.position;
-                    //Vector3 v = rb.velocity;
-                    //if (Vector3.Dot(self2Opponent, v) > 0)
-                    //{
-                    //    rb.velocity *= -1;
-                    //}
                 }
             }
+        }
+
+        void Clamp()
+        {
+            Vector3 pos = transform.position;
+            float r = Mathf.Sqrt(Mathf.Pow(pos.x, 2) + Mathf.Pow(pos.z, 2));
+            float theta = Mathf.Atan2(pos.z, pos.x);
+            r = Mathf.Clamp(r, P_SOB.ClampR.x, P_SOB.ClampR.y);
+            pos.x = r * Mathf.Cos(theta);
+            pos.z = r * Mathf.Sin(theta);
+            pos.y = Mathf.Clamp(pos.y, P_SOB.ClampY.x, P_SOB.ClampY.y);
+            transform.position = pos;
         }
         #endregion
 
