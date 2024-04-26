@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -25,9 +26,11 @@ namespace BaseSystem
         //　カメラシェイク
         CameraShake_Battle CameraS_B;
 
-        //ヒットエフェクト
+        //エフェクト
         [SerializeField] GameObject hitEffect;
         Transform hit_effect_parent;
+        GameObject shield;
+        GameObject[] enemyEffect;
 
         // GMからデータを取得するよう
         GameManager gm;
@@ -68,6 +71,7 @@ namespace BaseSystem
         bool[] isOnSkillCooltimes; // スキルのクールタイム中であるかどうか
         bool isOnSpecialCooltime = false; // 必殺技のクールタイム中であるかどうか
         bool isOnStateChangeCooltime = false; // 時間経過による状態変化中であるかどうか
+        bool ifUnplayableOnSkill = false; // アンプレイアブルが、スキルを使って巨大化している最中かどうか
         Vector3 axis; // ベイの回転軸
         float axisTimer = 0; // ベイの回転軸を傾ける時間
         bool isHpLow = false; // HPが一定以下になって、歳差運動をしているかどうか
@@ -199,8 +203,14 @@ namespace BaseSystem
             // CameraShake_Battle を取得
             CameraS_B = GameObject.FindGameObjectWithTag("CameraShakeGameObject").GetComponent<CameraShake_Battle>();
 
-            // ヒットエフェクトの親を取得
+            // エフェクトを取得
             hit_effect_parent = GameObject.FindGameObjectWithTag("hit_effect_parent").transform;
+            if (S_SO.IsPlayable)
+            {
+                shield = GameObject.FindGameObjectWithTag("Shield");
+                Shield(false);
+            }
+            enemyEffect = GameObject.FindGameObjectsWithTag("EnemyEffect");
 
             // ゲーム開始から少しの間は、無敵時間になっている。
             if (gameObject.activeSelf) StartCoroutine(CountDamagableDuration());
@@ -423,6 +433,7 @@ namespace BaseSystem
                     else if (State == PlayerState.COUNTER)
                     {
                         State = PlayerState.IDLE;
+                        Shield(false);
                         knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
 
@@ -451,6 +462,7 @@ namespace BaseSystem
                         IsPushBehaviourDone = false;
 
                         opponentPm.State = PlayerState.IDLE;
+                        opponentPm.Shield(false);
                         opponentPm.knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         opponentPm.IsCounterBehaviourDone = false;
 
@@ -611,6 +623,7 @@ namespace BaseSystem
                     if (!isOnPushCooltime && IA.InputGetter.Instance.IsPush && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.PUSH;
+                        Shield(false);
                         isOnPushCooltime = true;
                         knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                         IsCounterBehaviourDone = false;
@@ -633,7 +646,11 @@ namespace BaseSystem
 
         IEnumerator UnPlayablePushDir(bool isFromIdle)
         {
-            Instantiate(Enemy1StatusSO.Entity.PushEffectObj, transform.position, Quaternion.identity, transform);
+            GameObject pushEffect = Instantiate(Enemy1StatusSO.Entity.PushEffectObj, transform.position, Quaternion.identity, transform);
+            if (ifUnplayableOnSkill)
+            {
+                pushEffect.transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
+            }
 
             yield return new WaitForSeconds(Enemy1StatusSO.Entity.PushDirDur);
 
@@ -690,6 +707,7 @@ namespace BaseSystem
                     if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
+                        Shield(true);
                         isOnCounterCooltime = true;
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
 
@@ -720,6 +738,7 @@ namespace BaseSystem
                     if (!isOnCounterCooltime && IA.InputGetter.Instance.IsCounter && !IsSkillDirection && !IsSpecialDirection)
                     {
                         State = PlayerState.COUNTER;
+                        Shield(true);
                         isOnCounterCooltime = true;
                         IsPushBehaviourDone = false;
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
@@ -807,6 +826,7 @@ namespace BaseSystem
             if (State == PlayerState.COUNTER)
             {
                 State = PlayerState.IDLE;
+                Shield(false);
                 knoRes /= P_SOB.KnockbackResistanceCoefOnCounter;
                 IsCounterBehaviourDone = false;
             }
@@ -832,6 +852,14 @@ namespace BaseSystem
                 isKnockbackedBehaviourDone = false;
             }
             isOnStateChangeCooltime = false;
+        }
+
+        void Shield(bool isActivate)
+        {
+            if (S_SO.IsPlayable)
+            {
+                shield.SetActive(isActivate);
+            }
         }
         #endregion
 
@@ -947,7 +975,12 @@ namespace BaseSystem
 
                         yield return null;
                     }
+                    ifUnplayableOnSkill = true;
                     transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
+                    foreach (GameObject e in enemyEffect)
+                    {
+                        e.transform.localScale *= Enemy1StatusSO.Entity.SkillSizeCoef;
+                    }
                     transform.GetChild(1).gameObject.SetActive(false);
                     transform.GetChild(2).gameObject.SetActive(true);
                     weight *= Enemy1StatusSO.Entity.SkillWeightCoef;
@@ -975,7 +1008,12 @@ namespace BaseSystem
                         time += Time.deltaTime;
                         if (time >= Enemy1StatusSO.Entity.SkillDuration)
                         {
+                            ifUnplayableOnSkill = false;
                             transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
+                            foreach(GameObject e in enemyEffect)
+                            {
+                                e.transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
+                            }
                             weight /= Enemy1StatusSO.Entity.SkillWeightCoef;
                             transform.GetChild(1).gameObject.SetActive(true);
                             transform.GetChild(2).gameObject.SetActive(false);
@@ -1135,8 +1173,12 @@ namespace BaseSystem
             genericDamageCoef *= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
 
             GameManager.Instance.OnSpecialLightDir(true);
-            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(true);
-            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(true);
+            GameObject rightWeapon = GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject;
+            GameObject leftWeapon = GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject;
+            rightWeapon.SetActive(true);
+            leftWeapon.SetActive(true);
+            Coroutine rightCor = StartCoroutine(rightWeapon.GetComponent<MeshTrail>().TrailCreate());
+            Coroutine leftCor = StartCoroutine(leftWeapon.GetComponent<MeshTrail>().TrailCreate());
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.SpecialDur);
 
@@ -1149,8 +1191,12 @@ namespace BaseSystem
             genericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
 
             GameManager.Instance.OnSpecialLightDir(false);
-            GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject.SetActive(false); ;
-            GameObject.FindGameObjectWithTag("LeftWeapon").transform.GetChild(0).gameObject.SetActive(false);
+            StopCoroutine(rightCor);
+            rightCor = null;
+            StopCoroutine(leftCor);
+            leftCor = null;
+            rightWeapon.SetActive(false);
+            leftWeapon.SetActive(false);
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.WeakDur);
 

@@ -14,6 +14,8 @@ TagManager:
   - CameraShakeGameObject
   - hit_effect_parent
   - NowLoading
+  - Shield
+  - EnemyEffect
   layers:
   - Default
   - TransparentFX

@@ -8,24 +8,15 @@ public class MeshTrail : MonoBehaviour
     float meshRecretateRate = 0.025f;
     float meshDestroyTime = 3f;
     public Transform positionToSpawn;
-    bool isTrailActive;
+    public bool isTrailActive;
     public MeshRenderer[] usedMeshes;
     public Material effectMat;
     public SwordFadeOut swordFadeOut;
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space) && !isTrailActive)
-        {
-            isTrailActive = true;
-            StartCoroutine(TrailCreate(trailActiveTime));
-        }
-    }
 
-    IEnumerator TrailCreate(float timer)
+    public IEnumerator TrailCreate()
     {
-        while(timer > 0)
+        while (true)
         {
-            timer -= meshRecretateRate;
             /*
             for(int i = 0; i < usedMeshes.Length; i++) 
             {
@@ -43,13 +34,11 @@ public class MeshTrail : MonoBehaviour
                 
             }
             */
-            GameObject copy = Instantiate(gameObject);
+            GameObject copy = Instantiate(gameObject, transform.position, transform.rotation);
             copy.GetComponent<MeshRenderer>().material = effectMat;
             copy.GetComponent<SwordFadeOut>().fadeOutRequest = true;
             Destroy(copy, meshDestroyTime);
             yield return new WaitForSeconds(meshRecretateRate);
         }
-
-        isTrailActive = false;
     }
 }
