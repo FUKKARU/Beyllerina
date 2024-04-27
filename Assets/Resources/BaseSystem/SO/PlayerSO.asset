@@ -75,7 +75,7 @@ MonoBehaviour:
     - 0.5
     - 0
     - 2
-    DamageCoef: 0.25
+    DamageCoef: 0.1
     MrkAdjustValueY: 1.5
     MrkAdjustValueX: 0.5
     HpAdjustValue:

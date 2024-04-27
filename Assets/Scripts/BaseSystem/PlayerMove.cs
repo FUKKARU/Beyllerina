@@ -80,7 +80,8 @@ namespace BaseSystem
         float axisTimer = 0; // ベイの回転軸を傾ける時間
         bool isHpLow = false; // HPが一定以下になって、歳差運動をしているかどうか
         Vector3 rePos; // リスポーンポイント
-        float genericDamageCoef = 1; // 汎用ダメージ係数
+        float GenericDamageCoef { get; set; } = 1; // 汎用ダメージ係数（自分に乗算）
+        float OpponentGenericDamageCoef { get; set; } = 1; // 汎用ダメージ係数（相手に乗算）
         float rotDir = 1; // 正回転なら1、逆回転なら-1
         float pushPowerCoef = 1; // プッシュ力の係数（調整用）
         int specialPoint = 0; // 必殺技の発動ポイント
@@ -530,7 +531,7 @@ namespace BaseSystem
             // ダメージ計算
             float damage = baseDamage * statusAdjustValue * stateAdjustValue * damageCoef;
             damage = Mathf.Clamp(damage, P_SOD.MinDamage, P_SOD.MaxDamage);
-            damage *= genericDamageCoef;
+            damage *= pm.GenericDamageCoef * pm.opponentPm.OpponentGenericDamageCoef;
 
             if (pm.S_SO.IsPlayable && pm.P_SO.Dbg.P_DamageMul)
             {
@@ -917,6 +918,8 @@ namespace BaseSystem
             switch (type)
             {
                 case TYPE.Ballerina:
+                    GenericDamageCoef *= BallerinaStatusSO.Entity.OnSkillGenericDamageCoefCoef;
+
                     int pow = BallerinaStatusSO.Entity.SkillPow;
                     float _t = 0;
                     float _d = BallerinaStatusSO.Entity.SkillRiseDur;
@@ -1004,6 +1007,7 @@ namespace BaseSystem
                 case TYPE.Ballerina:
                     opponentRb.AddForce((op - sp).normalized * S_SOI.PushPower * BallerinaStatusSO.Entity.SkillPushPowerCoef, ForceMode.Impulse);
                     Damage(opponentPm, PlayerState.KNOCKBACKED);
+                    StartCoroutine(NormalizeGenericDamageCoef());
                     break;
 
                 case TYPE.BreakDancer:
@@ -1031,6 +1035,13 @@ namespace BaseSystem
             }
 
             yield break;
+        }
+
+        IEnumerator NormalizeGenericDamageCoef()
+        {
+            yield return new WaitForSeconds(BallerinaStatusSO.Entity.OnSkillDamageNormalizeDur);
+
+            GenericDamageCoef /= BallerinaStatusSO.Entity.OnSkillGenericDamageCoefCoef;
         }
 
         IEnumerator RotationChange()
@@ -1171,7 +1182,7 @@ namespace BaseSystem
             SoundManager.Instance.PlaySE(6);
             SoundManager.Instance.Special(true);
 
-            genericDamageCoef *= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
+            OpponentGenericDamageCoef *= BallerinaStatusSO.Entity.OnSpecialGenericDamageCoefCoef;
 
             GameManager.Instance.OnSpecialLightDir(true);
             GameObject rightWeapon = GameObject.FindGameObjectWithTag("RightWeapon").transform.GetChild(0).gameObject;
@@ -1183,11 +1194,11 @@ namespace BaseSystem
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.SpecialDur);
 
-            genericDamageCoef /= BallerinaStatusSO.Entity.GenericDamageCoefCoef;
+            OpponentGenericDamageCoef /= BallerinaStatusSO.Entity.OnSpecialGenericDamageCoefCoef;
 
             SoundManager.Instance.Special(false);
 
-            genericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
+            OpponentGenericDamageCoef /= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
 
             GameManager.Instance.OnSpecialLightDir(false);
             StopCoroutine(rightCor);
@@ -1199,7 +1210,7 @@ namespace BaseSystem
 
             yield return new WaitForSeconds(BallerinaStatusSO.Entity.WeakDur);
 
-            genericDamageCoef *= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
+            OpponentGenericDamageCoef *= BallerinaStatusSO.Entity.OnWeakGenericDamageCoefCoef;
 
             yield break;
         }

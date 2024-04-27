@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace BaseSystem
 {
@@ -38,7 +39,9 @@ namespace BaseSystem
         [Header("スキル発動時の上昇高度")] public float SkillRiseHeight;
         [Header("スキル発動時の下降時間")] public float SkillRushDur;
         [Header("スキル発動時の時間指数")] public int  SkillPow;
-        [Header("必殺技発動時に与えるダメージを何倍にするか")] public float GenericDamageCoefCoef;
+        [Header("スキル発動時に受けるダメージを何倍にするか")] public float OnSkillGenericDamageCoefCoef;
+        [Header("スキル発動時の受けるダメージの変化を、\r\n突進してから何秒後に元に戻すか")] public float OnSkillDamageNormalizeDur;
+        [Header("必殺技発動時に与えるダメージを何倍にするか")] public float OnSpecialGenericDamageCoefCoef;
         [Header("必殺技の継続時間")] public float SpecialDur;
         [Header("衰弱時に、与えるダメージを何分の一にするか（分母）")] public float OnWeakGenericDamageCoefCoef;
         [Header("衰弱状態の継続時間")] public float WeakDur;

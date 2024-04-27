@@ -43,7 +43,9 @@ MonoBehaviour:
   SkillRiseHeight: 0.015
   SkillRushDur: 0.2
   SkillPow: 2
-  GenericDamageCoefCoef: 1.5
+  OnSkillGenericDamageCoefCoef: 0.1
+  OnSkillDamageNormalizeDur: 0.2
+  OnSpecialGenericDamageCoefCoef: 1.5
   SpecialDur: 10
   OnWeakGenericDamageCoefCoef: 1.5
   WeakDur: 10
