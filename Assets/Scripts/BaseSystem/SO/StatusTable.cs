@@ -25,14 +25,12 @@ namespace BaseSystem
     [Serializable]
     public class StatusTablePlayable
     {
-        [Header("使うスキルの数")] public int SkillNum;
         [Header("HPバーの減少速度")] public float HpBarChangeSpeed;
     }
 
     [Serializable]
     public class StatusTableUnPlayable
     {
-        [Header("使うスキルの数（ランダム）")] public int SkillNum;
         [Header("プッシュ→スキル→プッシュ→…")]
         [Header("プッシュ→スキルの間隔")] public float Push2SkillInterval;
         [Header("プッシュ→スキルの間隔の誤差（±）")] public float Push2SkillIntervalOffset;
@@ -50,9 +48,9 @@ namespace BaseSystem
         [Header("プッシュ力")] public float PushPower;
         [Header("ノックバック耐性"), Range(0, 1)] public float KnockbackResistance;
         [Header("必殺技の発動に必要なポイント量")] public int SpecialPoint;
-        [Header("プッシュのクールタイム")] public float PushCoolTime;
-        [Header("カウンターのクールタイム")] public float CounterCoolTime;
-        [Header("スキルのクールタイム")] public float[] SkillCooltimes;
+        [Header("プッシュのクールタイム")] public float PushCooltime;
+        [Header("カウンターのクールタイム")] public float CounterCooltime;
+        [Header("スキルのクールタイム")] public float SkillCooltime;
         [Header("必殺技のクールタイム")] public float SpecialCooltime;
     }
 }

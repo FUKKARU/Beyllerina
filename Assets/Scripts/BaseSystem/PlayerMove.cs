@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -48,6 +46,12 @@ namespace BaseSystem
         float weight;
         float knoRes; // 内部的にRigidbody.drag（＝抵抗）を操作している
         float rotSpe;
+        // （以下は、プレイアブルのみ使用）
+        float pushCooltime;
+        float counterCooltime;
+        float skillCooltime;
+        float specialCooltime;
+        int maxSpecialPoint;
 
         // 敵への参照を取得する用
         GameObject opponent; // ゲームオブジェクト
@@ -61,14 +65,14 @@ namespace BaseSystem
         bool IsSpecialDirection { get; set; } = false; // 必殺技の演出中かどうか
         bool isPushIfUnplayable = false; // アンプレイアブルである時、プッシュを使うフラグ
         bool isCounterIfUnplayable = false; // アンプレイアブルである時、カウンターを使うフラグ
-        bool[] isSkillIfUnplayables; // アンプレイアブルである時、スキルを使うフラグのリスト
+        bool isSkillIfUnplayable = false; // アンプレイアブルである時、スキルを使うフラグのリスト
         bool isSpecialIfUnplayable = false; // アンプレイアブルである時、必殺技を使うフラグ
         bool IsPushBehaviourDone { get; set; } = false; // プッシュの処理を、完了しているか
         bool IsCounterBehaviourDone { get; set; } = false; // カウンターの処理を、完了しているか
         bool isKnockbackedBehaviourDone = false; // ノックバックされた時の処理を、完了しているか
         bool isOnPushCooltime = false; // プッシュのクールタイム中であるかどうか
         bool isOnCounterCooltime = false; // カウンターのクールタイム中であるかどうか
-        bool[] isOnSkillCooltimes; // スキルのクールタイム中であるかどうか
+        bool isOnSkillCooltime = false; // スキルのクールタイム中であるかどうか
         bool isOnSpecialCooltime = false; // 必殺技のクールタイム中であるかどうか
         bool isOnStateChangeCooltime = false; // 時間経過による状態変化中であるかどうか
         bool ifUnplayableOnSkill = false; // アンプレイアブルが、スキルを使って巨大化している最中かどうか
@@ -154,6 +158,24 @@ namespace BaseSystem
             knoRes = S_SOI.KnockbackResistance;
             rotSpe = S_SOI.RotationSpeed * SelectTeam.RotData.RotateNumber;
 
+            if (S_SO.IsPlayable)
+            {
+                pushCooltime = S_SOI.PushCooltime;
+                counterCooltime = S_SOI.CounterCooltime;
+                skillCooltime = S_SOI.SkillCooltime;
+                specialCooltime = S_SOI.SpecialCooltime;
+                maxSpecialPoint = S_SOI.SpecialPoint;
+
+                if (P_SO.Dbg.IsInfinityAction)
+                {
+                    pushCooltime = 0;
+                    counterCooltime = 0;
+                    skillCooltime = 0;
+                    specialCooltime = 0;
+                    maxSpecialPoint = 0;
+                }
+            }
+            
             // 敵への参照を取得
             int idx = Array.IndexOf(gm.Beys, gameObject);
             if (idx == 0)
@@ -171,30 +193,6 @@ namespace BaseSystem
             }
             opponentPm = opponent.GetComponent<PlayerMove>();
             opponentRb = opponent.GetComponent<Rigidbody>();
-
-            // ベイの行動処理用の配列をインスタンス化して、初期化する。
-            if (S_SO.IsPlayable)
-            {
-                isOnSkillCooltimes = new bool[S_SOP.SkillNum];
-                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
-                {
-                    isOnSkillCooltimes[i] = false;
-                }
-            }
-            else
-            {
-                isOnSkillCooltimes = new bool[S_SOU.SkillNum];
-                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
-                {
-                    isOnSkillCooltimes[i] = false;
-                }
-
-                isSkillIfUnplayables = new bool[S_SOU.SkillNum];
-                for (int i = 0; i < isSkillIfUnplayables.Length; i++)
-                {
-                    isSkillIfUnplayables[i] = false;
-                }
-            }
 
             // リスポーンポイントの取得
             string tag = (this == GameManager.Instance.P_Pm) ? P_SOB.P_RePosTag : P_SOB.U_RePosTag;
@@ -251,8 +249,7 @@ namespace BaseSystem
                     float ofst = S_SOU.Push2SkillIntervalOffset;
                     float time = Random.Range(dTime - ofst, dTime + ofst);
                     yield return new WaitForSeconds(time);
-                    int i = Random.Range(0, S_SOU.SkillNum); // ランダムなスキル
-                    isSkillIfUnplayables[i] = true;
+                    isSkillIfUnplayable = true;
                 }
             }
         }
@@ -263,7 +260,7 @@ namespace BaseSystem
             {
                 specialPoint += P_SOB.PointAmount;
                 PointBonus();
-                specialPoint = Mathf.Clamp(specialPoint, 0, S_SOI.SpecialPoint);
+                specialPoint = Mathf.Clamp(specialPoint, 0, maxSpecialPoint);
                 yield return new WaitForSeconds(P_SOB.PointDur);
             }
         }
@@ -675,7 +672,7 @@ namespace BaseSystem
 
         IEnumerator CountPushCooltime()
         {
-            float ct = S_SOI.PushCoolTime;
+            float ct = pushCooltime;
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
@@ -773,7 +770,7 @@ namespace BaseSystem
 
         IEnumerator CountCounterCooltime()
         {
-            float ct = S_SOI.CounterCoolTime;
+            float ct = counterCooltime;
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
@@ -880,38 +877,32 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                for (int i = 0; i < isOnSkillCooltimes.Length; i++)
+                if (!isOnSkillCooltime && IA.InputGetter.Instance.IsSkill)
                 {
-                    if (!isOnSkillCooltimes[i] && IA.InputGetter.Instance.IsSkill/*[i]*/)
-                    {
-                        isOnSkillCooltimes[i] = true;
+                    isOnSkillCooltime = true;
 
-                        if (gameObject.activeSelf) StartCoroutine(CountSkillCooltime(i));
+                    if (gameObject.activeSelf) StartCoroutine(CountSkillCooltime());
 
-                        SoundManager.Instance.SkillSE(true);
+                    SoundManager.Instance.SkillSE(true);
 
-                        SkillBehaviour(i);
-                    }
+                    SkillBehaviour();
                 }
             }
             else
             {
-                for (int i = 0; i < isSkillIfUnplayables.Length; i++)
+                if (isSkillIfUnplayable)
                 {
-                    if (isSkillIfUnplayables[i])
-                    {
-                        isSkillIfUnplayables[i] = false;
+                    isSkillIfUnplayable = false;
 
-                        SoundManager.Instance.SkillSE(false);
+                    SoundManager.Instance.SkillSE(false);
 
-                        SkillBehaviour(i);
-                    }
+                    SkillBehaviour();
                 }
             }
         }
 
-        // i番目のスキルを使う
-        void SkillBehaviour(int i)
+        // スキルを使う
+        void SkillBehaviour()
         {
             IsSkillDirection = true;
 
@@ -929,6 +920,8 @@ namespace BaseSystem
                     int pow = BallerinaStatusSO.Entity.SkillPow;
                     float _t = 0;
                     float _d = BallerinaStatusSO.Entity.SkillRiseDur;
+                    float h = BallerinaStatusSO.Entity.SkillRiseHeight;
+                    float coef = h / Mathf.Pow(_d, 2);
 
                     float t = 0;
                     float d = BallerinaStatusSO.Entity.SkillRushDur;
@@ -945,13 +938,13 @@ namespace BaseSystem
 
                     SoundManager.Instance.PlaySE(8);
 
+                    Vector3 lPos = transform.localPosition;
                     while (_action)
                     {
                         _t += Time.deltaTime;
 
-                        Vector3 pos = transform.position;
-                        pos.y = -_t * (_t - 2 * _d);
-                        transform.position = pos;
+                        float y = -coef * Mathf.Pow(_t - _d, 2) + h;
+                        transform.localPosition = lPos + Vector3.up * y;
                         if (_t > _d)
                         {
                             _action = false;
@@ -1074,48 +1067,43 @@ namespace BaseSystem
             }
         }
 
-        IEnumerator CountSkillCooltime(int idx) // idxは0始まりなことに注意！
+        IEnumerator CountSkillCooltime() // idxは0始まりなことに注意！
         {
-            float ct = S_SOI.SkillCooltimes[idx];
+            float ct = skillCooltime;
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
             // 半透明にする。
-            Color _col = gm.SkillCooltimeGauges[idx].color;
+            Color _col = gm.SkillCooltimeGauge.color;
             _col.a = P_SOB.GaugeAOnCooltime / (float)255;
-            gm.SkillCooltimeGauges[idx].color = _col;
+            gm.SkillCooltimeGauge.color = _col;
 
-            gm.SkillCooltimeGauges[0].fillAmount = 0f;
+            gm.SkillCooltimeGauge.fillAmount = 0f;
 
             while (time >= 0f)
             {
-                gm.SkillCooltimeGauges[0].fillAmount = -time / ct + 1;
+                gm.SkillCooltimeGauge.fillAmount = -time / ct + 1;
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
 
-            gm.SkillCooltimeGauges[0].fillAmount = 1f;
+            gm.SkillCooltimeGauge.fillAmount = 1f;
 
             // 不透明に戻す。
-            Color col = gm.SkillCooltimeGauges[idx].color;
+            Color col = gm.SkillCooltimeGauge.color;
             col.a = 255 / (float)255;
-            gm.SkillCooltimeGauges[idx].color = col;
+            gm.SkillCooltimeGauge.color = col;
 
-            isOnSkillCooltimes[idx] = false;
+            isOnSkillCooltime = false;
 
-            switch (idx)
-            {
-                case 0:
-                    action = true; _action = true;
-                    break;
-            }
+            action = true; _action = true;
         }
 
         void Special()
         {
             if (S_SO.IsPlayable)
             {
-                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
+                if (specialPoint == maxSpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
                 {
                     isOnSpecialCooltime = true;
 
@@ -1233,7 +1221,7 @@ namespace BaseSystem
 
         IEnumerator CountSpecialCooltime()
         {
-            float ct = S_SOI.SpecialCooltime;
+            float ct = specialCooltime;
             float time = ct;
             float interval = P_SOB.CooltimeBehaviourInterval;
 
@@ -1255,8 +1243,8 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                gm.SpecialGauge.fillAmount = specialPoint / (float)S_SOI.SpecialPoint;
-                if (specialPoint == S_SOI.SpecialPoint && !isOnSpecialCooltime)
+                gm.SpecialGauge.fillAmount = specialPoint / (float)maxSpecialPoint;
+                if (specialPoint == maxSpecialPoint && !isOnSpecialCooltime)
                 {
                     // 必殺技が発動できることを知らせる
                     gm.SpecialGauge.color = Color.yellow;

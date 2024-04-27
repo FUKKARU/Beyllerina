@@ -35,6 +35,7 @@ namespace BaseSystem
         public StatusTable StatusTable;
         [Header("スキル発動時に何倍の力を加えるか")] public float SkillPushPowerCoef;
         [Header("スキル発動時の上昇時間")] public float SkillRiseDur;
+        [Header("スキル発動時の上昇高度")] public float SkillRiseHeight;
         [Header("スキル発動時の下降時間")] public float SkillRushDur;
         [Header("スキル発動時の時間指数")] public int  SkillPow;
         [Header("必殺技発動時に与えるダメージを何倍にするか")] public float GenericDamageCoefCoef;

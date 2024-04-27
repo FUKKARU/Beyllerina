@@ -20,10 +20,8 @@ MonoBehaviour:
       - 
       SpecialName: 
     StatusTablePlayable:
-      SkillNum: 0
       HpBarChangeSpeed: 0
     StatusTableUnPlayable:
-      SkillNum: 1
       Push2SkillInterval: 10
       Push2SkillIntervalOffset: 5
       Skill2PushInterval: 10
@@ -36,11 +34,10 @@ MonoBehaviour:
       PushPower: 10
       KnockbackResistance: 0.1
       SpecialPoint: 100
-      PushCoolTime: 5
-      CounterCoolTime: 10
-      SkillCooltimes:
-      - 10
-      SpecialCooltime: 20
+      PushCooltime: 5
+      CounterCooltime: 10
+      SkillCooltime: 20
+      SpecialCooltime: 45
   PushEffectObj: {fileID: 118253155480359573, guid: 9605d371a6a2f104bb5f80b08efbeaf3,
     type: 3}
   PushDirDur: 0.5

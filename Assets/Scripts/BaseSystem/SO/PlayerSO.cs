@@ -66,6 +66,7 @@ namespace BaseSystem
         [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
         [Header("プレイアブルの受けるダメージを0倍にする")] public bool P_DamageImmune;
         [Header("アンプレイアブルの受けるダメージを0倍にする")] public bool U_DamageImmune;
+        [Header("【取扱注意】\r\nプッシュ、カウンター、スキル、必殺技の\r\nクールタイムを0にし、\r\n必殺技の発動に必要なポイントを0にする。")] public bool IsInfinityAction;
     }
 
     [Serializable]

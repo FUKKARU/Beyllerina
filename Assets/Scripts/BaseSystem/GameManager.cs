@@ -33,7 +33,7 @@ namespace BaseSystem
         [Header("アンプレイアブルのDamagedBar")] public Image UnPlayableDamagedBar;
         [Header("プッシュのクールタイムGauge")] public Image PushCooltimeGauge;
         [Header("カウンターのクールタイムGauge")] public Image CounterCooltimeGauge;
-        [Header("スキルのクールタイムGauge")] public Image[] SkillCooltimeGauges;
+        [Header("スキルのクールタイムGauge")] public Image SkillCooltimeGauge;
         [Header("必殺技のクールタイムGauge")] public Image SpecialCooltimeGauge;
         [Header("必殺技のGauge")] public Image SpecialGauge;
         [Header("ラウンドUI")] public GameObject RoundUI;
