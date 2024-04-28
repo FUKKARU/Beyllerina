@@ -169,11 +169,11 @@ namespace BaseSystem
 
                 if (P_SO.Dbg.IsInfinityAction)
                 {
-                    pushCooltime = 0;
-                    counterCooltime = 0;
-                    skillCooltime = 0;
-                    specialCooltime = 0;
-                    maxSpecialPoint = 0;
+                    pushCooltime = 1;
+                    counterCooltime = 1;
+                    skillCooltime = 1;
+                    specialCooltime = 1;
+                    maxSpecialPoint = 1;
                 }
             }
             
