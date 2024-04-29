@@ -18,7 +18,7 @@ MonoBehaviour:
     U_DamageMul: 0
     P_DamageImmune: 0
     U_DamageImmune: 0
-    IsInfinityAction: 0
+    IsInfinityAction: 1
   WhatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -50,7 +50,7 @@ MonoBehaviour:
     Duration2IdleOnPushFailed: 0.3
     Duration2IdleOnCounterFailed: 0.3
     Duration2IdleWhenKnockbacked: 1
-    CooltimeBehaviourInterval: 0.1
+    CooltimeBehaviourInterval: 0.025
     GaugeAOnCooltime: 100
     PointDur: 1
     PointAmount: 1
