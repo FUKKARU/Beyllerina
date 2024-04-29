@@ -1,90 +1,106 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+namespace BaseSystem
 {
-    [SerializeField, Tooltip("0:馬, 1:回復, 2:吹っ飛ばし, 3:プッシュ, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション")]
-    AudioClip[] clips;
-    [SerializeField] AudioSource seSource;
-    [SerializeField] AudioSource bgmSource;
-
-    bool isSpecial;
-
-    public static SoundManager Instance{ get; private set; }
-
-    private void Awake()
+    public class SoundManager : MonoBehaviour
     {
-        Instance = this;
-        isSpecial = false;
-    }
+        [SerializeField, Tooltip("0:馬, 1:回復, 2:吹っ飛ばし, 3:プッシュ, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション")]
+        AudioClip[] clips;
+        [SerializeField, Tooltip("0:ノーマルラウンド, 1:最終ラウンド")] AudioClip[] bgmClips;
+        [SerializeField] AudioSource seSource;
+        [SerializeField] AudioSource bgmSource;
 
-    /// <summary>
-    /// 0:馬, 1:回復, 2:吹っ飛ばし, 3:プッシュ, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション
-    /// </summary>
-    public void PlaySE(int index)
-    {
-        if (index < 0 || clips.Length <= index)
+        bool isSpecial;
+
+        public static SoundManager Instance { get; private set; }
+
+        private void Awake()
         {
-            Debug.Log("クリップが見つかりません。");
-            return;
+            Instance = this;
+            isSpecial = false;
         }
 
-        seSource.PlayOneShot(clips[index]);
-    }
-
-    public void HitSE()
-    {
-        if (isSpecial)
+        private void Start()
         {
-            seSource.PlayOneShot(clips[7]);
+            PlayBGM(GameData.GameData.RoundNum);
         }
-        else
+
+        /// <summary>
+        /// 0:馬, 1:回復, 2:吹っ飛ばし, 3:プッシュ, 4:ヒット, 5:カウンター, 6:必殺技（チャージ）, 7:ヒット(必殺技), 8:スキルチャージ, 9:スキルアクション
+        /// </summary>
+        public void PlaySE(int index)
         {
-            seSource.PlayOneShot(clips[4]);
+            if (index < 0 || clips.Length <= index)
+            {
+                Debug.Log("クリップが見つかりません。");
+                return;
+            }
+
+            seSource.PlayOneShot(clips[index]);
         }
-    }
 
-    public void Special(bool which)
-    {
-        isSpecial = which;
-    }
-
-    public void PushSE(bool isPlayable)
-    {
-        
-    }
-
-    public void CounterSE(bool isPlayable)
-    {
-
-    }
-
-    public void SkillSE(bool isPlayable)
-    {
-
-    }
-
-    /// <summary>
-    /// 必殺技SE
-    /// </summary>
-    /// <param name="index">0.強化状態に 1.衰弱状態に 2.必殺技が終了 3.剣がぶつかる</param>
-    public void SpecialSE(int index)
-    {
-        switch (index)
+        public void HitSE()
         {
-            case 0:
-                break;
+            if (isSpecial)
+            {
+                seSource.PlayOneShot(clips[7]);
+            }
+            else
+            {
+                seSource.PlayOneShot(clips[4]);
+            }
+        }
 
-            case 1:
-                break;
+        public void Special(bool which)
+        {
+            isSpecial = which;
+        }
 
-            case 2:
-                break;
+        public void PushSE(bool isPlayable)
+        {
 
-            case 3:
-                break;
+        }
+
+        public void CounterSE(bool isPlayable)
+        {
+
+        }
+
+        public void SkillSE(bool isPlayable)
+        {
+
+        }
+
+        /// <summary>
+        /// 必殺技SE
+        /// </summary>
+        /// <param name="index">0.強化状態に 1.衰弱状態に 2.必殺技が終了 3.剣がぶつかる</param>
+        public void SpecialSE(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    break;
+
+                case 1:
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+            }
+        }
+
+        public void PlayBGM(byte roundNum)
+        {
+            AudioClip clip = (roundNum == GameSO.Entity.RoundNum) ? bgmClips[1] : bgmClips[0];
+            bgmSource.clip = clip;
+            bgmSource.volume = (roundNum == GameSO.Entity.RoundNum) ? 0.125f : 0.25f;
+            bgmSource.Play();
         }
     }
 }

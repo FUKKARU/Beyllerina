@@ -1,24 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
-using BaseSystem;
 using UnityEngine;
 
-public class PlayerSound : MonoBehaviour
+namespace BaseSystem
 {
-    PlayerMove pm;
-    Rigidbody rb;
-
-    private void Start()
+    public class PlayerSound : MonoBehaviour
     {
-        pm = GetComponent<PlayerMove>();
-        rb = GetComponent<Rigidbody>();
-    }
+        PlayerMove pm;
+        Rigidbody rb;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            SoundManager.Instance.HitSE();
+            pm = GetComponent<PlayerMove>();
+            rb = GetComponent<Rigidbody>();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                SoundManager.Instance.HitSE();
+            }
         }
     }
 }
