@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterSelect.unity
     guid: d6d0115ad19d9d545bb7d31d9adf0dc9
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Rotate.unity
     guid: 03ed61a0c717d4541a42113439c3e8f0
   - enabled: 1

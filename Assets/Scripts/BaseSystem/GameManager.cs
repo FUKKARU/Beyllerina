@@ -149,7 +149,7 @@ namespace BaseSystem
             {
                 IsGameResultJudged = true;
 
-                StartCoroutine(KOBehaviourIfWin());
+                StartCoroutine(KOBehaviour(true));
             }
         }
 
@@ -162,15 +162,16 @@ namespace BaseSystem
             {
                 IsGameResultJudged = true;
 
-                StartCoroutine(KOBehaviourIfLose());
+                StartCoroutine(KOBehaviour(false));
             }
         }
 
-        IEnumerator KOBehaviourIfWin()
+        IEnumerator KOBehaviour(bool ifWin)
         {
             // KOの演出
             const int CANVAS_WIDTH = 800;
-            RectTransform trans = KO_UI.GetComponent<RectTransform>();
+            GameObject koUi = ifWin ? KO_UI : KOed_UI;
+            RectTransform trans =  koUi.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
             float time = 0;
             while (true)
@@ -193,23 +194,35 @@ namespace BaseSystem
                 yield return null;
             }
 
+            while (true)
+            {
+                yield return null;
+            }
             yield return new WaitForSeconds(PlayerSO.Entity.KOFadeDur);
             Vector3 p3 = trans.localPosition;
             p3.x = CANVAS_WIDTH;
             trans.localPosition = p3;
 
-            if (GameData.GameData.RoundNum < GameSO.Entity.RoundNum)
+            if (ifWin)
             {
-                // ラウンド数を増やす
-                GameData.GameData.RoundNum += 1;
+                if (GameData.GameData.RoundNum < GameSO.Entity.RoundNum)
+                {
+                    // ラウンド数を増やす
+                    GameData.GameData.RoundNum += 1;
 
-                // HPを戻し、次ラウンドのシーンに遷移する
-                StartCoroutine(WinBehaviour());
+                    // HPを戻し、次ラウンドのシーンに遷移する
+                    StartCoroutine(WinBehaviour());
+                }
+                else
+                {
+                    // 勝利シーンに遷移
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Win, true);
+                }
             }
             else
             {
-                // 勝利シーンに遷移
-                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Win, true);
+                // 敗北シーンに遷移
+                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
             }
         }
 
@@ -224,42 +237,6 @@ namespace BaseSystem
 
             // 次ラウンドのシーンに遷移
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
-        }
-        [SerializeField,Range(0,100)] float indexer;
-        IEnumerator KOBehaviourIfLose()
-        {
-            // KOedの演出
-            const int CANVAS_WIDTH = 800;
-            RectTransform trans = KOed_UI.GetComponent<RectTransform>();
-            float d = PlayerSO.Entity.KODur;
-            float time = 0;
-            while (true)
-            {
-                time += Time.deltaTime;
-
-                if (time >= d)
-                {
-                    Vector3 p1 = trans.localPosition;
-                    p1.x = 0;
-                    trans.localPosition = p1;
-                    break;
-                }
-
-                Vector3 p2 = trans.localPosition;
-                p2.x = -CANVAS_WIDTH / d * time + CANVAS_WIDTH;
-
-                trans.localPosition = p2;
-
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(PlayerSO.Entity.KOFadeDur);
-            Vector3 p3 = trans.localPosition;
-            p3.x = CANVAS_WIDTH;
-            trans.localPosition = p3;
-
-            // 敗北シーンに遷移
-            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
         }
         #endregion
 
