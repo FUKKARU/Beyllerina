@@ -10,7 +10,7 @@ namespace CharacterSelect
         {
             if (IA.InputGetter.Instance.IsQuit)
             {
-                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Rotate, true);
+                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
             }
         }
     }
