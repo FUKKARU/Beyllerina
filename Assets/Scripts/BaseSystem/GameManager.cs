@@ -194,11 +194,18 @@ namespace BaseSystem
                 yield return null;
             }
 
+            yield return new WaitForSeconds(PlayerSO.Entity.OnKOClickDur);
+
             while (true)
             {
+                if (IA.InputGetter.Instance.IsSelect)
+                {
+                    break;
+                }
+
                 yield return null;
             }
-            yield return new WaitForSeconds(PlayerSO.Entity.KOFadeDur);
+
             Vector3 p3 = trans.localPosition;
             p3.x = CANVAS_WIDTH;
             trans.localPosition = p3;

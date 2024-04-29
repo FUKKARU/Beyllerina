@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dbg:
     IsShowNormalLog: 0
-    P_DamageMul: 1
+    P_DamageMul: 0
     U_DamageMul: 0
     P_DamageImmune: 0
     U_DamageImmune: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
   HpRecoverRatio: 50
   FromHpRecoverDur: 2
   KODur: 0.1
-  KOFadeDur: 5
+  OnKOClickDur: 2
   BehaviourTable:
     PlayerMainAxisChangeSpeed: 10
     AxisRotateSpeed: 360
