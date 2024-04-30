@@ -6,12 +6,12 @@ namespace CharacterSelect
 {
     public class SceneChange : MonoBehaviour
     {
-        void Update()
+        
+        public void Onclick()
         {
-            if (IA.InputGetter.Instance.IsQuit)
-            {
-                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
-            }
+            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
         }
+
     }
+
 }

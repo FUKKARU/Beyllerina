@@ -25,8 +25,10 @@ namespace Title
         bool hover_zeroOneButton;
         void ZeroOneButton()
         {
+            zeroOneButton.GetComponent<SpriteRenderer>().sprite = zeroOneButtonInitial;
             playButton.GetComponent<BoxCollider2D>().enabled = false;
             zeroOneButton.GetComponent<CircleCollider2D>().enabled = false;
+
             eXIT_Button_Check_Banner.SetActive(true);
             eXIT_Button_Check_YesButton.SetActive(true);
             eXIT_Button_Check_CancelButton.SetActive(true);
@@ -60,11 +62,10 @@ namespace Title
 
         [SerializeField] GameObject eXIT_Button_Check_Banner;
 
-        void Input()
+        void InputMethod()
         {
-            if (IA.InputGetter.Instance.IsSelect)
+            if (IA.InputGetter.Instance.IsSelect || Input.GetKeyDown(KeyCode.Space))
             {
-                print(1);
                 if (hover_playButton) PlayButton();
                 else if(hover_zeroOneButton) ZeroOneButton();
                 else if(hover_EXIT_Button_Check_YesButton) EXIT_Button_Check_YesButton();
@@ -74,21 +75,23 @@ namespace Title
         void Awake()
         {
             cursor = GetComponent<Transform>();
+            playButton.GetComponent<BoxCollider2D>().enabled = true;
+            zeroOneButton.GetComponent<CircleCollider2D>().enabled = true;
             eXIT_Button_Check_Banner.SetActive(false);
             eXIT_Button_Check_YesButton.SetActive(false);
             eXIT_Button_Check_CancelButton.SetActive(false);
+
         }
 
         void Update()
         {
-            Vector2 val = IA.InputGetter.Instance.ValueRotate;
+            Vector2 val = IA.InputGetter.Instance.ValueDirection;
             Vector2 cPos = cursor.position;
-            cPos.x = Mathf.Clamp(cPos.x, -9.7f, 9.7f);
-            cPos.y = Mathf.Clamp(cPos.y, -6.5f, 6.5f);
+            cPos.x = Mathf.Clamp(cPos.x, -10f, 10f);
+            cPos.y = Mathf.Clamp(cPos.y, -4.5f, 6.5f);
             cursor.position = cPos; 
             cursor.position += new Vector3(val.x, val.y, 0) * cursorSpeed * Time.deltaTime;
-            print(IA.InputGetter.Instance.IsSelect);
-            Input();
+            InputMethod();
 
         }
 
