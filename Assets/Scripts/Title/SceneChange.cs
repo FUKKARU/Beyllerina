@@ -8,10 +8,13 @@ namespace Title
 
     public class SceneChange : MonoBehaviour
     {
+
+        [SerializeField] GameObject quitChooseUI;
         void Awake()
         {
             IA.InputGetter.Instance.IsSelect = false;
             IA.InputGetter.Instance.IsSelect = false;
+            quitChooseUI.SetActive(false);
         }
 
         void Update()
@@ -32,6 +35,7 @@ namespace Title
 
         public void QuitGame()
         {
+            quitChooseUI.SetActive(true);
             IA.InputGetter.Instance.IsQuit = true;
         }
 
