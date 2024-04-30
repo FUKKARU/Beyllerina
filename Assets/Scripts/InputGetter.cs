@@ -49,7 +49,7 @@ namespace IA
         public bool IsCounter { get; private set; } = false;
         public bool IsSkill { get; private set; } = false;
         public bool IsSpecial { get; private set; } = false;
-        public Vector2 ValueRotate { get; private set; } = Vector2.zero;
+        public Vector2 ValueDirection { get; private set; } = Vector2.zero;
         public bool IsSelect { get; private set; } = false;
         public bool IsCancel { get; private set; } = false;
         public bool IsQuit { get; private set; } = false;
@@ -138,7 +138,7 @@ namespace IA
 
         void ReadRotate(InputAction.CallbackContext context)
         {
-            ValueRotate = context.ReadValue<Vector2>();
+            ValueDirection = context.ReadValue<Vector2>();
         }
 
         void OnSelect(InputAction.CallbackContext context)

@@ -61,6 +61,7 @@ namespace BaseSystem
     public class DebugTable
     {
         [Header("ログを出す（WarningとErrorは除く）")] public bool IsShowNormalLog;
+        //[Header("ベイの方向入力をできるようにする")] public bool IsBeyMovable;
         [Header("プレイアブルの受けるダメージを100倍にする")] public bool P_DamageMul;
         [Header("アンプレイアブルの受けるダメージを100倍にする")] public bool U_DamageMul;
         [Header("プレイアブルの受けるダメージを0倍にする")] public bool P_DamageImmune;

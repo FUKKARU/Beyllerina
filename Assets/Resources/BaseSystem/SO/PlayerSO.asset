@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dbg:
     IsShowNormalLog: 0
-    P_DamageMul: 1
+    IsBeyMovable: 1
+    P_DamageMul: 0
     U_DamageMul: 0
     P_DamageImmune: 0
     U_DamageImmune: 0

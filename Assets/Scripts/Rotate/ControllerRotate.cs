@@ -16,7 +16,7 @@ namespace SelectTeam
 
         void Update()
         {
-            Vector2 rot = IA.InputGetter.Instance.ValueRotate;
+            Vector2 rot = IA.InputGetter.Instance.ValueDirection;
             float deg = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg;
 
             if (isFirstInput)

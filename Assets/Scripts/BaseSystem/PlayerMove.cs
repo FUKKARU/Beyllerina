@@ -289,14 +289,32 @@ namespace BaseSystem
 
             if (!antiGravity)
             {
+                //// 入力を検知して、少しだけ移動
+                //if (S_SO.IsPlayable && P_SO.Dbg.IsBeyMovable)
+                //{
+                //    Vector3 myPos = transform.position;
+                //    Vector3 myNormPos = new Vector3(myPos.x, 0, myPos.z);
+                //    Vector3 cameraPos = GameManager.Instance.GameCamera.transform.position;
+                //    Vector3 cameraNormPos = new Vector3(cameraPos.x, 0, cameraPos.z);
+
+                //    Vector3 dir = myNormPos - cameraNormPos;
+                //    Vector2 val = IA.InputGetter.Instance.ValueDirection;
+                //    Vector2 lMove = new Vector3(val.x, 0, val.y);
+
+                //    float amp = Mathf.Atan2(dir.z, dir.x); // dirの偏角
+                //    float theta = 90 - amp * Mathf.Rad2Deg; // ベクトルを何度回転させているか
+
+                //    Vector3 move = Quaternion.AngleAxis(theta, Vector3.up) * lMove;
+                //    Debug.Log(move);
+                //    rb.AddForce(move * 20, ForceMode.Force);
+                //}
+
                 // 重力
                 rb.AddForce(Vector3.down * 9.81f * P_SO.GravityScale, ForceMode.Force);
 
                 // 常に中心へ移動
                 rb.AddForce((stageCenter.transform.position - transform.position).normalized * P_SO.SpeedTowardCenter, ForceMode.Force);
             }
-
-
         }
 
         // ベイの現在のステータスに基づいて、Rigidbodyのパラメーターを更新する。
