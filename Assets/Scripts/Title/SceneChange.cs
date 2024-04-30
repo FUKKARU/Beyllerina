@@ -66,7 +66,6 @@ namespace Title
         {
             if (IA.InputGetter.Instance.IsSelect || Input.GetKeyDown(KeyCode.Space))
             {
-                print(1);
                 if (hover_playButton) PlayButton();
                 else if(hover_zeroOneButton) ZeroOneButton();
                 else if(hover_EXIT_Button_Check_YesButton) EXIT_Button_Check_YesButton();
@@ -76,9 +75,12 @@ namespace Title
         void Awake()
         {
             cursor = GetComponent<Transform>();
+            playButton.GetComponent<BoxCollider2D>().enabled = true;
+            zeroOneButton.GetComponent<CircleCollider2D>().enabled = true;
             eXIT_Button_Check_Banner.SetActive(false);
             eXIT_Button_Check_YesButton.SetActive(false);
             eXIT_Button_Check_CancelButton.SetActive(false);
+
         }
 
         void Update()
