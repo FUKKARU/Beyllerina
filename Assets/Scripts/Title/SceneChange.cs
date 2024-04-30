@@ -81,13 +81,12 @@ namespace Title
 
         void Update()
         {
-            Vector2 val = IA.InputGetter.Instance.ValueRotate;
+            Vector2 val = IA.InputGetter.Instance.ValueDirection;
             Vector2 cPos = cursor.position;
             cPos.x = Mathf.Clamp(cPos.x, -9.7f, 9.7f);
             cPos.y = Mathf.Clamp(cPos.y, -6.5f, 6.5f);
             cursor.position = cPos; 
             cursor.position += new Vector3(val.x, val.y, 0) * cursorSpeed * Time.deltaTime;
-            print(IA.InputGetter.Instance.IsSelect);
             Input();
 
         }
