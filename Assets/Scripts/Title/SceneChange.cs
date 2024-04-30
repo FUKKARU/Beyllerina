@@ -36,7 +36,17 @@ namespace Title
         public void QuitGame()
         {
             quitChooseUI.SetActive(true);
+            
+        }
+
+        public void ApplicationShutDown()
+        {
             IA.InputGetter.Instance.IsQuit = true;
+        }
+
+        public void BackToGame()
+        {
+            quitChooseUI.SetActive(false);
         }
 
         public void StartGame()
