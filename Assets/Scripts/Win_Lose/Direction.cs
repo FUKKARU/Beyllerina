@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
 
 namespace Win_Lose
@@ -63,6 +63,13 @@ namespace Win_Lose
 
             const int CANVAS_WIDTH = 800;
             RectTransform resultUI = (BaseSystem.GameData.GameData.IsWin ? victoryUI : defeatUI).GetComponent<RectTransform>();
+            TextMeshProUGUI roundNum = resultUI.GetChild(0).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI counterNum = resultUI.GetChild(1).GetComponent<TextMeshProUGUI>();
+
+            roundNum.text =
+                $"{BaseSystem.GameData.GameData.PlayableRoundNum} - {BaseSystem.GameData.GameData.UnPlayableRoundNum}";
+            counterNum.text = $"{BaseSystem.GameData.GameData.CounterNum}";
+
             float d1 = WinLoseSO.Entity.ResultUIDur;
             float t1 = 0;
 

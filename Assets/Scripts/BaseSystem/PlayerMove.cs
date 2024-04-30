@@ -372,7 +372,7 @@ namespace BaseSystem
         #region@PlayerState‚Ì‘JˆÚ‚ÌÚ×i‘Î‰‚·‚éó‘Ô‚ÌAyğŒz‚ğ–‚½‚µ‚½‚ç‘¦À‚É‘JˆÚ‚·‚éBƒxƒC‚Ìs“®ˆ—‚ÉŠÖ‚í‚é•Ï”‚ÌƒŠƒZƒbƒg‚às‚¤Bj
         // ˆÈ‰º‚Ì‚¢‚¸‚ê‚©‚Ì‘JˆÚ‚ğs‚¤B
         // Ey©•ªzPUSH    => IDLE       y“GzIDLE    => KNOCKBACKED
-        // Ey©•ªzCOUNTER => IDLE       y“GzPUSH    => KNOCKBACKED
+        // Ey©•ªzCOUNTER => IDLE       y“GzPUSH    => KNOCKBACKED     (ƒJƒEƒ“ƒ^[‰ñ”‚ğ‘‚â‚·B)
         // Ey©•ªzIDLE    => KNOCKBACKEDy“GzPUSH    => IDLE
         // Ey©•ªzPUSH    => KNOCKBACKEDy“GzCOUNTER => IDLE
         // yğŒzi“G‚ÆÚG‚µ‚½Û‚ÉŒÄ‚Î‚ê‚éBj
@@ -439,6 +439,8 @@ namespace BaseSystem
                         {
                             Debug.Log($"<color=#64ff64>{name} ‚ª {opponent.name} ‚ÉƒJƒEƒ“ƒ^[‚µ‚½I</color>");
                         }
+
+                        GameData.GameData.CounterNum++;
                     }
                     else
                     {

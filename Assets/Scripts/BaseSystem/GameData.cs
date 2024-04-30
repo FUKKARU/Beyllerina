@@ -49,6 +49,27 @@ namespace BaseSystem
                     isWin = value;
                 }
             }
+
+            static int counterNum = 0;
+            public static int CounterNum
+            {
+                get
+                {
+                    return counterNum;
+                }
+
+                set
+                {
+                    if (value >= 0)
+                    {
+                        counterNum = value;
+                    }
+                    else
+                    {
+                        counterNum = 0;
+                    }
+                }
+            }
         }
     }
 }
