@@ -18,6 +18,10 @@ TagManager:
   - EnemyEffect
   - BackGrounds
   - rapier_effect_parent
+  - PlayButton
+  - ZeroOneButton
+  - EXIT_Button_Check_cancelButton
+  - EXIT_Button_Check_YesButton
   layers:
   - Default
   - TransparentFX
