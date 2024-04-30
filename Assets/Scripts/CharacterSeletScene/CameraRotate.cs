@@ -30,13 +30,8 @@ public class CameraRotate : MonoBehaviour
     void Update()
     {
 
-        if (Physics.Raycast(angleDetector.transform.position, Vector3.up,   out RaycastHit hit, 6.0f))
-        {
-            Debug.DrawRay(angleDetector.transform.position, hit.point, Color.yellow);
-            print(hit.transform.gameObject.name);
-            print(Vector3.Distance(angleDetector.transform.position, hit.transform.gameObject.transform.position));
-        }
 
+        Physics.Raycast(angleDetector.transform.position, Vector3.up, out RaycastHit hit, 6.0f);
         Vector2 val = IA.InputGetter.Instance.ValueDirection;
         float h = -val.x;
         float v = -val.y;
