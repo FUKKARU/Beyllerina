@@ -34,7 +34,7 @@ public class BackGr_Scroll : MonoBehaviour
             isRespown = false;
         }
 
-        BG01.transform.position = new Vector3(BG01.transform.position.x  * Time.deltaTime, BG01.transform.position.y, BG01.transform.position.z);
+        BG01.transform.position = new Vector3(BG01.transform.position.x + PlusPos * Time.deltaTime, BG01.transform.position.y, BG01.transform.position.z);
         BG02.transform.position = new Vector3(BG02.transform.position.x + parallaxEffect01 * Time.deltaTime, BG02.transform.position.y, BG02.transform.position.z);
         BG03.transform.position = new Vector3(BG03.transform.position.x + parallaxEffect02 * Time.deltaTime , BG03.transform.position.y, BG03.transform.position.z);
         BG04.transform.position = new Vector3(BG04.transform.position.x + parallaxEffect03 * Time.deltaTime , BG04.transform.position.y, BG04.transform.position.z);
