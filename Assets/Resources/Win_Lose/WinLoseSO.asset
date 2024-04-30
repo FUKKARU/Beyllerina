@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraDir:
     StartPosition: {x: -1.205, y: -1.655, z: 1.645}
-    EndPositon: {x: 0.225, y: -2.36, z: 1.345}
+    EndPosition: {x: 0.225, y: -2.36, z: 1.345}
     StartRotation: {x: 0, y: 180, z: 0}
     EndRotation: {x: 0, y: -142.5, z: 0}
     Duration: 0.5
+  ResultUIDur: 0.1

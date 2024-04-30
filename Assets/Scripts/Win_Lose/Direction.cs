@@ -79,6 +79,8 @@ namespace Win_Lose
                 pos.x = -CANVAS_WIDTH / d1 * t1 + CANVAS_WIDTH;
                 resultUI.localPosition = pos;
 
+                t1 += Time.deltaTime;
+
                 yield return null;
             }
 
