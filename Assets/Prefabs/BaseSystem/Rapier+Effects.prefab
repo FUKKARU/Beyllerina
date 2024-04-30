@@ -48,10 +48,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionToSpawn: {fileID: 892863861706727655}
+  isTrailActive: 0
   usedMeshes:
   - {fileID: 3758989054868946312}
   effectMat: {fileID: 2100000, guid: 998f2ccdbdc92c047a046ce40bb748cc, type: 2}
-  swordFadeOut: {fileID: 0}
+  swordFadeOut: {fileID: 3134482168088375420}
 --- !u!114 &3134482168088375420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5955844840416208063, guid: 20ef6f134f14bb04788c55562738af00, type: 3}
+  - {fileID: 2100000, guid: 35e107f2968a03947aa40ad599eaf671, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
