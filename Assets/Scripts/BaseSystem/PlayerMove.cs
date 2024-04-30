@@ -611,6 +611,7 @@ namespace BaseSystem
                         isOnPushCooltime = true;
                         if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
                         SoundManager.Instance.PlaySE(3);
+                        SoundManager.Instance.PlaySE(11);
                     }
                 }
                 else
@@ -622,6 +623,7 @@ namespace BaseSystem
                         StartCoroutine(UnPlayablePushDir(true));
 
                         SoundManager.Instance.PlaySE(3);
+                        SoundManager.Instance.PlaySE(11);
                     }
                 }
             }
@@ -645,6 +647,7 @@ namespace BaseSystem
                         IsCounterBehaviourDone = false;
                         if (gameObject.activeSelf) StartCoroutine(CountPushCooltime());
                         SoundManager.Instance.PlaySE(3);
+                        SoundManager.Instance.PlaySE(11);
                     }
                 }
                 else
@@ -656,6 +659,7 @@ namespace BaseSystem
                         StartCoroutine(UnPlayablePushDir(false));
 
                         SoundManager.Instance.PlaySE(3);
+                        SoundManager.Instance.PlaySE(11);
                     }
                 }
             }
@@ -729,6 +733,7 @@ namespace BaseSystem
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
 
                         SoundManager.Instance.PlaySE(5);
+                        SoundManager.Instance.PlaySE(12);
                     }
                 }
                 else
@@ -740,6 +745,7 @@ namespace BaseSystem
                         State = PlayerState.COUNTER;
 
                         SoundManager.Instance.PlaySE(5);
+                        SoundManager.Instance.PlaySE(12);
                     }
                 }
             }
@@ -763,6 +769,7 @@ namespace BaseSystem
                         if (gameObject.activeSelf) StartCoroutine(CountCounterCooltime());
 
                         SoundManager.Instance.PlaySE(5);
+                        SoundManager.Instance.PlaySE(12);
                     }
                 }
                 else
@@ -775,6 +782,7 @@ namespace BaseSystem
                         IsPushBehaviourDone = false;
 
                         SoundManager.Instance.PlaySE(5);
+                        SoundManager.Instance.PlaySE(12);
                     }
                 }
             }
@@ -968,6 +976,7 @@ namespace BaseSystem
                     }
 
                     SoundManager.Instance.PlaySE(9);
+                    SoundManager.Instance.PlaySE(13);
 
                     while (action)
                     {
@@ -1191,6 +1200,7 @@ namespace BaseSystem
         IEnumerator BallerinaCountSpecialTime()
         {
             SoundManager.Instance.PlaySE(6);
+            SoundManager.Instance.PlaySE(14);
             SoundManager.Instance.Special(true);
 
             OpponentGenericDamageCoef *= BallerinaStatusSO.Entity.OnSpecialGenericDamageCoefCoef;
