@@ -9,14 +9,19 @@ public class CameraRotate : MonoBehaviour
     float side;
     float ver;
     float speed = 2f;
+    [SerializeField] GameObject mainCamera;
+    [SerializeField] Vector3 cameraStartPos = new Vector3 (19f,180f,0);
     
    
 
     void Start()
     {
+
+        mainCamera.transform.localEulerAngles = cameraStartPos;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+        StartCoroutine("ForStartCamera");
     }
 
     
@@ -31,7 +36,14 @@ public class CameraRotate : MonoBehaviour
         transform.rotation = Quaternion.Euler(ver, -side, 0f);
     }
 
-    
+    IEnumerator ForStartCamera()
+    {
 
-    
+        this.gameObject.GetComponent<CameraRotate>().enabled = false;
+
+        yield return new WaitForSeconds(1f);
+
+        this.gameObject.GetComponent<CameraRotate>().enabled = true;
+    }
+
 }
