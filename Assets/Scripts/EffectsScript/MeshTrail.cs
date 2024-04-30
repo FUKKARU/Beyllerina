@@ -21,6 +21,7 @@ namespace BaseSystem
                 GameObject copy = Instantiate(gameObject, transform.position, transform.rotation, GameManager.Instance.rapier_effect_parent);
                 copy.GetComponent<MeshRenderer>().material = effectMat;
                 copy.GetComponent<SwordFadeOut>().fadeOutRequest = true;
+                copy.GetComponent<BoxCollider>().enabled = false;
                 Destroy(copy, meshDestroyTime);
                 yield return new WaitForSeconds(meshRecretateRate);
             }
