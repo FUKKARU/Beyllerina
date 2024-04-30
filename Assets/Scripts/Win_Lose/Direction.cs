@@ -61,16 +61,23 @@ namespace Win_Lose
             cam.transform.position = endPos;
             cam.transform.rotation = endRot;
 
-            RectTransform resultUI = ((BaseSystem.GameData.GameData.IsWin) ? victoryUI : defeatUI).GetComponent<RectTransform>();
+            const int CANVAS_WIDTH = 800;
+            RectTransform resultUI = (BaseSystem.GameData.GameData.IsWin ? victoryUI : defeatUI).GetComponent<RectTransform>();
             float d1 = WinLoseSO.Entity.ResultUIDur;
             float t1 = 0;
 
             while (t1 < d1)
             {
-                //resultUI.
+                Vector3 pos = resultUI.localPosition;
+                pos.x = -CANVAS_WIDTH / d1 * t1 + CANVAS_WIDTH;
+                resultUI.localPosition = pos;
 
                 yield return null;
             }
+
+            Vector3 _pos = resultUI.localPosition;
+            _pos.x = 0;
+            resultUI.localPosition = _pos;
         }
     }
 }

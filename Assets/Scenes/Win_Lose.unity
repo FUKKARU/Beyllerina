@@ -204,6 +204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Victory
       objectReference: {fileID: 0}
+    - target: {fileID: 3843709818976636115, guid: 1ba31e2f0f19e8444a95c0b472724058,
+        type: 3}
+      propertyPath: m_text
+      value: 0 - 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7469407516790096176, guid: 1ba31e2f0f19e8444a95c0b472724058,
         type: 3}
       propertyPath: m_Sprite
@@ -737,6 +742,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3843709818976636115, guid: 1ba31e2f0f19e8444a95c0b472724058,
+        type: 3}
+      propertyPath: m_text
+      value: 0 - 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8845504043460319362, guid: 1ba31e2f0f19e8444a95c0b472724058,
         type: 3}
       propertyPath: m_Pivot.x
@@ -815,7 +825,7 @@ PrefabInstance:
     - target: {fileID: 8845504043460319362, guid: 1ba31e2f0f19e8444a95c0b472724058,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 800
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8845504043460319362, guid: 1ba31e2f0f19e8444a95c0b472724058,
         type: 3}
