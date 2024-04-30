@@ -135,18 +135,9 @@ namespace BaseSystem
             S_SOI = S_SO.StatusTableInitStatus;
             if (S_SO.IsPlayable)
             {
-                if (GameData.GameData.RoundNum == 1)
-                {
-                    Hp = S_SOI.Hp;
-                    gm.PlayableBar.fillAmount = 1;
-                    gm.PlayableDamagedBar.fillAmount = 1;
-                }
-                else
-                {
-                    Hp = GameData.GameData.PlayableHp;
-                    gm.PlayableBar.fillAmount = Hp / S_SOI.Hp;
-                    gm.PlayableDamagedBar.fillAmount = Hp / S_SOI.Hp;
-                }
+                Hp = S_SOI.Hp;
+                gm.PlayableBar.fillAmount = 1;
+                gm.PlayableDamagedBar.fillAmount = 1;
             }
             else
             {
@@ -154,7 +145,7 @@ namespace BaseSystem
                 gm.UnPlayableBar.fillAmount = 1;
                 gm.UnPlayableDamagedBar.fillAmount = 1;
             }
-            
+
             weight = S_SOI.Weight;
             knoRes = S_SOI.KnockbackResistance;
             rotSpe = S_SOI.RotationSpeed * SelectTeam.RotData.RotateNumber;
@@ -176,7 +167,7 @@ namespace BaseSystem
                     maxSpecialPoint = 1;
                 }
             }
-            
+
             // 敵への参照を取得
             int idx = Array.IndexOf(gm.Beys, gameObject);
             if (idx == 0)
@@ -1022,7 +1013,7 @@ namespace BaseSystem
                         {
                             ifUnplayableOnSkill = false;
                             transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
-                            foreach(GameObject e in enemyEffect)
+                            foreach (GameObject e in enemyEffect)
                             {
                                 e.transform.localScale /= Enemy1StatusSO.Entity.SkillSizeCoef;
                             }
@@ -1408,14 +1399,14 @@ namespace BaseSystem
                     gm.UnPlayableBar.fillAmount = 0f;
                 }
 
-                // 勝利/敗北の処理を発火する
+                // KO/KOedの処理を発火する
                 if (!S_SO.IsPlayable)
                 {
-                    GameManager.Instance.Win();
+                    GameManager.Instance.KO();
                 }
                 else
                 {
-                    GameManager.Instance.Lose();
+                    GameManager.Instance.KOed();
                 }
 
                 gameObject.SetActive(false); // 非アクティブにする

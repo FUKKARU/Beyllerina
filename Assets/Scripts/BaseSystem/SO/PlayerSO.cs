@@ -49,7 +49,7 @@ namespace BaseSystem
         [Header("Ÿ—˜‚ÉAÅ‘åHP - Œ»İHP‚Ì‰½%•ª‰ñ•œ‚·‚é‚©")] public float HpRecoverRatio;
         [Header("HP‚ğ‰ñ•œ‚µ‚Ä‚©‚ç‰½•bŒã‚ÉƒV[ƒ“‘JˆÚ‚·‚é‚©")] public float FromHpRecoverDur;
         [Header("K.O. ‚Ì•¶š‚ğ‰½•b‚Å‰æ–Ê‚Ì’†‰›‚É‚Á‚Ä‚­‚é‚©")] public float KODur;
-        [Header("K.O.‚É‚È‚Á‚Ä‚©‚çA‰½•b‚ÅƒNƒŠƒbƒN‰Â”\‚É‚·‚é‚©")] public float OnKOClickDur;
+        [Header("K.O.‚É‚È‚Á‚Ä‚©‚çA‰½•b‚ÅŸ‚Ìˆ—‚ÉˆÚ‚é‚©")] public float OnKONextDur;
         [Space(25)]
         [Header("y‹““®ŠÖŒWz")] public BehaviourTable BehaviourTable;
         [Header("yƒ‰ƒCƒg‚Ì‰‰oŠÖŒWz")] public LightDirectionTable LightDirectionTable;

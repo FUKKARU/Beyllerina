@@ -8,21 +8,33 @@ namespace BaseSystem
     {
         public static class GameData
         {
-            static byte roundNum = 1;
-            public static byte RoundNum
+            static byte playableRoundNum = 0;
+            public static byte PlayableRoundNum
             {
                 get
                 {
-                    return roundNum;
+                    return playableRoundNum;
                 }
 
                 set
                 {
-                    roundNum = (byte)Mathf.Clamp(value, 1, GameSO.Entity.RoundNum);
+                    playableRoundNum = (byte)Mathf.Clamp(value, 0, GameSO.Entity.RoundNum);
                 }
             }
 
-            public static float PlayableHp { get; set; } = 1;
+            static byte unPlayableRoundNum = 0;
+            public static byte UnPlayableRoundNum
+            {
+                get
+                {
+                    return unPlayableRoundNum;
+                }
+
+                set
+                {
+                    unPlayableRoundNum = (byte)Mathf.Clamp(value, 0, GameSO.Entity.RoundNum);
+                }
+            }
         }
     }
 }
