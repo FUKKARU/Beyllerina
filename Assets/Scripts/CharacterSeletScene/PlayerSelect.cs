@@ -69,7 +69,7 @@ public class PlayerSelect : MonoBehaviour
             //è’ìÀÇµÇΩèÍçáè≠ÇµägëÂ
             ObjForScale.transform.localScale = new Vector3(ObjStartSize.x + ObjPlusSize.x, ObjStartSize.y + ObjPlusSize.y, ObjStartSize.z + ObjPlusSize.z);
             SpotLight01.transform.position = SpotLightVec;
-            BaseSystem.SoundManager.Instance.PlaySE(0);
+            //BaseSystem.SoundManager.Instance.PlaySE(0);
             Debug.Log("ëIÇÒÇ≈Ç≠ÇÍÇƒÇ†ÇËÇ™Ç∆Ç§ÅI");
 
         
@@ -89,7 +89,7 @@ public class PlayerSelect : MonoBehaviour
         //è’ìÀÇµÇ»Ç¢èÍçáå≥Ç…ñﬂÇÈ
         ObjForScale.transform.localScale = ObjStartSize;
         Debug.Log("Ç¶Ç¡...ëIÇÒÇ≈Ç≠ÇÍÇ»Ç¢ÇÃ");
-        BaseSystem.SoundManager.Instance.PlaySE(1);
+        //BaseSystem.SoundManager.Instance.PlaySE(1);
         
 
 
