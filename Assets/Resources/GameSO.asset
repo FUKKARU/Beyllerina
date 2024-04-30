@@ -18,6 +18,5 @@ MonoBehaviour:
     CharacterSelect: CharacterSelect
     Rotate: Rotate
     Game: Game
-    Win: Win
-    Lose: Lose
+    WinLose: Win_Lose
   NowLoadingTextDur: 0.25

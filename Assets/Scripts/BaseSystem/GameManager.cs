@@ -218,7 +218,8 @@ namespace BaseSystem
                 else
                 {
                     // 勝利シーンに遷移
-                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Win, true);
+                    GameData.GameData.IsWin = true;
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.WinLose, true);
                 }
             }
             else
@@ -237,7 +238,8 @@ namespace BaseSystem
                 else
                 {
                     // 敗北シーンに遷移
-                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
+                    GameData.GameData.IsWin = false;
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.WinLose, true);
                 }
             }
         }

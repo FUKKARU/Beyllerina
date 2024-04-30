@@ -35,6 +35,20 @@ namespace BaseSystem
                     unPlayableRoundNum = (byte)Mathf.Clamp(value, 0, GameSO.Entity.RoundNum);
                 }
             }
+
+            static bool isWin = true;
+            public static bool IsWin
+            {
+                get
+                {
+                    return isWin;
+                }
+
+                set
+                {
+                    isWin = value;
+                }
+            }
         }
     }
 }

@@ -44,6 +44,5 @@ public class SceneNameTable
     [Header("ƒLƒƒƒ‰‘I‘ğ")] public string CharacterSelect;
     [Header("‰ñ“]")] public string Rotate;
     [Header("ƒQ[ƒ€")] public string Game;
-    [Header("Ÿ—˜")] public string Win;
-    [Header("”s–k")] public string Lose;
+    [Header("Ÿ—˜/”s–k")] public string WinLose;
 }

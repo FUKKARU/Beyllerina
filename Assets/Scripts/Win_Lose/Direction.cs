@@ -6,6 +6,9 @@ namespace Win_Lose
 {
     public class Direction : MonoBehaviour
     {
+        [SerializeField] GameObject Playable;
+        [SerializeField] GameObject UnPlayable;
+
         GameObject cam;
 
         Vector3 startPos, endPos;
@@ -15,6 +18,15 @@ namespace Win_Lose
 
         void Start()
         {
+            if (BaseSystem.GameData.GameData.IsWin)
+            {
+                UnPlayable.SetActive(false);
+            }
+            else
+            {
+                Playable.SetActive(false);
+            }
+
             cam = Camera.main.gameObject;
 
             startPos = WinLoseSO.Entity.CameraDir.StartPosition;
