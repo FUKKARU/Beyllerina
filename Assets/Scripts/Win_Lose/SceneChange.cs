@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Win
+namespace Win_Lose
 {
     public class SceneChange : MonoBehaviour
     {
