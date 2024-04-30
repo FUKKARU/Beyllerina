@@ -36,7 +36,7 @@ namespace BaseSystem
         [Header("スキルのクールタイムGauge")] public Image SkillCooltimeGauge;
         [Header("必殺技のクールタイムGauge")] public Image SpecialCooltimeGauge;
         [Header("必殺技のGauge")] public Image SpecialGauge;
-        [Header("ラウンドUI")] public GameObject RoundUI;
+        [Header("ラウンド数（プレイアブル/アンプレイアブル）")] public TextMeshProUGUI[] RoundUI;
         [Header("KOしたUI")] public GameObject KO_UI;
         [Header("KOされたUI")] public GameObject KOed_UI;
         [Header("プレイアブルの名前UI")] public GameObject PlayableNameUI;
@@ -57,24 +57,14 @@ namespace BaseSystem
 
         [NonSerialized] public bool IsGameResultJudged = false; // 勝利/敗北の処理を、行っている/行ったかどうか
 
-        Image[] roundUIs = new Image[3];
-
         void Start()
         {
             P_Pm = Beys[0].GetComponent<PlayerMove>();
             U_Pm = Beys[1].GetComponent<PlayerMove>();
 
-            for (int i = 0; i < 3; i++)
-            {
-                roundUIs[i] = RoundUI.transform.GetChild(i).GetComponent<Image>();
-            }
-
-            for (int i = 0; i < GameData.GameData.RoundNum; i++)
-            {
-                roundUIs[i].enabled = false;
-            }
-
             rapier_effect_parent = GameObject.FindGameObjectWithTag("rapier_effect_parent").transform;
+
+            ShowRoundNum(GameData.GameData.PlayableRoundNum, GameData.GameData.UnPlayableRoundNum);
         }
 
         void Update()
@@ -88,6 +78,24 @@ namespace BaseSystem
             // 名前UIの表示
             NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, PlayerSO.Entity.NameUIOffset);
             NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, PlayerSO.Entity.NameUIOffset);
+        }
+
+
+        void ShowRoundNum(byte pNum, byte uNum)
+        {
+            RoundUI[0].text = pNum.ToString();
+            RoundUI[1].text = uNum.ToString();
+
+            if ((GameData.GameData.PlayableRoundNum >= GameSO.Entity.RoundNum - 1) || (GameData.GameData.UnPlayableRoundNum >= GameSO.Entity.RoundNum - 1))
+            {
+                RoundUI[0].color = Color.yellow;
+                RoundUI[1].color = Color.yellow;
+            }
+            else
+            {
+                RoundUI[0].color = Color.white;
+                RoundUI[1].color = Color.white;
+            }
         }
 
         void ChangeBarsFillAmount()
@@ -138,12 +146,12 @@ namespace BaseSystem
             nameUI.transform.rotation = Quaternion.AngleAxis(180, nameUI.transform.up) * nameUI.transform.rotation;
         }
 
-        #region 勝利/敗北
+        #region KO/KOed
 
         /// <summary>
-        /// プレイアブルが勝利
+        /// プレイアブルがKO
         /// </summary>
-        public void Win()
+        public void KO()
         {
             if (!IsGameResultJudged)
             {
@@ -154,9 +162,9 @@ namespace BaseSystem
         }
 
         /// <summary>
-        /// プレイアブルが敗北
+        /// プレイアブルがKOed
         /// </summary>
-        public void Lose()
+        public void KOed()
         {
             if (!IsGameResultJudged)
             {
@@ -166,12 +174,12 @@ namespace BaseSystem
             }
         }
 
-        IEnumerator KOBehaviour(bool ifWin)
+        IEnumerator KOBehaviour(bool isKO)
         {
             // KOの演出
             const int CANVAS_WIDTH = 800;
-            GameObject koUi = ifWin ? KO_UI : KOed_UI;
-            RectTransform trans =  koUi.GetComponent<RectTransform>();
+            GameObject koUi = isKO ? KO_UI : KOed_UI;
+            RectTransform trans = koUi.GetComponent<RectTransform>();
             float d = PlayerSO.Entity.KODur;
             float time = 0;
             while (true)
@@ -194,31 +202,18 @@ namespace BaseSystem
                 yield return null;
             }
 
-            yield return new WaitForSeconds(PlayerSO.Entity.OnKOClickDur);
-
-            while (true)
+            if (isKO)
             {
-                if (IA.InputGetter.Instance.IsSelect)
+                // ラウンド数を増やす
+                GameData.GameData.PlayableRoundNum += 1;
+                ShowRoundNum(GameData.GameData.PlayableRoundNum, GameData.GameData.UnPlayableRoundNum);
+
+                yield return new WaitForSeconds(PlayerSO.Entity.OnKONextDur);
+
+                if (GameData.GameData.PlayableRoundNum < GameSO.Entity.RoundNum)
                 {
-                    break;
-                }
-
-                yield return null;
-            }
-
-            Vector3 p3 = trans.localPosition;
-            p3.x = CANVAS_WIDTH;
-            trans.localPosition = p3;
-
-            if (ifWin)
-            {
-                if (GameData.GameData.RoundNum < GameSO.Entity.RoundNum)
-                {
-                    // ラウンド数を増やす
-                    GameData.GameData.RoundNum += 1;
-
-                    // HPを戻し、次ラウンドのシーンに遷移する
-                    StartCoroutine(WinBehaviour());
+                    // 次ラウンドのシーンに遷移
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
                 }
                 else
                 {
@@ -228,22 +223,23 @@ namespace BaseSystem
             }
             else
             {
-                // 敗北シーンに遷移
-                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
+                // ラウンド数を増やす
+                GameData.GameData.UnPlayableRoundNum += 1;
+                ShowRoundNum(GameData.GameData.PlayableRoundNum, GameData.GameData.UnPlayableRoundNum);
+
+                yield return new WaitForSeconds(PlayerSO.Entity.OnKONextDur);
+
+                if (GameData.GameData.UnPlayableRoundNum < GameSO.Entity.RoundNum)
+                {
+                    // 次ラウンドのシーンに遷移
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
+                }
+                else
+                {
+                    // 敗北シーンに遷移
+                    LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Lose, true);
+                }
             }
-        }
-
-        IEnumerator WinBehaviour()
-        {
-            // HPを戻す演出
-            yield return new WaitForSeconds(PlayerSO.Entity.UntilHpRecoverDur);
-            P_Pm.Hp += (P_Pm.S_SOI.Hp - P_Pm.Hp) * PlayerSO.Entity.HpRecoverRatio / 100;
-            PlayableBar.fillAmount = P_Pm.Hp / P_Pm.S_SOI.Hp;
-            GameData.GameData.PlayableHp = P_Pm.Hp; // シーン遷移前のHpを記録しておく
-            yield return new WaitForSeconds(PlayerSO.Entity.FromHpRecoverDur);
-
-            // 次ラウンドのシーンに遷移
-            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
         }
         #endregion
 

@@ -24,7 +24,14 @@ namespace BaseSystem
 
         private void Start()
         {
-            PlayBGM(GameData.GameData.RoundNum);
+            if ((GameData.GameData.PlayableRoundNum >= GameSO.Entity.RoundNum -1)|| (GameData.GameData.UnPlayableRoundNum >= GameSO.Entity.RoundNum - 1))
+            {
+                PlayBGM(true);
+            }
+            else
+            {
+                PlayBGM(false);
+            }
         }
 
         /// <summary>
@@ -95,11 +102,11 @@ namespace BaseSystem
             }
         }
 
-        public void PlayBGM(byte roundNum)
+        public void PlayBGM(bool isReach)
         {
-            AudioClip clip = (roundNum == GameSO.Entity.RoundNum) ? bgmClips[1] : bgmClips[0];
+            AudioClip clip = isReach ? bgmClips[1] : bgmClips[0];
             bgmSource.clip = clip;
-            bgmSource.volume = (roundNum == GameSO.Entity.RoundNum) ? 0.125f : 0.25f;
+            bgmSource.volume = isReach ? 0.125f : 0.25f;
             bgmSource.Play();
         }
     }
