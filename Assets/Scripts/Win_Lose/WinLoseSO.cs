@@ -35,6 +35,7 @@ namespace Win_Lose
         #endregion
 
         [Header("yƒJƒƒ‰‚Ì‰‰oŠÖŒWz")] public CameraDirectionTable CameraDir;
+        [Header("Victory/Defeat ‚ÌUI‚ªA‰½•b‚Å‰æ–Ê’†‰›‚É‚­‚é‚©")] public float ResultUIDur;
     }
 
     [Serializable]

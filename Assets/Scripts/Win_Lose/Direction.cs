@@ -1,30 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Win_Lose
 {
     public class Direction : MonoBehaviour
     {
-        [SerializeField] GameObject Playable;
-        [SerializeField] GameObject UnPlayable;
+        [SerializeField] GameObject playable;
+        [SerializeField] GameObject unPlayable;
+        [SerializeField] GameObject victoryUI;
+        [SerializeField] GameObject defeatUI;
 
         GameObject cam;
 
         Vector3 startPos, endPos;
         Quaternion startRot, endRot;
 
-        float time = 0;
-
         void Start()
         {
             if (BaseSystem.GameData.GameData.IsWin)
             {
-                UnPlayable.SetActive(false);
+                unPlayable.SetActive(false);
             }
             else
             {
-                Playable.SetActive(false);
+                playable.SetActive(false);
             }
 
             cam = Camera.main.gameObject;
@@ -36,25 +37,39 @@ namespace Win_Lose
 
             cam.transform.position = startPos;
             cam.transform.rotation = startRot;
+
+            StartCoroutine(CameraDirection());
         }
 
-        void Update()
+        IEnumerator CameraDirection()
         {
-            float d = WinLoseSO.Entity.CameraDir.Duration;
+            float d0 = WinLoseSO.Entity.CameraDir.Duration;
+            float t0 = 0;
 
-            if (time < d)
+            while (t0 < d0)
             {
-                float t = time / d;
+                float _t0 = t0 / d0;
 
-                cam.transform.position = Vector3.Slerp(startPos, endPos, t);
-                cam.transform.rotation = Quaternion.Slerp(startRot, endRot, t);
+                cam.transform.position = Vector3.Slerp(startPos, endPos, _t0);
+                cam.transform.rotation = Quaternion.Slerp(startRot, endRot, _t0);
 
-                time += Time.deltaTime;
+                t0 += Time.deltaTime;
+
+                yield return null;
             }
-            else
+
+            cam.transform.position = endPos;
+            cam.transform.rotation = endRot;
+
+            RectTransform resultUI = ((BaseSystem.GameData.GameData.IsWin) ? victoryUI : defeatUI).GetComponent<RectTransform>();
+            float d1 = WinLoseSO.Entity.ResultUIDur;
+            float t1 = 0;
+
+            while (t1 < d1)
             {
-                cam.transform.position = endPos;
-                cam.transform.rotation = endRot;
+                //resultUI.
+
+                yield return null;
             }
         }
     }
