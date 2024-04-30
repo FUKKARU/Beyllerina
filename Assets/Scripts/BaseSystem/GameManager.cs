@@ -172,6 +172,8 @@ namespace BaseSystem
 
                 StartCoroutine(KOBehaviour(false));
             }
+
+            SoundManager.Instance.PlaySE(10);
         }
 
         IEnumerator KOBehaviour(bool isKO)

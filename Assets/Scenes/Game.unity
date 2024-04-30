@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.024933089, g: 0.028948996, b: 0.03506753, a: 1}
+  m_IndirectSpecularColor: {r: 0.025329752, g: 0.02893129, b: 0.034647096, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1212,18 +1212,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clips:
   - {fileID: 8300000, guid: ab7fe59dd285fb143b8f5287c9d51a43, type: 3}
-  - {fileID: 8300000, guid: 179fd7e878782344eafe672bce2b222a, type: 3}
+  - {fileID: 8300000, guid: 6e9073a6d7eed8e4ab1f7441aca57d00, type: 3}
   - {fileID: 8300000, guid: fb9fe4295d9fc664fb2fce59b95f6d29, type: 3}
-  - {fileID: 8300000, guid: ff2802982f933074a919c75ab17b7611, type: 3}
+  - {fileID: 8300000, guid: 6e9073a6d7eed8e4ab1f7441aca57d00, type: 3}
   - {fileID: 8300000, guid: 6458cd9659e586a4f832f6ddd3f852da, type: 3}
   - {fileID: 8300000, guid: afa31f426e010c1408ce07f63c6508af, type: 3}
   - {fileID: 8300000, guid: e34d919621863e941b326b6080ca0d17, type: 3}
   - {fileID: 8300000, guid: 81db0394720cd6740a299405450590a7, type: 3}
   - {fileID: 8300000, guid: 424c8c7434888684eb39da599c381ca2, type: 3}
   - {fileID: 8300000, guid: 32f6299fd43bc3746be61a311a841304, type: 3}
+  - {fileID: 8300000, guid: 2a65c88a7e18e044cb782d076dca2ee7, type: 3}
+  - {fileID: 8300000, guid: 66d881606e767ed47ab54a27b8d98454, type: 3}
+  - {fileID: 8300000, guid: b54229f4316313e43ac7f70eddf1d897, type: 3}
+  - {fileID: 8300000, guid: f05854d3395b8044da9608432f6c7f00, type: 3}
+  - {fileID: 8300000, guid: a2afda2d8da579344a0c9b58c335b190, type: 3}
   bgmClips:
   - {fileID: 8300000, guid: 503d92a0bd01a514b8be258d692c2267, type: 3}
   - {fileID: 8300000, guid: f9ffd0c12c4ce1e4b93c6eed8e581edf, type: 3}
+  - {fileID: 8300000, guid: ea4b69939500ac644a631c113e37ac6b, type: 3}
+  - {fileID: 8300000, guid: f168ee57c8857744caacb45305821300, type: 3}
   seSource: {fileID: 1281885790}
   bgmSource: {fileID: 391625801}
 --- !u!4 &427253365
