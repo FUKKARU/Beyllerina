@@ -45,14 +45,14 @@ namespace IA
         #endregion
 
         #region 変数宣言
-        public bool IsPush { get; set; } = false;
-        public bool IsCounter { get; set; } = false;
-        public bool IsSkill { get; set; } = false;
-        public bool IsSpecial { get; set; } = false;
-        public Vector2 ValueRotate { get; set; } = Vector2.zero;
-        public bool IsSelect { get; set; } = false;
-        public bool IsCancel { get; set; } = false;
-        public bool IsQuit { get; set; } = false;
+        public bool IsPush { get; private set; } = false;
+        public bool IsCounter { get; private set; } = false;
+        public bool IsSkill { get; private set; } = false;
+        public bool IsSpecial { get; private set; } = false;
+        public Vector2 ValueRotate { get; private set; } = Vector2.zero;
+        public bool IsSelect { get; private set; } = false;
+        public bool IsCancel { get; private set; } = false;
+        public bool IsQuit { get; private set; } = false;
         #endregion
 
         #region【LateUpdate】毎フレームの最後で、フラグを初期化する
@@ -89,7 +89,7 @@ namespace IA
                 _inputs.System.Select.performed += OnSelect;
 
                 _inputs.System.Cancel.performed += OnCancel;
-                
+
                 _inputs.System.Quit.performed += OnQuit;
             }
             else
@@ -128,12 +128,12 @@ namespace IA
 
         void OnSkill(InputAction.CallbackContext context)
         {
-            IsSkill = true;   
+            IsSkill = true;
         }
 
         void OnSpecial(InputAction.CallbackContext context)
         {
-            IsSpecial = true;   
+            IsSpecial = true;
         }
 
         void ReadRotate(InputAction.CallbackContext context)
