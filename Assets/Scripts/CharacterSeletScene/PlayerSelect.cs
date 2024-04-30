@@ -21,6 +21,7 @@ public class PlayerSelect : MonoBehaviour
     [SerializeField]
     private float SpotLightHigh = 1.0f;
 
+    bool isBallerinaSelected = false;
 
 
 
@@ -36,24 +37,32 @@ public class PlayerSelect : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Cancel001"))
+        if (isBallerinaSelected && IA.InputGetter.Instance.IsSelect)
         {
+            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
+        }
+
+        //if (Input.GetButton("Cancel001"))
+        //{
             
 
-            GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
-            childUI.SetActive(false);
+        //    GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
+        //    childUI.SetActive(false);
 
-            Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.lockState = CursorLockMode.Locked;
 
 
-        }
+        //}
     }
     private void OnCollisionEnter(Collision collision)
     {
         
         if (collision.gameObject.CompareTag("MainCamera"))
         {
-
+            if (gameObject.name == "ballerina_sit")
+            {
+                isBallerinaSelected = true;
+            }
             SpotLightVec = new Vector3(ObjForScale.transform.position.x, ObjForScale.transform.position.y + SpotLightHigh, ObjForScale.transform.position.z);
             Debug.Log("ìñÇΩÇ¡ÇƒÇ¢ÇÈÇÊÅI");
             //è’ìÀÇµÇΩèÍçáè≠ÇµägëÂ
@@ -70,7 +79,10 @@ public class PlayerSelect : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-
+        if (gameObject.name == "ballerina_sit")
+        {
+            isBallerinaSelected = false;
+        }
         SpotLightVec = new Vector3(0, 0, 0);
         //è’ìÀÇµÇ»Ç¢èÍçáå≥Ç…ñﬂÇÈ
         ObjForScale.transform.localScale = ObjStartSize;

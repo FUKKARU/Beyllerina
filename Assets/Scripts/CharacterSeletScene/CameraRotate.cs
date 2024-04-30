@@ -28,8 +28,9 @@ public class CameraRotate : MonoBehaviour
     void Update()
     {
         // Debug.Log(Input.GetAxis(ÅgMouse XÅh));
-        float h = Input.GetAxis("Mouse X");
-        float v = Input.GetAxis("Mouse Y");
+        Vector2 val = IA.InputGetter.Instance.ValueDirection;
+        float h = -val.x;
+        float v = -val.y;
         side += h * speed;
         ver += v * speed;
 
