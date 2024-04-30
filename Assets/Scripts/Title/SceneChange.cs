@@ -4,8 +4,16 @@ using UnityEngine;
 
 namespace Title
 {
+
+
     public class SceneChange : MonoBehaviour
     {
+        void Awake()
+        {
+            IA.InputGetter.Instance.IsSelect = false;
+            IA.InputGetter.Instance.IsSelect = false;
+        }
+
         void Update()
         {
             if (IA.InputGetter.Instance.IsSelect)
@@ -21,5 +29,17 @@ namespace Title
 #endif
             }
         }
+
+        public void QuitGame()
+        {
+            IA.InputGetter.Instance.IsQuit = true;
+        }
+
+        public void StartGame()
+        {
+            IA.InputGetter.Instance.IsSelect = true;
+        }
     }
+
+
 }
