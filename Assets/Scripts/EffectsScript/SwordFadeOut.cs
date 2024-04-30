@@ -16,6 +16,7 @@ public class SwordFadeOut : MonoBehaviour
     {
         if (fadeOutRequest && !effectStart)
         {
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             myMaterial = GetComponent<MeshRenderer>().material;
             StartCoroutine(FadeOut(myMaterial, 0, shaderVarRate, shaderVarRefreshRate));
             effectStart = true;
