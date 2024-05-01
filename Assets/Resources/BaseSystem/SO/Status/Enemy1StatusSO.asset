@@ -28,7 +28,7 @@ MonoBehaviour:
       Skill2PushIntervalOffset: 5
       HpBarChangeSpeed: 0.1
     StatusTableInitStatus:
-      Hp: 100
+      Hp: 200
       Weight: 1
       RotationSpeed: 1800
       PushPower: 10

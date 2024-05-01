@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dbg:
     IsShowNormalLog: 0
-    IsBeyMovable: 1
     P_DamageMul: 0
     U_DamageMul: 0
     P_DamageImmune: 0
@@ -49,7 +48,7 @@ MonoBehaviour:
     MinPowerOnKnockbacked: 15
     KnockbackResistanceCoefOnCounter: 100
     Duration2IdleOnPushFailed: 0.3
-    Duration2IdleOnCounterFailed: 0.3
+    Duration2IdleOnCounterFailed: 0.5
     Duration2IdleWhenKnockbacked: 1
     CooltimeBehaviourInterval: 0.025
     GaugeAOnCooltime: 100
@@ -68,14 +67,14 @@ MonoBehaviour:
     LightSpecialColor: {r: 1, g: 0, b: 0, a: 1}
     LampSpecialIntensity: 0.25
   DamageTable:
-    DamagableDuration: 0.1
+    DamagableDuration: 0.5
     MinDamage: 0
     MaxDamage: 100
     StateAdjustValue:
-    - 1
     - 0.5
+    - 0.25
     - 0
-    - 2
+    - 5
     DamageCoef: 0.1
     MrkAdjustValueY: 1.5
     MrkAdjustValueX: 0.5

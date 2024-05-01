@@ -34,10 +34,10 @@ MonoBehaviour:
       PushPower: 10
       KnockbackResistance: 0.1
       SpecialPoint: 100
-      PushCooltime: 5
-      CounterCooltime: 10
-      SkillCooltime: 20
-      SpecialCooltime: 45
+      PushCooltime: 3
+      CounterCooltime: 3
+      SkillCooltime: 8
+      SpecialCooltime: 15
   SkillPushPowerCoef: 8.5
   SkillRiseDur: 1
   SkillRiseHeight: 0.015
