@@ -107,10 +107,11 @@ public class BackGr_Respown : MonoBehaviour
 
         if (transform.position.x >= DestroyX)
         {
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
+            Destroy(this.gameObject, 2f);
         }
     }
 
-  
 
+    
 }

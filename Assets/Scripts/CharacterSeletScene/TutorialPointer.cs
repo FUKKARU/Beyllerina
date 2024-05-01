@@ -7,11 +7,14 @@ using TMPro;
 
 public class TutorialPointer : MonoBehaviour
 {
-    [SerializeField] GameObject PageText;
-    [SerializeField] GameObject cursor;
+    [SerializeField] GameObject PageText, AllPageText, AllAboutTutorial;
+    [SerializeField] GameObject cursor, NoForwardButton, NoBehindButton, Chikuonki, Barellia01, CameraRotateScri;
     [SerializeField] GameObject[] TutorialPage;
     [SerializeField] int Page = 0;
     const float cursorSpeed = 6.5f;
+    [SerializeField] AudioClip ClickSound;
+    AudioSource audioSource;
+
     bool EveryFlag;
     
     [SerializeField] GameObject ForwardButton;
@@ -21,8 +24,13 @@ public class TutorialPointer : MonoBehaviour
     [SerializeField] GameObject ToBehindButton;
     bool hover_ToBehindButton;
 
+    private void Start()
+    {
+        audioSource = Chikuonki.GetComponent<AudioSource>();
+    }
     private void Update()
     {
+        int PageForText = Page + 1;
         TextMeshProUGUI text = PageText.GetComponent<TextMeshProUGUI>();
         Vector3 val = IA.InputGetter.Instance.ValueDirection;
         
@@ -34,8 +42,8 @@ public class TutorialPointer : MonoBehaviour
         //Debug.Log(cPos);
         cursor.transform.position = cPos;
         InputMethod();
-        text.text = Page.ToString("0");
-        Debug.Log(Page.ToString("0"));
+        text.text = PageForText.ToString("0");
+        //Debug.Log(Page.ToString("0"));
 
     }
     
@@ -55,13 +63,75 @@ public class TutorialPointer : MonoBehaviour
 
             }
 
+
+            for (int i = 0; i < TutorialPage.Length; i++)
+            {
+
+                TutorialPage[i].gameObject.SetActive(false);
+
+                if (Page < TutorialPage.Length)
+                {
+                    TutorialPage[Page].gameObject.SetActive(true);
+                }
+
+
+            }
+
+
         }
 
         if (IA.InputGetter.Instance.IsCancel)
         {
             Page --;
-            
+
+            for (int i = 0; i < TutorialPage.Length; i++)
+            {
+                TutorialPage[i].gameObject.SetActive(false);
+                TutorialPage[Page].gameObject.SetActive(true);
+
+
+            }
+
         }
+
+        if (Page == 3)
+        {
+            
+            PageText.SetActive(false);
+            AllPageText.SetActive(false);
+            Barellia01.SetActive(true);
+            AllAboutTutorial.SetActive(false);
+            CameraRotateScri.GetComponent<CameraRotate>().enabled = true;
+            this.enabled = false;
+
+        }
+
+        if (Page >= 2)
+        {
+            NoForwardButton.SetActive(true);
+            ForwardButton.SetActive(false);
+        }
+        else
+        {
+            NoForwardButton.SetActive(false);
+            ForwardButton.SetActive(true);
+
+        }
+
+        if (Page <= 0)
+        {
+            NoBehindButton.SetActive(true);
+            ToBehindButton.SetActive(false);
+
+        }
+        else
+        {
+            NoBehindButton.SetActive(false);
+            ToBehindButton.SetActive(true);
+
+        }
+
+        
 
     }
 
@@ -72,7 +142,7 @@ public class TutorialPointer : MonoBehaviour
         
         if (collision.gameObject.name == "ForwardButton")
         {
-
+            audioSource.PlayOneShot(ClickSound);
             /*
             Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊÅI");
             ForwardButton.GetComponent<SpriteRenderer>().sprite = ForwardButtonHover;
@@ -83,6 +153,7 @@ public class TutorialPointer : MonoBehaviour
         }
         else if (collision.gameObject.name == "ToBehindButton")
         {
+            audioSource.PlayOneShot(ClickSound);
             /*
             Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊÅI");
             ToBehindButton.GetComponent<SpriteRenderer>().sprite = ToBehindButtonHover;
@@ -96,7 +167,7 @@ public class TutorialPointer : MonoBehaviour
         {
             
         }
-        else if (collision.gameObject.name == "NoForwardButton")
+        else if (collision.gameObject.name == "NoBehindButton")
         {
             
         }
@@ -143,8 +214,8 @@ public class TutorialPointer : MonoBehaviour
             
         }
 
-        Debug.Log(Page);
-        BaseSystem.SoundManager.Instance.PlaySE(0);
+        //Debug.Log(Page);
+        
 
     }
 
@@ -159,8 +230,8 @@ public class TutorialPointer : MonoBehaviour
 
             
         }
-        Debug.Log(Page);
-        BaseSystem.SoundManager.Instance.PlaySE(0);
+        //Debug.Log(Page);
+        
 
     }
 }

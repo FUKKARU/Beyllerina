@@ -29,8 +29,8 @@ public class CameraRotate : MonoBehaviour
     [SerializeField] GameObject angleDetector;
     void Update()
     {
-        if (tutorial.tutorailFin)
-        {
+        //if (tutorial.tutorailFin)
+        //{
             Physics.Raycast(angleDetector.transform.position, Vector3.up, out RaycastHit hit, 6.0f);
             Vector2 val = IA.InputGetter.Instance.ValueDirection;
             float h = -val.x;
@@ -54,7 +54,7 @@ public class CameraRotate : MonoBehaviour
 
 
             transform.rotation = Quaternion.Euler(ver, -side, 0f);
-        }
+       // }
 
 
     }

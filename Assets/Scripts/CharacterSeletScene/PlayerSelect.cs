@@ -131,7 +131,7 @@ public class PlayerSelect : MonoBehaviour
         GameObject childUI = ObjForScale.transform.GetChild(1).gameObject;
        
         
-        if (Input.GetButton("Decide"))
+        if (IA.InputGetter.Instance.IsSelect)
         {
             
             //Debug.Log("ç∂ÉNÉäÉbÉNêÑÇµÇΩÇÊ");
@@ -146,7 +146,7 @@ public class PlayerSelect : MonoBehaviour
             childUI.SetActive(true);
 
 
-            Cursor.lockState = CursorLockMode.None;
+            
 
         }
 
