@@ -16,6 +16,8 @@ namespace Title
         bool hover_playButton;
         void PlayButton()
         {
+            BaseSystem.GameData.GameData.PlayableRoundNum = 0;
+            BaseSystem.GameData.GameData.UnPlayableRoundNum = 0;
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.CharacterSelect, true);
 
             BaseSystem.SoundManager.Instance.PlaySE(0);
