@@ -23,6 +23,10 @@ TagManager:
   - EXIT_Button_Check_cancelButton
   - EXIT_Button_Check_YesButton
   - CharacterSelect_Ballerina
+  - BackGroundsTree
+  - BackGroundsUekomi
+  - BackGroundsOkunoTree
+  - BackGroundsMShadow
   layers:
   - Default
   - TransparentFX

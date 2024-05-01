@@ -9,7 +9,7 @@ public class PlayerSelect : MonoBehaviour
     [SerializeField]
     private Transform Camera; //カメラの位置情報を取得
     [SerializeField]
-    private GameObject ObjForScale,  SpotLight01, SpotLight1P, SpotLight2P;
+    private GameObject ObjForScale,  SpotLight01, SpotLight1P, SpotLight2P, Chikuonki;
     [SerializeField]
     private Vector3 Rotate = new Vector3(0, 50f, 0); //yの値が一秒ごと回転する角度（つまり、あげれば回転速度が早くなる）
     [SerializeField]
@@ -20,6 +20,8 @@ public class PlayerSelect : MonoBehaviour
     private Vector3 ObjPlusSize = new Vector3(0.15f, 0.15f, 0.15f); //選択後のオブジェクトのサイズの増分
     [SerializeField]
     private float SpotLightHigh = 1.0f;
+    [SerializeField] AudioClip ClickSound;
+    AudioSource audioSource;
 
     bool isBallerinaSelected = false;
 
@@ -36,7 +38,7 @@ public class PlayerSelect : MonoBehaviour
 
     private void Start()
     {
-
+        audioSource = Chikuonki.GetComponent<AudioSource>();
         changeSceneOnce = false;
         ObjForScale.transform.localScale = ObjStartSize;
         characterDate = FindObjectOfType<CharaGameManager>().GetCharacterDate();
@@ -88,6 +90,7 @@ public class PlayerSelect : MonoBehaviour
             if (gameObject.CompareTag("CharacterSelect_Ballerina"))
             {
                 isBallerinaSelected = true;
+                audioSource.PlayOneShot(ClickSound);
             }
             SpotLightVec = new Vector3(ObjForScale.transform.position.x, ObjForScale.transform.position.y + SpotLightHigh, ObjForScale.transform.position.z);
             //Debug.Log("当たっているよ！");
@@ -101,7 +104,7 @@ public class PlayerSelect : MonoBehaviour
         
         }
 
-
+        
         
     }
 
@@ -111,7 +114,8 @@ public class PlayerSelect : MonoBehaviour
         {
             isBallerinaSelected = false;
         }
-        SpotLightVec = new Vector3(0, 0, 0);
+        
+        SpotLight01.transform.position = new Vector3(0,0,0);
         //衝突しない場合元に戻る
         ObjForScale.transform.localScale = ObjStartSize;
         //Debug.Log("えっ...選んでくれないの");
