@@ -331,7 +331,7 @@ namespace BaseSystem
             if (collision.gameObject.CompareTag(P_SO.BeyTagName) && isDamageManager)
             {
                 CameraS_B.ShakeOn();
-                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2, Quaternion.identity, hit_effect_parent);
+                Instantiate(hitEffect, (gameObject.transform.position + collision.gameObject.transform.position) / 2 + new Vector3(0,1,0), Quaternion.identity, hit_effect_parent);
                 if (isDamagable && (!IsSpecialDirection && !opponentPm.IsSpecialDirection) && (!IsSkillDirection && !opponentPm.IsSkillDirection))
                 {
                     isDamagable = false;
