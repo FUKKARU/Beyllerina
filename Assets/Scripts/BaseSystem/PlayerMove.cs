@@ -1277,15 +1277,18 @@ namespace BaseSystem
             float interval = P_SOB.CooltimeBehaviourInterval;
 
             gm.SpecialCooltimeGauge.fillAmount = 1f;
+            gm.SpecialCooltimeText.enabled = true;
 
             while (time >= 0f)
             {
                 gm.SpecialCooltimeGauge.fillAmount = time / ct;
+                gm.SpecialCooltimeText.text = time.ToString("F1");
                 yield return new WaitForSeconds(interval);
                 time -= interval;
             }
 
             gm.SpecialCooltimeGauge.fillAmount = 0f;
+            gm.SpecialCooltimeText.enabled = false;
 
             isOnSpecialCooltime = false;
         }
@@ -1294,15 +1297,15 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                gm.SpecialGauge.fillAmount = specialPoint / (float)maxSpecialPoint;
+                gm.SpecialChargingGauge.fillAmount = specialPoint / (float)maxSpecialPoint;
                 if (specialPoint == maxSpecialPoint && !isOnSpecialCooltime)
                 {
                     // •KŽE‹Z‚ª”­“®‚Å‚«‚é‚±‚Æ‚ð’m‚ç‚¹‚é
-                    gm.SpecialGauge.color = Color.yellow;
+                    gm.SpecialGauge.enabled = true;
                 }
                 else
                 {
-                    gm.SpecialGauge.color = Color.green;
+                    gm.SpecialGauge.enabled = false;
                 }
             }
         }
