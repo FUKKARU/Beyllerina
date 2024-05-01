@@ -1122,7 +1122,8 @@ AudioSource:
   m_GameObject: {fileID: 391625800}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1939555429322767513, guid: 27207b183d3290440ad203faacd6d260,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.25
@@ -2469,7 +2470,8 @@ AudioSource:
   m_GameObject: {fileID: 1281885789}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 70599053867870222, guid: 27207b183d3290440ad203faacd6d260,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -4210,10 +4212,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 911802395557777427, guid: d1dbee4239bdda445975311c4f8db8c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2425564472654217331, guid: d1dbee4239bdda445975311c4f8db8c0,
         type: 3}
       propertyPath: m_Name
       value: AudioVolumeChanger
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563275545493546977, guid: d1dbee4239bdda445975311c4f8db8c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007636958545983492, guid: d1dbee4239bdda445975311c4f8db8c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8392147340936074936, guid: d1dbee4239bdda445975311c4f8db8c0,
         type: 3}

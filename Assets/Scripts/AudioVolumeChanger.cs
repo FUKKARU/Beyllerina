@@ -5,12 +5,18 @@ using UnityEngine;
 
 public class AudioVolumeChanger : MonoBehaviour
 {
-    TextMeshProUGUI volumeText;
-    float textShowTime = 0f; // 減っていく
+    TextMeshProUGUI bgmVolumeText;
+    TextMeshProUGUI seVolumeText;
+    TextMeshProUGUI systemVolumeText;
+    float bgmTextShowTime = 0f; // 減っていく
+    float seTextShowTime = 0f; // 減っていく
+    float systemTextShowTime = 0f; // 減っていく
 
     void Start()
     {
-        volumeText = transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        bgmVolumeText = transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        seVolumeText = transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
+        systemVolumeText = transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -18,57 +24,81 @@ public class AudioVolumeChanger : MonoBehaviour
         // BGM
         if (Input.GetKey(KeyCode.Alpha1))
         {
-            ChangeAudioVolume(AudioSO.AudioType.BGM);
+            string paramName = AudioSO.Entity.GetAudioParam(AudioSO.AudioType.BGM);
+
+            AudioSO.Entity.AudioMixer.GetFloat(paramName, out float volume);
+            if (Input.GetKeyDown(KeyCode.UpArrow)) volume += AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else if (Input.GetKeyDown(KeyCode.DownArrow)) volume -= AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else return; // ここで処理を終了
+            volume = Mathf.Clamp(volume, -80f, 20f);
+            AudioSO.Entity.AudioMixer.SetFloat(paramName, volume);
+
+            bgmTextShowTime = AudioSO.Entity.VolumeTextShowDur;
+            bgmVolumeText.text = volume.ToString("F1"); // 小数第一位まで
+            bgmVolumeText.enabled = true;
         }
         // SE
         else if (Input.GetKey(KeyCode.Alpha2))
         {
-            ChangeAudioVolume(AudioSO.AudioType.SE);
+            string paramName = AudioSO.Entity.GetAudioParam(AudioSO.AudioType.SE);
+
+            AudioSO.Entity.AudioMixer.GetFloat(paramName, out float volume);
+            if (Input.GetKeyDown(KeyCode.UpArrow)) volume += AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else if (Input.GetKeyDown(KeyCode.DownArrow)) volume -= AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else return; // ここで処理を終了
+            volume = Mathf.Clamp(volume, -80f, 20f);
+            AudioSO.Entity.AudioMixer.SetFloat(paramName, volume);
+
+            seTextShowTime = AudioSO.Entity.VolumeTextShowDur;
+            seVolumeText.text = volume.ToString("F1"); // 小数第一位まで
+            seVolumeText.enabled = true;
         }
         // System
         else if (Input.GetKey(KeyCode.Alpha3))
         {
-            ChangeAudioVolume(AudioSO.AudioType.SYSTEM);
+            string paramName = AudioSO.Entity.GetAudioParam(AudioSO.AudioType.SYSTEM);
+
+            AudioSO.Entity.AudioMixer.GetFloat(paramName, out float volume);
+            if (Input.GetKeyDown(KeyCode.UpArrow)) volume += AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else if (Input.GetKeyDown(KeyCode.DownArrow)) volume -= AudioSO.Entity.VolumeChangeStep; // 2刻み
+            else return; // ここで処理を終了
+            volume = Mathf.Clamp(volume, -80f, 20f);
+            AudioSO.Entity.AudioMixer.SetFloat(paramName, volume);
+
+            systemTextShowTime = AudioSO.Entity.VolumeTextShowDur;
+            systemVolumeText.text = volume.ToString("F1"); // 小数第一位まで
+            systemVolumeText.enabled = true;
         }
 
-        if (textShowTime > 0f)
+        if (bgmTextShowTime > 0f)
         {
-            textShowTime -= Time.deltaTime;
+            bgmTextShowTime -= Time.deltaTime;
 
-            if (textShowTime <= 0f)
+            if (bgmTextShowTime <= 0f)
             {
-                textShowTime = 0f;
-                volumeText.enabled = false;
+                bgmTextShowTime = 0f;
+                bgmVolumeText.enabled = false;
             }
         }
-    }
-
-    void ChangeAudioVolume(AudioSO.AudioType type)
-    {
-        string paramName = AudioSO.Entity.GetAudioParam(type);
-
-        AudioSO.Entity.AudioMixer.GetFloat(paramName, out float volume);
-
-        // 2刻み
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (seTextShowTime > 0f)
         {
-            volume += AudioSO.Entity.VolumeChangeStep;
+            seTextShowTime -= Time.deltaTime;
+
+            if (seTextShowTime <= 0f)
+            {
+                seTextShowTime = 0f;
+                seVolumeText.enabled = false;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (systemTextShowTime > 0f)
         {
-            volume -= AudioSO.Entity.VolumeChangeStep;
+            systemTextShowTime -= Time.deltaTime;
+
+            if (systemTextShowTime <= 0f)
+            {
+                systemTextShowTime = 0f;
+                systemVolumeText.enabled = false;
+            }
         }
-        else
-        {
-            return; // ここで処理を終了
-        }
-
-        volume = Mathf.Clamp(volume, -80f, 20f);
-
-        AudioSO.Entity.AudioMixer.SetFloat(paramName, volume);
-
-        textShowTime = AudioSO.Entity.VolumeTextShowDur;
-        volumeText.text = volume.ToString("F1"); // 小数第一位まで
-        volumeText.enabled = true;
     }
 }
