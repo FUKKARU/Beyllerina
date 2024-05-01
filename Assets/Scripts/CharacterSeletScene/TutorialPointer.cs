@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class TutorialPointer : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class TutorialPointer : MonoBehaviour
 
     private void Update()
     {
-        Text text = PageText.GetComponent<Text>();
+        TextMeshProUGUI text = PageText.GetComponent<TextMeshProUGUI>();
         Vector3 val = IA.InputGetter.Instance.ValueDirection;
         
         
