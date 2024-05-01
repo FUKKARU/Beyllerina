@@ -81,7 +81,7 @@ public class PlayerSelect : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (gameObject.name == "ballerina_sit")
+        if (gameObject.CompareTag("CharacterSelect_Ballerina"))
         {
             isBallerinaSelected = false;
         }

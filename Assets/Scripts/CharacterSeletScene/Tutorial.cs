@@ -17,17 +17,13 @@ public class Tutorial : MonoBehaviour
         tutorailFin = false;
         volume.profile.TryGet(out dOF);
         dOF.focalLength.value = 300;
-        tutorialImages[0].SetActive(true);
-        yield return new WaitForSeconds(2);
-        tutorialImages[0].SetActive(false);
 
-        tutorialImages[1].SetActive(true);
-        yield return new WaitForSeconds(2);
-        tutorialImages[1].SetActive(false);
-
-        tutorialImages[2].SetActive(true);
-        yield return new WaitForSeconds(2);
-        tutorialImages[2].SetActive(false);
+        foreach (GameObject img in tutorialImages)
+        {
+            img.SetActive(true);
+            yield return new WaitForSeconds(2);
+            img.SetActive(false);
+        }
 
         dOF.focalLength.value = 1;
         tutorailFin = true;
