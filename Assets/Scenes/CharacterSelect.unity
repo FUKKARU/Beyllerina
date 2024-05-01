@@ -2622,6 +2622,12 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!1 &513131324 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5167637580356928892, guid: 08934115686bb0447a9392134bb2b75f,
+    type: 3}
+  m_PrefabInstance: {fileID: 967462946338295402}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &524121084
 GameObject:
   m_ObjectHideFlags: 0
@@ -17549,8 +17555,7 @@ PrefabInstance:
         type: 3}
       propertyPath: BG04
       value: 
-      objectReference: {fileID: 5167637580356928892, guid: 08934115686bb0447a9392134bb2b75f,
-        type: 3}
+      objectReference: {fileID: 513131324}
     - target: {fileID: 6595164324319735846, guid: 5027694b052d8c048be2ffbb95145b77,
         type: 3}
       propertyPath: DestroyX
