@@ -26,20 +26,42 @@ public class PlayerSelect : MonoBehaviour
 
 
     private CharacterDate characterDate;
-    
+
+
+    [SerializeField] List<GameObject> CountObj = new List<GameObject>();
+    bool changeSceneOnce;// ゲームシーンへの遷移は発動したか？
 
     private void Start()
     {
+        changeSceneOnce = false;
         ObjForScale.transform.localScale = ObjStartSize;
         characterDate = FindObjectOfType<CharaGameManager>().GetCharacterDate();
         
     }
 
+
+    IEnumerator CountAndStart()
+    {
+        CountObj[0].SetActive(true);
+        yield return new WaitForSeconds(1);
+        CountObj[0].SetActive(true);
+        CountObj[1].SetActive(true);
+        yield return new WaitForSeconds(1);
+        CountObj[1].SetActive(true);
+        CountObj[2].SetActive(true);
+        yield return new WaitForSeconds(1);
+        CountObj[2].SetActive(true);
+        CountObj[3].SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
+    }
+
     private void Update()
     {
-        if (isBallerinaSelected && IA.InputGetter.Instance.IsSelect)
+        if (isBallerinaSelected && IA.InputGetter.Instance.IsSelect && !changeSceneOnce || Input.GetKeyDown(KeyCode.Space))
         {
-            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
+            StartCoroutine(CountAndStart());
+            changeSceneOnce = true;
         }
 
         //if (Input.GetButton("Cancel001"))
