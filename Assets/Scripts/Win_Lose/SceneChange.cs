@@ -8,11 +8,7 @@ namespace Win_Lose
     {
         void Update()
         {
-            if (IA.InputGetter.Instance.IsSelect)
-            {
-                LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
-            }
-            else if (IA.InputGetter.Instance.IsQuit)
+            if (IA.InputGetter.Instance.IsQuit)
             {
                 LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
             }

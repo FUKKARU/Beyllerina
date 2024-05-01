@@ -385,6 +385,25 @@ namespace BaseSystem
         }
         #endregion
 
+        #region 【LateUpdate】
+        void LateUpdate()
+        {
+            Posture(); // 姿勢制御
+        }
+
+        // 地面に垂直な姿勢制御をする。
+        void Posture()
+        {
+            // ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
+            Ray shotRay = new Ray(transform.position, -transform.up);
+            if (Physics.Raycast(shotRay, out RaycastHit ground))
+            {
+                Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
+                transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, P_SOB.PlayerMainAxisChangeSpeed * Time.deltaTime);
+            }
+        }
+        #endregion
+
 
 
         #region　PlayerStateの遷移の詳細（対応する状態の時、【条件】を満たしたら即座に遷移する。ベイの行動処理に関わる変数のリセットも行う。）
@@ -1290,20 +1309,11 @@ namespace BaseSystem
         #endregion
 
         #region PlayerStateに基づくベイの行動処理の詳細
-        // 1.地面に垂直な姿勢制御をする。
-        // 2.自転する。ただし、HPが低くなったら歳差運動に切り替わる。
+        // 自転する。ただし、HPが低くなったら歳差運動に切り替わる。
         void Rotate()
         {
             // HPが一定以下かどうかチェックし、フラグを切り替える。
             isHpLow = Hp < S_SOI.Hp * P_SOB.AxisSlopeStartHpCoef ? true : false;
-
-            // 回転処理を行う前に、ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
-            Ray shotRay = new Ray(transform.position, -transform.up);
-            if (Physics.Raycast(shotRay, out RaycastHit ground))
-            {
-                Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
-                transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, P_SOB.PlayerMainAxisChangeSpeed * Time.deltaTime);
-            }
 
             // HPが一定以下になったら、歳差運動をする。
             if (isHpLow)
@@ -1443,15 +1453,5 @@ namespace BaseSystem
             }
         }
         #endregion
-
-        public PlayerState GetState()
-        {
-            return State;
-        }
-
-        public PlayerState GetOpponentState()
-        {
-            return opponentPm.GetState();
-        }
     }
 }

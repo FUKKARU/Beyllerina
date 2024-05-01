@@ -36,6 +36,7 @@ namespace Win_Lose
 
         [Header("【カメラの演出関係】")] public CameraDirectionTable CameraDir;
         [Header("Victory/Defeat のUIが、何秒で画面中央にくるか")] public float ResultUIDur;
+        [Header("演出終了後、何秒でタイトルに戻る入力を受け付けるか")] public float InputGetDur;
     }
 
     [Serializable]

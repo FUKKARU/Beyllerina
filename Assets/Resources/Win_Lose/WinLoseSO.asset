@@ -19,3 +19,4 @@ MonoBehaviour:
     EndRotation: {x: 0, y: -142.5, z: 0}
     Duration: 0.5
   ResultUIDur: 0.1
+  InputGetDur: 3

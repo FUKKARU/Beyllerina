@@ -91,6 +91,20 @@ namespace Win_Lose
             Vector3 _pos = resultUI.localPosition;
             _pos.x = 0;
             resultUI.localPosition = _pos;
+
+            yield return new WaitForSeconds(WinLoseSO.Entity.InputGetDur);
+
+            while (true)
+            {
+                if (IA.InputGetter.Instance.IsSelect)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
         }
     }
 }
