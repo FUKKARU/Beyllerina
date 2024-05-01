@@ -8,7 +8,7 @@ using TMPro;
 public class TutorialPointer : MonoBehaviour
 {
     [SerializeField] GameObject PageText, AllPageText, AllAboutTutorial;
-    [SerializeField] GameObject cursor, NoForwardButton, NoBehindButton, Chikuonki, Barellia01, CameraRotateScri;
+    [SerializeField] GameObject cursor, NoForwardButton, NoBehindButton, Chikuonki, Barellia01, CameraRotateScri, NewCursor;
     [SerializeField] GameObject[] TutorialPage;
     [SerializeField] int Page = 0;
     const float cursorSpeed = 6.5f;
@@ -87,7 +87,12 @@ public class TutorialPointer : MonoBehaviour
             for (int i = 0; i < TutorialPage.Length; i++)
             {
                 TutorialPage[i].gameObject.SetActive(false);
-                TutorialPage[Page].gameObject.SetActive(true);
+
+                if (Page < TutorialPage.Length)
+                {
+                    TutorialPage[Page].gameObject.SetActive(true);
+
+                }
 
 
             }
@@ -101,7 +106,9 @@ public class TutorialPointer : MonoBehaviour
             AllPageText.SetActive(false);
             Barellia01.SetActive(true);
             AllAboutTutorial.SetActive(false);
-            CameraRotateScri.GetComponent<CameraRotate>().enabled = true;
+            cursor.SetActive(false);
+            NewCursor.SetActive(true);
+            CameraRotateScri.GetComponent<CameraRotate>().enabled = true;        
             this.enabled = false;
 
         }
@@ -209,7 +216,11 @@ public class TutorialPointer : MonoBehaviour
         for (int i = 0; i < TutorialPage.Length; i++)
         {
             TutorialPage[i].gameObject.SetActive(false);
-            TutorialPage[Page].gameObject.SetActive(true);
+
+            if (Page < TutorialPage.Length)
+            {
+                TutorialPage[Page].gameObject.SetActive(true);
+            }
 
             
         }
@@ -226,7 +237,11 @@ public class TutorialPointer : MonoBehaviour
         for (int i = 0; i < TutorialPage.Length; i++)
         {
             TutorialPage[i].gameObject.SetActive(false);
-            TutorialPage[Page].gameObject.SetActive(true);
+
+            if (Page < TutorialPage.Length)
+            {
+                TutorialPage[Page].gameObject.SetActive(true);
+            }
 
             
         }
