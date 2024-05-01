@@ -16,8 +16,6 @@ namespace Title
         bool hover_playButton;
         void PlayButton()
         {
-            BaseSystem.GameData.GameData.PlayableRoundNum = 0;
-            BaseSystem.GameData.GameData.UnPlayableRoundNum = 0;
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.CharacterSelect, true);
 
             BaseSystem.SoundManager.Instance.PlaySE(0);
@@ -84,6 +82,7 @@ namespace Title
         }
         void Awake()
         {
+
             cursor = GetComponent<Transform>();
             playButton.GetComponent<BoxCollider2D>().enabled = true;
             zeroOneButton.GetComponent<CircleCollider2D>().enabled = true;
@@ -95,6 +94,7 @@ namespace Title
 
         void Update()
         {
+
             Vector2 val = IA.InputGetter.Instance.ValueDirection;
             Vector2 cPos = cursor.position;
             cPos.x = Mathf.Clamp(cPos.x, -10f, 10f);
