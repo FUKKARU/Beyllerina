@@ -22,6 +22,7 @@ TagManager:
   - ZeroOneButton
   - EXIT_Button_Check_cancelButton
   - EXIT_Button_Check_YesButton
+  - CharacterSelect_Ballerina
   layers:
   - Default
   - TransparentFX

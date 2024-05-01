@@ -36,11 +36,11 @@ public class CameraRotate : MonoBehaviour
             float h = -val.x;
             float v = -val.y;
             float div = 5;
-            if (Vector3.Distance(angleDetector.transform.position, hit.transform.gameObject.transform.position) > 2)
+            if ((angleDetector.transform.position - hit.transform.gameObject.transform.position).sqrMagnitude > Mathf.Pow(2, 2))
             {
                 additionalPower -= (Vector3.Distance(angleDetector.transform.position, hit.transform.gameObject.transform.position) - 2) / div;
             }
-            else if (Vector3.Distance(angleDetector.transform.position, hit.transform.gameObject.transform.position) < 1.5f)
+            else if ((angleDetector.transform.position - hit.transform.gameObject.transform.position).sqrMagnitude < Mathf.Pow(1.5f, 2))
             {
                 additionalPower += (1.5f - Vector3.Distance(angleDetector.transform.position, hit.transform.gameObject.transform.position)) / div;
             }

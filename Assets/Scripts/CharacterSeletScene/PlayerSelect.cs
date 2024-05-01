@@ -59,7 +59,7 @@ public class PlayerSelect : MonoBehaviour
         
         if (collision.gameObject.CompareTag("MainCamera"))
         {
-            if (gameObject.name == "ballerina_sit")
+            if (gameObject.CompareTag("CharacterSelect_Ballerina"))
             {
                 isBallerinaSelected = true;
             }

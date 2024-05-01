@@ -14323,7 +14323,7 @@ GameObject:
   - component: {fileID: 919132147708065671}
   m_Layer: 0
   m_Name: sitting
-  m_TagString: Untagged
+  m_TagString: CharacterSelect_Ballerina
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
