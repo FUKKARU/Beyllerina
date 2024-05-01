@@ -46,6 +46,6 @@ MonoBehaviour:
   OnSkillGenericDamageCoefCoef: 0.1
   OnSkillDamageNormalizeDur: 0.2
   OnSpecialGenericDamageCoefCoef: 1.5
-  SpecialDur: 10
+  SpecialDur: 8
   OnWeakGenericDamageCoefCoef: 1.5
-  WeakDur: 10
+  WeakDur: 3
