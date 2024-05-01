@@ -28,11 +28,15 @@ public class PlayerSelect : MonoBehaviour
     private CharacterDate characterDate;
 
 
-    [SerializeField] List<GameObject> CountObj = new List<GameObject>();
+    public GameObject Count3;
+    public GameObject Count2;
+    public GameObject Count1;
+    public GameObject CountGo;
     bool changeSceneOnce;// ゲームシーンへの遷移は発動したか？
 
     private void Start()
     {
+
         changeSceneOnce = false;
         ObjForScale.transform.localScale = ObjStartSize;
         characterDate = FindObjectOfType<CharaGameManager>().GetCharacterDate();
@@ -42,16 +46,16 @@ public class PlayerSelect : MonoBehaviour
 
     IEnumerator CountAndStart()
     {
-        CountObj[0].SetActive(true);
+        Count3.SetActive(true);
         yield return new WaitForSeconds(1);
-        CountObj[0].SetActive(true);
-        CountObj[1].SetActive(true);
+        Count3.SetActive(false);
+        Count2.SetActive(true);
         yield return new WaitForSeconds(1);
-        CountObj[1].SetActive(true);
-        CountObj[2].SetActive(true);
+        Count2.SetActive(false);
+        Count1.SetActive(true);
         yield return new WaitForSeconds(1);
-        CountObj[2].SetActive(true);
-        CountObj[3].SetActive(true);
+        Count1.SetActive(false);
+        CountGo.SetActive(true);
         yield return new WaitForSeconds(0.3f);
         LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Game, true);
     }
