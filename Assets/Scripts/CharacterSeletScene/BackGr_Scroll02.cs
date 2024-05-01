@@ -24,7 +24,7 @@ public class BackGr_Scroll02 : MonoBehaviour
 
         if (transform.position.x >= RespownX)
         {
-            Debug.Log("復活ポジ到着にゃん");
+            //Debug.Log("復活ポジ到着にゃん");
             
         }
 
@@ -32,7 +32,7 @@ public class BackGr_Scroll02 : MonoBehaviour
         {
             
             Destroy(this.gameObject);
-            Debug.Log("破壊したしんよ");
+            //Debug.Log("破壊したしんよ");
 
         }
 

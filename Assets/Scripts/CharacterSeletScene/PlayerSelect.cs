@@ -64,13 +64,13 @@ public class PlayerSelect : MonoBehaviour
                 isBallerinaSelected = true;
             }
             SpotLightVec = new Vector3(ObjForScale.transform.position.x, ObjForScale.transform.position.y + SpotLightHigh, ObjForScale.transform.position.z);
-            Debug.Log("当たっているよ！");
+            //Debug.Log("当たっているよ！");
            
             //衝突した場合少し拡大
             ObjForScale.transform.localScale = new Vector3(ObjStartSize.x + ObjPlusSize.x, ObjStartSize.y + ObjPlusSize.y, ObjStartSize.z + ObjPlusSize.z);
             SpotLight01.transform.position = SpotLightVec;
             //BaseSystem.SoundManager.Instance.PlaySE(0);
-            Debug.Log("選んでくれてありがとう！");
+            //Debug.Log("選んでくれてありがとう！");
 
         
         }
@@ -88,7 +88,7 @@ public class PlayerSelect : MonoBehaviour
         SpotLightVec = new Vector3(0, 0, 0);
         //衝突しない場合元に戻る
         ObjForScale.transform.localScale = ObjStartSize;
-        Debug.Log("えっ...選んでくれないの");
+        //Debug.Log("えっ...選んでくれないの");
         //BaseSystem.SoundManager.Instance.PlaySE(1);
         
 
@@ -104,13 +104,13 @@ public class PlayerSelect : MonoBehaviour
         if (Input.GetButton("Decide"))
         {
             
-            Debug.Log("左クリック推したよ");
+            //Debug.Log("左クリック推したよ");
 
             
    　　//  this.transform.transform.position = Camera.transform.position + new Vector3(1f, -1.35f, 2.58f);
 
            
-            Debug.Log("近づいてきた");
+            //Debug.Log("近づいてきた");
 
 
             childUI.SetActive(true);
@@ -130,21 +130,21 @@ public class PlayerSelect : MonoBehaviour
     {
         characterDate.SetPlayer01(character01);
   
-        Debug.Log("これはおした");
+        //Debug.Log("これはおした");
     }
     
     public void OnSlectCharacter2P(GameObject character02)
     {
         characterDate.SetPlayer02(character02);
 
-        Debug.Log("これはおしたの２P");
+        //Debug.Log("これはおしたの２P");
     }
 
     public void OnCPU(GameObject CPU01)
     {
         characterDate.SetCPU01(CPU01);
 
-        Debug.Log("これはおしたの２P");
+        //Debug.Log("これはおしたの２P");
     }
 
     public void Light1P()

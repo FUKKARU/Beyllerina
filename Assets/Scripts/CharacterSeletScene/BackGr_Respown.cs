@@ -38,7 +38,7 @@ public class BackGr_Respown : MonoBehaviour
 
                 GameObject CloneGameObject = Instantiate(BG01, RStarPos, Quaternion.identity);
                 GameObject CloneGameObjectL = Instantiate(BG01, LStarPos, Quaternion.identity);
-                Debug.Log("ê∂ê¨Ç≥ÇÍÇΩÇ“ÇÂÇÒ");
+                //Debug.Log("ê∂ê¨Ç≥ÇÍÇΩÇ“ÇÂÇÒ");
 
                 CloneGameObject.transform.localScale = new Vector3(ScaleRandomX, ScaleRandomY, 1);
                 CloneGameObjectL.transform.localScale = new Vector3(ScaleRandomX, ScaleRandomY, 1);
