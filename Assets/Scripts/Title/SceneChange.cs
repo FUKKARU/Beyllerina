@@ -17,6 +17,8 @@ namespace Title
         void PlayButton()
         {
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.CharacterSelect, true);
+
+            BaseSystem.SoundManager.Instance.PlaySE(0);
         }
 
         [SerializeField] Sprite zeroOneButtonInitial;
@@ -32,6 +34,8 @@ namespace Title
             eXIT_Button_Check_Banner.SetActive(true);
             eXIT_Button_Check_YesButton.SetActive(true);
             eXIT_Button_Check_CancelButton.SetActive(true);
+
+            BaseSystem.SoundManager.Instance.PlaySE(0);
         }
 
         [SerializeField] Sprite eXIT_Button_Check_YesButton_Initial;
@@ -45,6 +49,8 @@ namespace Title
 #else
             Application.Quit();
 #endif
+
+            BaseSystem.SoundManager.Instance.PlaySE(0);
         }
 
         [SerializeField] Sprite eXIT_Button_Check_cancelButton_Initial;
@@ -58,6 +64,8 @@ namespace Title
             eXIT_Button_Check_Banner.SetActive(false);
             eXIT_Button_Check_YesButton.SetActive(false);
             eXIT_Button_Check_CancelButton.SetActive(false);
+
+            BaseSystem.SoundManager.Instance.PlaySE(0);
         }
 
         [SerializeField] GameObject eXIT_Button_Check_Banner;
@@ -130,6 +138,8 @@ namespace Title
                 obj.GetComponent<SpriteRenderer>().sprite = eXIT_Button_Check_YesButton_Hover;
                 hover_EXIT_Button_Check_YesButton = true;
             }
+
+            BaseSystem.SoundManager.Instance.PlaySE(2);
         }
 
         private void OnTriggerExit2D(Collider2D collider)
@@ -156,6 +166,8 @@ namespace Title
                 eXIT_Button_Check_YesButton.GetComponent<SpriteRenderer>().sprite = eXIT_Button_Check_YesButton_Initial;
                 hover_EXIT_Button_Check_YesButton = false;
             }
+
+            BaseSystem.SoundManager.Instance.PlaySE(1);
         }
     }
 }
