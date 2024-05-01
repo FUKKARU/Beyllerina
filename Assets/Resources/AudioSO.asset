@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e60523334af7a4d8bab2c406ff9f20, type: 3}
+  m_Name: AudioSO
+  m_EditorClassIdentifier: 
+  AudioMixer: {fileID: 24100000, guid: 27207b183d3290440ad203faacd6d260, type: 2}
+  Audioes:
+  - Type: 0
+    Grouop: {fileID: 1939555429322767513, guid: 27207b183d3290440ad203faacd6d260,
+      type: 2}
+    Param: BGM
+  - Type: 1
+    Grouop: {fileID: 70599053867870222, guid: 27207b183d3290440ad203faacd6d260, type: 2}
+    Param: SE
+  - Type: 2
+    Grouop: {fileID: -1988034731457577949, guid: 27207b183d3290440ad203faacd6d260,
+      type: 2}
+    Param: System
+  VolumeChangeStep: 2
+  VolumeTextShowDur: 1
