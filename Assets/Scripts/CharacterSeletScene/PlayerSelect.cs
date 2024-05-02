@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CharacterSelect
 {
@@ -23,6 +24,8 @@ namespace CharacterSelect
         [SerializeField] AudioClip ClickSound;
         AudioSource audioSource;
         [SerializeField] CameraShake_CS cameraShakeScript;
+        [SerializeField] Image crosshair;
+        [SerializeField] Collider cameraCollider;
 
         bool isBallerinaSelected = false;
 
@@ -49,7 +52,9 @@ namespace CharacterSelect
 
         IEnumerator CountAndStart()
         {
+            cameraCollider.enabled = false;
             cameraShakeScript.IsCameraShakeOn = false;
+            crosshair.enabled = false;
 
             Count3.SetActive(true);
             yield return new WaitForSeconds(1);

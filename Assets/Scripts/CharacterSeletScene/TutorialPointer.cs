@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 namespace CharacterSelect
 {
@@ -16,6 +18,7 @@ namespace CharacterSelect
         AudioSource audioSource;
         [SerializeField] GameObject[] keyHelps;
         [SerializeField] CameraShake_CS cameraShakeScript;
+        [SerializeField] Image crosshair;
 
         bool EveryFlag;
 
@@ -115,6 +118,7 @@ namespace CharacterSelect
                 CameraRotateScri.GetComponent<CameraRotate>().enabled = true;
                 foreach (GameObject e in keyHelps) e.SetActive(false);
                 cameraShakeScript.enabled = true;
+                crosshair.enabled = true;
 
                 this.enabled = false;
             }
