@@ -9,12 +9,20 @@ namespace CharacterSelect
     {
         [SerializeField] AnimationCurve curve;
         float duration = 0.3f;
+        public bool IsCameraShakeOn { get; set; } = true;
 
         void Start () 
         {
             StartCoroutine(ShakeRoutine());
         }
 
+        void Update()
+        {
+            if (!IsCameraShakeOn)
+            {
+                StopAllCoroutines();
+            }
+        }
 
         IEnumerator ShakeRoutine()
         {

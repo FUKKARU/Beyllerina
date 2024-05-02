@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BaseSystem;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Win_Lose
 {
@@ -13,7 +12,7 @@ namespace Win_Lose
         [SerializeField] GameObject unPlayable;
         [SerializeField] GameObject victoryUI;
         [SerializeField] GameObject defeatUI;
-        [SerializeField] Image exitUI;
+        [SerializeField] GameObject exitUI;
 
         GameObject cam;
 
@@ -96,7 +95,7 @@ namespace Win_Lose
 
             yield return new WaitForSeconds(WinLoseSO.Entity.InputGetDur);
 
-            exitUI.enabled = true;
+            exitUI.SetActive(true);
 
             while (true)
             {
@@ -107,6 +106,12 @@ namespace Win_Lose
 
                 yield return null;
             }
+
+            BaseSystem.GameData.GameData.PlayableRoundNum = 0;
+            BaseSystem.GameData.GameData.UnPlayableRoundNum = 0;
+            BaseSystem.GameData.GameData.IsWin = true;
+            BaseSystem.GameData.GameData.CounterNum = 0;
+            BaseSystem.GameData.GameData.SpecialPoint = 0;
 
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
         }

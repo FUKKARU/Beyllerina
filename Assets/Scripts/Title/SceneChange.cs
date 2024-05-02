@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Title
 {
@@ -8,12 +10,19 @@ namespace Title
     {
         Transform cursor;
         [SerializeField] GameObject quitChooseUI;
-        const float cursorSpeed = 6.5f;
+        const float cursorSpeedRaw = 6.5f;
+        float cursorSpeed;
+        const float cursorSpeedStep = 0.2f;
+        [SerializeField] TextMeshProUGUI cursorSpeedText;
+        float cursorSpeedTextShowTime = 0f; // Œ¸‚Á‚Ä‚¢‚­
 
         [SerializeField] Sprite playButtonInitial;
         [SerializeField] Sprite playButtonHover;
         [SerializeField] GameObject playButton;
         bool hover_playButton;
+
+        [SerializeField] GameObject keyHelp;
+
         void PlayButton()
         {
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.CharacterSelect, true);
@@ -72,7 +81,7 @@ namespace Title
 
         void InputMethod()
         {
-            if (IA.InputGetter.Instance.IsSelect || Input.GetKeyDown(KeyCode.Space))
+            if (IA.InputGetter.Instance.IsSelect)
             {
                 if (hover_playButton) PlayButton();
                 else if(hover_zeroOneButton) ZeroOneButton();
@@ -92,8 +101,30 @@ namespace Title
 
         }
 
+        void Start()
+        {
+            cursorSpeed = cursorSpeedRaw * BaseSystem.GameData.GameData.DirectionMoveSpeedCoef;
+        }
+
         void Update()
         {
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    BaseSystem.GameData.GameData.DirectionMoveSpeedCoef += cursorSpeedStep;
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    BaseSystem.GameData.GameData.DirectionMoveSpeedCoef -= cursorSpeedStep;
+                }
+                else return;
+
+                cursorSpeed = cursorSpeedRaw * BaseSystem.GameData.GameData.DirectionMoveSpeedCoef;
+                cursorSpeedTextShowTime = 1;
+                cursorSpeedText.text = "~ " + BaseSystem.GameData.GameData.DirectionMoveSpeedCoef.ToString("F1"); // ¬”‘æˆêˆÊ‚Ü‚Å
+                cursorSpeedText.enabled = true;
+            }
 
             Vector2 val = IA.InputGetter.Instance.ValueDirection;
             Vector2 cPos = cursor.position;
@@ -103,6 +134,16 @@ namespace Title
             cursor.position += new Vector3(val.x, val.y, 0) * cursorSpeed * Time.deltaTime;
             InputMethod();
 
+            if (cursorSpeedTextShowTime > 0f)
+            {
+                cursorSpeedTextShowTime -= Time.deltaTime;
+
+                if (cursorSpeedTextShowTime <= 0f)
+                {
+                    cursorSpeedTextShowTime = 0f;
+                    cursorSpeedText.enabled = false;
+                }
+            }
         }
 
         public void QuitGame()
@@ -124,6 +165,7 @@ namespace Title
             {
                 playButton.GetComponent<SpriteRenderer>().sprite = playButtonHover;
                 hover_playButton = true;
+                if (keyHelp != null) keyHelp.SetActive(true);
             }
             else if(obj == zeroOneButton)
             {
@@ -152,6 +194,7 @@ namespace Title
             {
                 playButton.GetComponent<SpriteRenderer>().sprite = playButtonInitial;
                 hover_playButton = false;
+                if (keyHelp != null) keyHelp.SetActive(false);
             }
             else if (obj == zeroOneButton)
             {
@@ -169,7 +212,7 @@ namespace Title
                 hover_EXIT_Button_Check_YesButton = false;
             }
 
-            BaseSystem.SoundManager.Instance.PlaySE(1);
+            //BaseSystem.SoundManager.Instance.PlaySE(1);
         }
     }
 }

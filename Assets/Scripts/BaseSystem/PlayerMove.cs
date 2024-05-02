@@ -84,7 +84,7 @@ namespace BaseSystem
         float OpponentGenericDamageCoef { get; set; } = 1; // 汎用ダメージ係数（相手に乗算）
         float rotDir = 1; // 正回転なら1、逆回転なら-1
         float pushPowerCoef = 1; // プッシュ力の係数（調整用）
-        int specialPoint = 0; // 必殺技の発動ポイント
+        public int SpecialPoint { get; set; } // 必殺技の発動ポイント
 
         bool antiGravity = false;//重力停止
         #endregion
@@ -168,6 +168,8 @@ namespace BaseSystem
                 }
             }
 
+            SpecialPoint = GameData.GameData.SpecialPoint;
+
             // 敵への参照を取得
             int idx = Array.IndexOf(gm.Beys, gameObject);
             if (idx == 0)
@@ -250,9 +252,11 @@ namespace BaseSystem
         {
             while (true)
             {
-                specialPoint += P_SOB.PointAmount;
+                if (gm.IsGameResultJudged) break;
+
+                SpecialPoint += P_SOB.PointAmount;
                 PointBonus();
-                specialPoint = Mathf.Clamp(specialPoint, 0, maxSpecialPoint);
+                SpecialPoint = Mathf.Clamp(SpecialPoint, 0, maxSpecialPoint);
                 yield return new WaitForSeconds(P_SOB.PointDur);
             }
         }
@@ -274,7 +278,7 @@ namespace BaseSystem
                 {
                     if (hpRange * i < Hp && Hp <= hpRange * (i + 1))
                     {
-                        specialPoint += bonusPoint[i];
+                        SpecialPoint += bonusPoint[i];
                     }
                 }
             }
@@ -396,7 +400,7 @@ namespace BaseSystem
         {
             // ベイのローカルy軸（緑）の方向を地面の法線ベクトルに合わせる。
             Ray shotRay = new Ray(transform.position, -transform.up);
-            if (Physics.Raycast(shotRay, out RaycastHit ground))
+            if (Physics.Raycast(shotRay, out RaycastHit ground, ~(1 << P_SO.WhatIsGround)))
             {
                 Quaternion toSlope = Quaternion.FromToRotation(transform.up, ground.normal);
                 transform.rotation = Quaternion.Slerp(transform.rotation, toSlope * transform.rotation, P_SOB.PlayerMainAxisChangeSpeed * Time.deltaTime);
@@ -1153,11 +1157,11 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                if (specialPoint == maxSpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
+                if (SpecialPoint == maxSpecialPoint && !isOnSpecialCooltime && IA.InputGetter.Instance.IsSpecial)
                 {
                     isOnSpecialCooltime = true;
 
-                    specialPoint = 0;
+                    SpecialPoint = 0;
 
                     if (gameObject.activeSelf) StartCoroutine(CountSpecialCooltime());
 
@@ -1297,8 +1301,8 @@ namespace BaseSystem
         {
             if (S_SO.IsPlayable)
             {
-                gm.SpecialChargingGauge.fillAmount = specialPoint / (float)maxSpecialPoint;
-                if (specialPoint == maxSpecialPoint && !isOnSpecialCooltime)
+                gm.SpecialChargingGauge.fillAmount = SpecialPoint / (float)maxSpecialPoint;
+                if (SpecialPoint == maxSpecialPoint && !isOnSpecialCooltime)
                 {
                     // 必殺技が発動できることを知らせる
                     gm.SpecialGauge.enabled = true;

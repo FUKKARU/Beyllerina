@@ -24,7 +24,7 @@ namespace BaseSystem
 
         private void Start()
         {
-            if ((GameData.GameData.PlayableRoundNum >= GameSO.Entity.RoundNum -1)|| (GameData.GameData.UnPlayableRoundNum >= GameSO.Entity.RoundNum - 1))
+            if ((GameData.GameData.PlayableRoundNum >= GameSO.Entity.RoundNum - 1) || (GameData.GameData.UnPlayableRoundNum >= GameSO.Entity.RoundNum - 1))
             {
                 PlayBGM(true);
             }
@@ -45,7 +45,7 @@ namespace BaseSystem
                 return;
             }
 
-            seSource.PlayOneShot(clips[index]);
+            if (clips[index] != null) seSource.PlayOneShot(clips[index]);
         }
 
         public void HitSE()
