@@ -15,7 +15,7 @@ MonoBehaviour:
   Dbg:
     IsShowNormalLog: 0
     P_DamageMul: 0
-    U_DamageMul: 1
+    U_DamageMul: 0
     P_DamageImmune: 0
     U_DamageImmune: 0
     IsInfinityAction: 0
