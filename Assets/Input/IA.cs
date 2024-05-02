@@ -70,7 +70,7 @@ namespace IA
                 {
                     ""name"": """",
                     ""id"": ""e78baea8-bc67-4a95-bac3-8a1e61091c77"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -92,7 +92,7 @@ namespace IA
                 {
                     ""name"": """",
                     ""id"": ""3a568bad-2338-4a30-beaf-b485b8fd145e"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -136,7 +136,7 @@ namespace IA
                 {
                     ""name"": """",
                     ""id"": ""e32e49e2-38bc-499a-bb8e-3f4b0f796f1b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -320,7 +320,18 @@ namespace IA
                 {
                     ""name"": """",
                     ""id"": ""62f6c11b-b6b2-4adf-850b-e02c0851ff1b"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2aaa8fe6-c59c-4392-8479-65b5715da5af"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -342,7 +353,18 @@ namespace IA
                 {
                     ""name"": """",
                     ""id"": ""e6a9a088-2478-4663-983b-8ea73b982660"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bfff45f-026c-4647-ac99-4cd8a0ff6156"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -358,17 +380,6 @@ namespace IA
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Cancel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8f9fd375-9cc7-45cf-abaf-3991905c5f38"",
-                    ""path"": ""<Gamepad>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Quit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
