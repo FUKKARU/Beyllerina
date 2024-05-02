@@ -14,6 +14,9 @@ namespace Title
         [SerializeField] Sprite playButtonHover;
         [SerializeField] GameObject playButton;
         bool hover_playButton;
+
+        [SerializeField] GameObject keyHelp;
+
         void PlayButton()
         {
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.CharacterSelect, true);
@@ -72,7 +75,7 @@ namespace Title
 
         void InputMethod()
         {
-            if (IA.InputGetter.Instance.IsSelect || Input.GetKeyDown(KeyCode.Space))
+            if (IA.InputGetter.Instance.IsSelect)
             {
                 if (hover_playButton) PlayButton();
                 else if(hover_zeroOneButton) ZeroOneButton();
@@ -124,6 +127,7 @@ namespace Title
             {
                 playButton.GetComponent<SpriteRenderer>().sprite = playButtonHover;
                 hover_playButton = true;
+                if (keyHelp != null) keyHelp.SetActive(true);
             }
             else if(obj == zeroOneButton)
             {
@@ -152,6 +156,7 @@ namespace Title
             {
                 playButton.GetComponent<SpriteRenderer>().sprite = playButtonInitial;
                 hover_playButton = false;
+                if (keyHelp != null) keyHelp.SetActive(false);
             }
             else if (obj == zeroOneButton)
             {
@@ -169,7 +174,7 @@ namespace Title
                 hover_EXIT_Button_Check_YesButton = false;
             }
 
-            BaseSystem.SoundManager.Instance.PlaySE(1);
+            //BaseSystem.SoundManager.Instance.PlaySE(1);
         }
     }
 }
