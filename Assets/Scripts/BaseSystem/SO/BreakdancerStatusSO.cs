@@ -7,7 +7,7 @@ namespace BaseSystem
     {
         #region QOLŒüãˆ—
         // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-        public const string PATH = "BaseSystem/SO/Status/BreakDancerStatusSO";
+        public const string PATH = "SO/BaseSystem/Status/BreakDancerStatusSO";
 
         // À‘Ì
         private static BreakDancerStatusSO _entity;

@@ -30,7 +30,8 @@ MonoBehaviour:
   CameraAngleRange: {x: 0, y: 30}
   CameraRadius: 14
   CameraDuration: 60
-  NameUIOffset: 2.25
+  PlayableNameUIOffset: 2.25
+  UnPlayableNameUIOffset: 1.75
   UntilHpRecoverDur: 2
   HpRecoverRatio: 50
   FromHpRecoverDur: 2

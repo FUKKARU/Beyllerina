@@ -9,7 +9,7 @@ namespace Win_Lose
     {
         #region QOLŒüãˆ—
         // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-        public const string PATH = "Win_Lose/WinLoseSO";
+        public const string PATH = "SO/Win_Lose/WinLoseSO";
 
         // À‘Ì
         private static WinLoseSO _entity;

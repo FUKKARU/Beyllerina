@@ -78,8 +78,8 @@ namespace BaseSystem
         void LateUpdate()
         {
             // 名前UIの表示
-            NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, PlayerSO.Entity.NameUIOffset);
-            NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, PlayerSO.Entity.NameUIOffset);
+            NameUIConstrain(GameCamera, P_Pm.gameObject, PlayableNameUI, PlayerSO.Entity.PlayableNameUIOffset);
+            NameUIConstrain(GameCamera, U_Pm.gameObject, UnPlayableNameUI, PlayerSO.Entity.UnPlayableNameUIOffset);
         }
 
 

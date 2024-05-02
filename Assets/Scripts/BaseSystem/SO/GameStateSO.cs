@@ -5,7 +5,7 @@ public class GameStateSO : ScriptableObject
 {
     #region QOLŒüãˆ—
     // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-    public const string PATH = "GameStateSO";
+    public const string PATH = "SO/GameStateSO";
 
     // À‘Ì
     private static GameStateSO _entity;

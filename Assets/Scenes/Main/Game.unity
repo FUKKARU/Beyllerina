@@ -1399,12 +1399,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 427253365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &423234611 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 480264704070709403, guid: 804a2c22ceab93649807d856e1e4cfea,
-    type: 3}
-  m_PrefabInstance: {fileID: 3956389373990354372}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &427253363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,7 +2214,7 @@ MonoBehaviour:
   KO_UI: {fileID: 223923050}
   KOed_UI: {fileID: 223923050}
   PlayableNameUI: {fileID: 549404487}
-  UnPlayableNameUI: {fileID: 423234611}
+  UnPlayableNameUI: {fileID: 3956389373990354373}
   GameCamera: {fileID: 1804146979329962454}
   Chanderia: {fileID: 1621828194}
   Lamps:
@@ -4777,6 +4771,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 804a2c22ceab93649807d856e1e4cfea, type: 3}
+--- !u!1 &3956389373990354373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3697422461437190748, guid: 804a2c22ceab93649807d856e1e4cfea,
+    type: 3}
+  m_PrefabInstance: {fileID: 3956389373990354372}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4334032810129482542
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class AudioSO : ScriptableObject
 {
     #region QOLŒüãˆ—
     // •Û‘¶‚µ‚Ä‚ ‚éêŠ‚ÌƒpƒX
-    public const string PATH = "AudioSO";
+    public const string PATH = "SO/AudioSO";
 
     // À‘Ì
     private static AudioSO _entity;
