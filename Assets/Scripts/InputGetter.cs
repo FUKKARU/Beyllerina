@@ -82,9 +82,9 @@ namespace IA
 
                 _inputs.MainGame.Special.performed += OnSpecial;
 
-                _inputs.SubGame.Rotate.started += ReadRotate;
-                _inputs.SubGame.Rotate.performed += ReadRotate;
-                _inputs.SubGame.Rotate.canceled += ReadRotate;
+                _inputs.SubGame.Rotate.started += ReadDirection;
+                _inputs.SubGame.Rotate.performed += ReadDirection;
+                _inputs.SubGame.Rotate.canceled += ReadDirection;
 
                 _inputs.System.Select.performed += OnSelect;
 
@@ -102,9 +102,9 @@ namespace IA
 
                 _inputs.MainGame.Special.performed -= OnSpecial;
 
-                _inputs.SubGame.Rotate.started -= ReadRotate;
-                _inputs.SubGame.Rotate.performed -= ReadRotate;
-                _inputs.SubGame.Rotate.canceled -= ReadRotate;
+                _inputs.SubGame.Rotate.started -= ReadDirection;
+                _inputs.SubGame.Rotate.performed -= ReadDirection;
+                _inputs.SubGame.Rotate.canceled -= ReadDirection;
 
                 _inputs.System.Select.performed -= OnSelect;
 
@@ -136,7 +136,7 @@ namespace IA
             IsSpecial = true;
         }
 
-        void ReadRotate(InputAction.CallbackContext context)
+        void ReadDirection(InputAction.CallbackContext context)
         {
             ValueDirection = context.ReadValue<Vector2>();
         }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Title
 {
@@ -8,7 +10,11 @@ namespace Title
     {
         Transform cursor;
         [SerializeField] GameObject quitChooseUI;
-        const float cursorSpeed = 6.5f;
+        const float cursorSpeedRaw = 6.5f;
+        float cursorSpeed;
+        const float cursorSpeedStep = 0.2f;
+        [SerializeField] TextMeshProUGUI cursorSpeedText;
+        float cursorSpeedTextShowTime = 0f; // Œ¸‚Á‚Ä‚¢‚­
 
         [SerializeField] Sprite playButtonInitial;
         [SerializeField] Sprite playButtonHover;
@@ -95,8 +101,30 @@ namespace Title
 
         }
 
+        void Start()
+        {
+            cursorSpeed = cursorSpeedRaw * BaseSystem.GameData.GameData.DirectionMoveSpeedCoef;
+        }
+
         void Update()
         {
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    BaseSystem.GameData.GameData.DirectionMoveSpeedCoef += cursorSpeedStep;
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    BaseSystem.GameData.GameData.DirectionMoveSpeedCoef -= cursorSpeedStep;
+                }
+                else return;
+
+                cursorSpeed = cursorSpeedRaw * BaseSystem.GameData.GameData.DirectionMoveSpeedCoef;
+                cursorSpeedTextShowTime = 1;
+                cursorSpeedText.text = "~ " + BaseSystem.GameData.GameData.DirectionMoveSpeedCoef.ToString("F1"); // ¬”‘æˆêˆÊ‚Ü‚Å
+                cursorSpeedText.enabled = true;
+            }
 
             Vector2 val = IA.InputGetter.Instance.ValueDirection;
             Vector2 cPos = cursor.position;
@@ -106,6 +134,16 @@ namespace Title
             cursor.position += new Vector3(val.x, val.y, 0) * cursorSpeed * Time.deltaTime;
             InputMethod();
 
+            if (cursorSpeedTextShowTime > 0f)
+            {
+                cursorSpeedTextShowTime -= Time.deltaTime;
+
+                if (cursorSpeedTextShowTime <= 0f)
+                {
+                    cursorSpeedTextShowTime = 0f;
+                    cursorSpeedText.enabled = false;
+                }
+            }
         }
 
         public void QuitGame()

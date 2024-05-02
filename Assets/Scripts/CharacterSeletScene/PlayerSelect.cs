@@ -67,7 +67,7 @@ namespace CharacterSelect
 
         private void Update()
         {
-            if (isBallerinaSelected && IA.InputGetter.Instance.IsSelect && !changeSceneOnce || Input.GetKeyDown(KeyCode.Space))
+            if (isBallerinaSelected && IA.InputGetter.Instance.IsSelect && !changeSceneOnce)
             {
                 StartCoroutine(CountAndStart());
                 changeSceneOnce = true;

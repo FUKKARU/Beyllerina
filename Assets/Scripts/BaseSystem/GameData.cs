@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace BaseSystem
@@ -67,6 +68,27 @@ namespace BaseSystem
                     else
                     {
                         counterNum = 0;
+                    }
+                }
+            }
+
+            static float directionMoveSpeedCoef = 1;
+            public static float DirectionMoveSpeedCoef
+            {
+                get
+                {
+                    return directionMoveSpeedCoef;
+                }
+
+                set
+                {
+                    if (value < 0)
+                    {
+                        directionMoveSpeedCoef = 0;
+                    }
+                    else
+                    {
+                        directionMoveSpeedCoef = value;
                     }
                 }
             }
