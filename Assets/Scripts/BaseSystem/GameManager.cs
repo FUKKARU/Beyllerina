@@ -180,6 +180,8 @@ namespace BaseSystem
 
         IEnumerator KOBehaviour(bool isKO)
         {
+            GameData.GameData.SpecialPoint = (byte)P_Pm.SpecialPoint;
+
             // KOの演出
             const int CANVAS_WIDTH = 800;
             GameObject koUi = isKO ? KO_UI : KOed_UI;

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace BaseSystem
@@ -71,6 +70,22 @@ namespace BaseSystem
                     }
                 }
             }
+
+            static byte specialPoint = 0;
+            public static byte SpecialPoint
+            {
+                get
+                {
+                    return specialPoint;
+                }
+
+                set
+                {
+                    specialPoint = value;
+                }
+            }
+
+
 
             static float directionMoveSpeedCoef = 1;
             public static float DirectionMoveSpeedCoef

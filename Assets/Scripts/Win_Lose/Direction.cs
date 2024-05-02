@@ -107,6 +107,12 @@ namespace Win_Lose
                 yield return null;
             }
 
+            BaseSystem.GameData.GameData.PlayableRoundNum = 0;
+            BaseSystem.GameData.GameData.UnPlayableRoundNum = 0;
+            BaseSystem.GameData.GameData.IsWin = true;
+            BaseSystem.GameData.GameData.CounterNum = 0;
+            BaseSystem.GameData.GameData.SpecialPoint = 0;
+
             LoadSceneAsync.LoadSceneAsync.Load(GameSO.Entity.SceneName.Title, true);
         }
     }
