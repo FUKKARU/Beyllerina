@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 namespace CharacterSelect
 {
@@ -106,7 +105,7 @@ namespace CharacterSelect
 
             }
 
-            if (Page == 3)
+            if (Page == 4)
             {
 
                 PageText.SetActive(false);
@@ -123,7 +122,7 @@ namespace CharacterSelect
                 this.enabled = false;
             }
 
-            if (Page >= 2)
+            if (Page >= 3)
             {
                 NoForwardButton.SetActive(true);
                 ForwardButton.SetActive(false);
